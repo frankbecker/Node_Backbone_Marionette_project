@@ -1,0 +1,339 @@
+/* =====================  Regions   =========================== */
+#container_region{
+	display: inline-block;
+	width: 80%;
+	float: right;
+}
+#left_sidebar_region{
+	display: inline-block;
+	width: 18%;
+	float: left;
+}
+/* ===================== Side Bar  ============================ */
+.SideBar{
+	display: inline-block;
+	float: left;
+	.profile-pic{
+		width: 208px;
+		height: 208px;
+		overflow: hidden;
+		img{
+			width: 208px;
+		}
+	}
+}
+
+/* =====================  Helper Functions   ======================== */
+
+.hide{
+	display: none!important;
+}
+.float_left{
+	float: left;
+}
+.float_right{
+	float: right;
+}
+.no_opacity{
+	opacity: 0;
+}
+/* ==========================   Choose Profile   =================================*/
+#choose_profile{
+	width: 300px;
+  div{
+		display: inline-block;
+		&:hover{
+			cursor: pointer;
+		}
+	}
+  .thumb-container{
+  	display: inline-block;
+  }
+  h5{
+  	display: inline-block;
+  	margin: 39px 0 0 10px;
+	position: relative;
+	vertical-align: top;
+	color: blue;
+  }
+	img{
+
+	}
+	a{
+
+	}
+}
+
+/*   =======================   Mostly wall and profile style   ========================  */
+
+#main_container{
+	float: right;
+	z-index: 100;
+	position: relative;
+}
+#Profile{
+	width: 100%;
+	float: right;
+	z-index: 100;
+	position: relative;
+}
+#left_bar{
+width: 25%;
+float: left;
+z-index: 110;
+position: relative;
+}
+
+
+.comment {
+padding: 16px 16px 16px 16px;
+border: none;
+background: #F2F2F2;
+z-index: 2;
+box-shadow: none;
+}
+/*   ========================    Profile box ... to the left  ==============================  */
+.img-rounded {
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+.img-polaroid {
+  padding: 4px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+     -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.bs-docs-sidenav {
+width: 208px;
+margin: 10px 0 0;
+padding: 0;
+background-color: #fff;
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+border-radius: 6px;
+-webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+-moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+box-shadow: 0 1px 4px rgba(0,0,0,.065);
+}
+
+.bs-docs-sidenav > li:first-child > a {
+-webkit-border-radius: 6px 6px 0 0;
+-moz-border-radius: 6px 6px 0 0;
+border-radius: 6px 6px 0 0;
+}
+.bs-docs-sidenav .icon-chevron-right {
+float: right;
+margin-top: 2px;
+margin-right: -6px;
+opacity: .25;
+}
+.bs-docs-sidenav > li > a {
+display: block;
+width: 190px \9;
+margin: 0 0 -1px;
+padding: 8px 14px;
+border: 1px solid #e5e5e5;
+}
+
+/*  =========================================================================
+	COMMENT AND SUBCOMMENT 
+    ========================================================================= */
+
+#wall{
+	width: 100%;
+	.media-heading{
+		display: inline-block;
+		width: 80%;
+	}
+}
+input.comment{
+	width: 80%;
+	border: 1px solid;
+	padding: 8px;
+}
+.comment-destroy, .sub_comment-destroy{
+	display: inline-block;
+	float: right;
+	margin-left: 20px;
+	&:hover{
+		cursor: pointer;
+	}
+}
+.comment-edit, .sub_comment-edit{
+	display: inline-block;
+	float: right;
+	&:hover{
+		cursor: pointer;
+	}
+}
+.comment-content{
+	width: 90%;
+	display:inline-block;
+	&:hover{
+		cursor: default;
+	}
+}
+.display{
+	&:hover{
+		cursor: default;
+	}
+}
+.thumb-container.comment_input_pic{
+	width: 50px;
+	height: 50px;
+}
+/* ==========================================================================
+   WALL INPUT BOX
+   ========================================================================== */
+.Wall{
+
+			section{
+				padding:0;
+				background: #fff;
+				background: rgba(255, 255, 255, 0.9);
+				border: 1px solid #ccc;
+				position: relative;
+				border-top-left-radius: 2px;
+				border-top-right-radius: 2px;
+				box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2),
+							0 25px 50px 0 rgba(0, 0, 0, 0.15);
+
+							&:before {
+								content: '';
+								border-left: 1px solid #f5d6d6;
+								border-right: 1px solid #f5d6d6;
+								width: 2px;
+								position: absolute;
+								top: 0;
+								left: 40px;
+								height: 100%;
+							}
+
+						input{
+								position: relative;
+								margin: 0;
+								width: 100%;
+								font-size: 24px;
+								font-family: inherit;
+								line-height: 1.4em;
+								outline: none;
+								color: inherit;
+								-webkit-box-sizing: border-box;
+								-moz-box-sizing: border-box;
+								-ms-box-sizing: border-box;
+								-o-box-sizing: border-box;
+								box-sizing: border-box;
+								-webkit-font-smoothing: antialiased;
+								-moz-font-smoothing: antialiased;
+								-ms-font-smoothing: antialiased;
+								-o-font-smoothing: antialiased;
+								font-smoothing: antialiased;
+								padding: 24px 16px 16px 60px;
+								border: none;
+								background: rgba(0, 0, 0, 0.02);
+								z-index: 2;
+								box-shadow: none;
+								height: 80px;
+						}
+						input::-webkit-input-placeholder {
+							font-style: italic;		
+							color: #a9a9a9;	
+					    }
+					    input:-moz-placeholder{
+							font-style: italic;
+							color: #a9a9a9;
+						}
+
+				}
+
+
+				#header:before {
+					content: '';
+					position: absolute;
+					top: 0;
+					right: 0;
+					left: 0;
+					height: 15px;
+					z-index: 2;
+					border-bottom: 1px solid #6c615c;
+					background: #8d7d77;
+					background: -webkit-gradient(linear, left top, left bottom, from(rgba(132, 110, 100, 0.8)),to(rgba(101, 84, 76, 0.8)));
+					background: -webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+					background: -moz-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+					background: -o-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+					background: -ms-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+					background: linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+					filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#9d8b83', EndColorStr='#847670');
+					border-top-left-radius: 1px;
+					border-top-right-radius: 1px;
+				}
+}
+
+
+/*  ==============================   COMMENT BOX AND SUB COMMENTS   ================================  */
+.thumb-container,
+.thumb-inner,
+.thumb-img {
+	border: 0;
+	display: block;
+	display: inline-block;
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+	position: relative;
+	width: 100%;
+}
+
+
+.thumb-container {
+	background: #FFFFFF;
+	border: 1px solid;
+	border-color: #ccc #aaa #aaa #ccc;
+	height: 74px;
+	padding: 6px;
+	width: 74px;
+}
+
+.thumb-container a,
+.thumb-container img {
+	border: 0;
+	margin: 0;
+}
+
+.thumb-center img,
+.thumb-strip,
+.thumb-icon {
+	position: absolute;
+}
+
+.thumb-center img {
+	/*margin-left: 50%;
+	margin-top: 50%;*/
+}
+
+.thumb-strip {
+	background: #fff;
+	background: rgba(255, 255, 255, 0.5);
+	color: #222;
+	font: 10px/16px Arial, sans-serif;
+	height: 16px;
+	bottom: 0;
+	left: 0;
+	letter-spacing: -1px;
+	text-indent: 4px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width: 100%;
+}
+
+
+
+
+
