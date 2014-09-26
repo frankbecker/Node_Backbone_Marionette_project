@@ -38,7 +38,14 @@ define([
             },
 
             newSubComment:function(event){
-
+              if (event.keyCode != 13) return;
+                var target = event.target;
+                if(target.value === ""){
+                 $(this.el).find(".comment").attr('placeholder','Please try again!');
+                 return;
+                }
+              var subcomment = new SubComment();
+              $(".sub_container", this.el).prepend(subcomment.el);
             },
 
             onClose: function() {

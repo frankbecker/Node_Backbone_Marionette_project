@@ -24,7 +24,7 @@ define([
             template: Handlebars.compile(Template),
 
             events: {
-               //"keypress .comment"      : "newSubComment"
+               "keypress .comment"      : "newSubComment"
             },
 
             initialize: function() {

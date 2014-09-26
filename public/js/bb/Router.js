@@ -8,7 +8,7 @@ define(['App',
         'bb/Views/Signup/Signup',
         'bb/Views/Sidebar/Sidebar',
         'bb/Views/About/About',
-        'bb/Views/Profile/Profile',
+        'bb/Views/Profile/Wall',
     ],
     function(
         App,
