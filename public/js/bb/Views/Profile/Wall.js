@@ -33,7 +33,8 @@ define([
 
             initialize: function() {
                 this.collection = new Comments();
-                this.user_logged_id = App.Session.get("_id");
+                this.user_logged_in = App.Session;
+                this.new_comment = null;
             },
 
             render: function() {
@@ -47,10 +48,13 @@ define([
 
             populate_wall : function(){
                 var user_id = this.user_logged_id;
+                var self = this;
                 this.collection.fetch({
-                    
+
                    success:function(collection, response, options){
-                    console.log(collection);
+                    self.collection.each(function(model){
+                        self.insert_needed_info_into_comments(model);
+                    });
                    },
 
                    fail:function(collection, response, options){
@@ -60,18 +64,37 @@ define([
             },
 
             newComment:function(event){
+
               if (event.keyCode != 13) return;
                 var target = event.target;
                 if(target.value === ""){
                  $(this.el).find("#new-todo").attr('placeholder','Please try again!');
                  return;
                 }
-              var new_comment = this.collection.create({
+              var self = this;
+              this.new_comment = this.collection.create({
                   body: target.value,
                   user: this.user_logged_id
-               });
-              var comment = new Comment();
-              $("#wall", this.el).prepend(comment.el);
+                },{ silent: true, wait: true, success: this.insert_needed_info_into_comments(this.new_comment), fail: this.created_comment_fail} );
+
+            },
+
+            created_comment_success : function(new_comment, response, options){
+           
+            },
+
+            created_comment_fail: function(new_comment, response, options){
+                console.log("something went wrong when creating a new commment");
+            },
+
+            insert_needed_info_into_comments : function(model){
+                var comment_user = model.get('user');
+                if( comment_user._id == this.user_logged_in.get('_id')){
+                    model.set("match", true);
+                }
+                model.set("user_logged_in", this.user_logged_in.toJSON());
+                var comment = new Comment({model: model});
+                $("#wall", self.el).prepend(comment.el);
             },
 
             onClose: function() {

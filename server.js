@@ -13,7 +13,7 @@ var configDB = require('./config/database.js');
 var sessionOpts = {
 	key: "token",
 	secret: 'ilovescotchscotchyscotchscotch',
-    cookie: { maxAge: 10000 }
+    cookie: 'secure'
 };
 
 app.set('root_directory', __dirname);

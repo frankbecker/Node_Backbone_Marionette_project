@@ -19,7 +19,9 @@ define([
             defaults: {
                 _id: null,
                 profile_pic: null,
-                name: null,
+                first_name: null,
+                last_name: null,
+                full_name: null,
                 about_me: null
             },
 
@@ -45,11 +47,15 @@ define([
             clear: function() {
                 $.removeCookie('_id');
                 $.removeCookie('profile_pic');
-                $.removeCookie('name');
+                $.removeCookie('first_name');
+                $.removeCookie('last_name');
+                $.removeCookie('full_name');
                 $.removeCookie('profile_in_view');
                 this.unset("_id");
                 this.unset("profile_pic");
-                this.unset("name");
+                this.unset("first_name");
+                this.unset("last_name");
+                this.unset("full_name");
                 this.unset("profile_in_view");
             },
 

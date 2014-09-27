@@ -15,12 +15,13 @@ module.exports = function(app, passport) {
 
 	// process the login form
 	app.post('/login', function(req, res, next) {
-		passport.authenticate('local-login', function(err, user, info) {
+		passport.authenticate('local-login', {session: true}, function(err, user, info) {
 			if (err)return next(err);
 			if (user === false) {
 				return res.send(401, info);
 				} else {
 				req.app.set('user_legged_in', user._id);
+				req.session.user = user;
 				return res.send(200, user);				
 			}
 		})(req, res, next);

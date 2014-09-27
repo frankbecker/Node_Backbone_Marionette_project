@@ -12,10 +12,11 @@ exports.findById = function(req, res) {
 };
 
 exports.findByUser = function(req, res) {
-    var id = req.app.get('user_legged_in');
-    console.log(id);
+    var id = req.session.user.id;
     Comment.find({ user: id }).populate('user').populate('sub_comments.user').exec(function(err, collection) {
         if (err) return console.error(err);
+        //!ATTENTION I am using this functino in order to remove both username and password from our User object
+        // I am trying to set up a getter in order to fix this issue, but I'll need to look deeper into this problem
         _.each(collection , function(model){
             model.user.local = "";
         });

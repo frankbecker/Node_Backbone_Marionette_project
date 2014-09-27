@@ -51,8 +51,12 @@ userSchema.methods.remove_local = function(){
     return delete this.local;
 };
 
-userSchema.virtual('name').get(function () {
+userSchema.virtual('full_name').get(function () {
   return this.first_name + ' ' + this.last_name;
+});
+
+userSchema.set('toJSON', {
+    virtuals: true
 });
 // create the model for users and expose it to our app
 module.exports = mongoose.model('User', userSchema);
