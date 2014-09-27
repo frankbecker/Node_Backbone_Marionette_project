@@ -1,5 +1,6 @@
 // app/routes.js
 var User_route = require('./routes/User');
+var Comments_route = require('./routes/Comments');
 module.exports = function(app, passport) {
 
 	// =====================================
@@ -9,7 +10,7 @@ module.exports = function(app, passport) {
 	app.get('/login', function(req, res) {
 		console.log(req.cookies);
 		// render the page and pass in any flash data if it exists
-		res.render('login.ejs', { message: req.flash('loginMessage') });
+		//res.render('login.ejs', { message: req.flash('loginMessage') });
 	});
 
 	// process the login form
@@ -46,6 +47,15 @@ module.exports = function(app, passport) {
 	app.delete('/user/:id', User_route.deleteUser);
 	app.post('/upload_img', User_route.upload_img);
 
+
+	// =====================================
+	// COMMENTS WALL, MAINLY =========================
+	// =====================================
+	app.get('/comments', Comments_route.findByUser);
+	app.get('/comments/:id', Comments_route.findById);
+	app.put('/comments/:id', Comments_route.updateComment);
+	app.delete('/comments/:id', Comments_route.deleteComment);
+	app.post('/comments', Comments_route.addComment);
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================

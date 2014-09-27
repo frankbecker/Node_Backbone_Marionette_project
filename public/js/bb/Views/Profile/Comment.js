@@ -28,7 +28,7 @@ define([
                "keypress .comment"      : "newSubComment"
             },
 
-            initialize: function() {
+            initialize: function(){
                 this.render();
             },
 
