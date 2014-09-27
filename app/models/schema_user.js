@@ -47,6 +47,10 @@ userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.local.password);
 };
 
+userSchema.methods.remove_local = function(){
+    return delete this.local;
+};
+
 userSchema.virtual('name').get(function () {
   return this.first_name + ' ' + this.last_name;
 });

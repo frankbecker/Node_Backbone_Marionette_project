@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var User = require('../models/user');
+var User = require('../models/schema_user');
 var fs = require("fs");
 
 exports.findById = function(req, res) {

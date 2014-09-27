@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
-var Comment = require('../models/comment');
+var Comment = require('../models/schema_comment');
 var fs = require("fs");
+var _ = require('underscore');
 
 exports.findById = function(req, res) {
     var id = req.params.id;
@@ -11,9 +12,13 @@ exports.findById = function(req, res) {
 };
 
 exports.findByUser = function(req, res) {
-    var id = req.params.id;
-    Comment.find({ user: id }, function(err, collection){
+    var id = req.app.get('user_legged_in');
+    console.log(id);
+    Comment.find({ user: id }).populate('user').populate('sub_comments.user').exec(function(err, collection) {
         if (err) return console.error(err);
+        _.each(collection , function(model){
+            model.user.local = "";
+        });
          res.send(collection);
     });
 };
@@ -21,9 +26,9 @@ exports.findByUser = function(req, res) {
 exports.addComment = function(req, res) {
     var comment = req.body;
     var Comment_model = new Comment(comment);
-    Comment_model.save(function (err, fluffy) {
+    Comment_model.save(function (err, new_comment) {
       if (err) return console.error(err);
-      console.log("Comment was saved");
+      res.send(new_comment);
     });
 };
 

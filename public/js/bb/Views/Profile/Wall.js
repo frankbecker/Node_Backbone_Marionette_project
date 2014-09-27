@@ -6,7 +6,8 @@ define([
         'backbone',
         'handlebars',
         'text!bb/Templates/Profile/wall.html',
-        'bb/Views/Profile/Comment'
+        'bb/Views/Profile/Comment',
+        'bb/Collections/Comments/Comments'
     ],
     function(
         App,
@@ -16,7 +17,8 @@ define([
         Backbone,
         Handlebars,
         Template,
-        Comment
+        Comment,
+        Comments
     ) {
 
         var Wall = Marionette.View.extend({
@@ -30,12 +32,31 @@ define([
             },
 
             initialize: function() {
-
+                this.collection = new Comments();
+                this.user_logged_id = App.Session.get("_id");
             },
 
             render: function() {
+                var self = this;
                 $(this.el).html(this.template());
+                setTimeout(function(){
+                    self.populate_wall();
+                },0);
                 return this;
+            },
+
+            populate_wall : function(){
+                var user_id = this.user_logged_id;
+                this.collection.fetch({
+                    
+                   success:function(collection, response, options){
+                    console.log(collection);
+                   },
+
+                   fail:function(collection, response, options){
+
+                   }
+               });
             },
 
             newComment:function(event){
@@ -45,6 +66,10 @@ define([
                  $(this.el).find("#new-todo").attr('placeholder','Please try again!');
                  return;
                 }
+              var new_comment = this.collection.create({
+                  body: target.value,
+                  user: this.user_logged_id
+               });
               var comment = new Comment();
               $("#wall", this.el).prepend(comment.el);
             },

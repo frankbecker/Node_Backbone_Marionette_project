@@ -1,6 +1,6 @@
 // app/routes.js
-var User_route = require('./routes/User');
-var Comments_route = require('./routes/Comments');
+var User_route = require('./routes/route_user');
+var Comments_route = require('./routes/route_comments');
 module.exports = function(app, passport) {
 
 	// =====================================
@@ -20,7 +20,8 @@ module.exports = function(app, passport) {
 			if (user === false) {
 				return res.send(401, info);
 				} else {
-				return res.send(200, user);
+				req.app.set('user_legged_in', user._id);
+				return res.send(200, user);				
 			}
 		})(req, res, next);
 	});
