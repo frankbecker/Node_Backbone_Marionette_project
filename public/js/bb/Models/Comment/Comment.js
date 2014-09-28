@@ -16,16 +16,13 @@ define([
         var Comment = Backbone.Model.extend({
 
             idAttribute: '_id',
-            
+
             defaults: {
                 _id: null,
                 body  : null,
                 created  : null,
-                user : null
-            },
-            
-            initialize: function() {
-                this.url = "/comments/"+this.get("_id");
+                user : null,
+                parent: null
             }
 
         });

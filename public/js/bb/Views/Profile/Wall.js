@@ -88,6 +88,7 @@ define([
             },
 
             insert_needed_info_into_comments : function(model){
+                if(model.get("parent"))return;
                 var comment_user = model.get('user');
                 if( comment_user._id == this.user_logged_in.get('_id')){
                     model.set("match", true);
