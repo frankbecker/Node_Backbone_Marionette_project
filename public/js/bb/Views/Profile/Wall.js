@@ -93,7 +93,7 @@ define([
                     model.set("match", true);
                 }
                 model.set("user_logged_in", this.user_logged_in.toJSON());
-                var comment = new Comment({model: model});
+                var comment = new Comment({model: model, collection: this.collection});
                 $("#wall", self.el).prepend(comment.el);
             },
 

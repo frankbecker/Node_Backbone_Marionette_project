@@ -36,7 +36,7 @@ exports.addComment = function(req, res) {
 exports.updateComment = function(req, res) {
     var _id = req.params.id;
     var comment = req.body;
-    comment.user = comment.user._id;
+    comment.user = comment.user._id;   /// we need to get rid of the User object and just update the user with _id field, I am trying to find a better way of doing this, cleaner way
     console.log("updateComment");
     delete comment._id;
         Comment.update({'_id':_id}, comment, {safe:true}, function(err, result) {

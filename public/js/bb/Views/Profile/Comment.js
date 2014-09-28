@@ -37,6 +37,7 @@ define([
                 this.editing = false;
                 this.childViews = [];      //GARBAGE COLLECTION
                 this.user_logged_in = App.Session;
+                this.new_SubComment = null;
                 this.render();
             },
 
@@ -57,33 +58,29 @@ define([
                  $(this.el).find(".comment").attr('placeholder','Please try again!');
                  return;
                 }
-              var self = this;
-              var SubComments_array = this.model.get("sub_comments");
-              var new_model = {
+              this.new_SubComment = this.collection.create({
                   body: target.value,
-                  user: this.user_logged_in.get('_id'),
-                  match: true
-                };
-              
-              SubComments_array.push(new_model);
-              /// this is just so that it will conform with the template              
-              this.model.set("sub_comments" , SubComments_array);
-              console.log(this.model.toJSON());
-              var user = this.model.get("user");
-              this.model.set("user", user._id);
-              this.model.save().done(function(){
-                  new_model.user = self.user_logged_in.toJSON();
-                  var MyModel = Backbone.Model.extend({});
-                  var model = new MyModel(new_model);
-                  var subcomment = new SubComment({model: model});
-                  subcomment.on("sub_comment:edit",function(id){
-                    self.update_subcomment(id);
-                  });
-                  self.childViews.push(subcomment);
-                  $(".sub_container", self.el).append(subcomment.el);
-                  self = null;
-              });
-             
+                  user: this.user_logged_in.get("_id"),
+                  parent: this.model.get("_id")
+                },{ silent: true, wait: true, success: this.insert_needed_info_into_comments(this.new_SubComment), fail: this.created_comment_fail} );
+            },
+
+            created_comment_success : function(new_comment, response, options){
+           
+            },
+
+            created_comment_fail: function(new_comment, response, options){
+                console.log("something went wrong when creating a new commment");
+            },
+
+            insert_needed_info_into_comments : function(model){
+                var SubComments_array = this.model.get("sub_comments");
+                var comment_user = model.get('user');
+                if( comment_user._id == this.user_logged_in.get('_id')){
+                    model.set("match", true);
+                }
+                var sub_comment = new SubComment({model: model, collection: this.collection});
+                $(".sub_container", self.el).append(sub_comment.el);
             },
 
             edit_comment: function(){
@@ -111,32 +108,12 @@ define([
 
             load_sub_comments : function(){
                 var self = this;
-                var SubComments_array = self.model.get("sub_comments");
-                _.each(SubComments_array, function(subcomment){
-                  var MyModel = Backbone.Model.extend({});
-                  var comment_user = subcomment.user;
-                    if( comment_user._id == self.user_logged_in.get('_id')){
-                        subcomment.match = true;
-                    }
-                  var model = new MyModel(subcomment);
-                  var subcomment_view = new SubComment({model: model});
-                  subcomment_view.on("sub_comment:edit",function(id){
-                    self.update_subcomment(id);
-                  });
-                  self.childViews.push(subcomment_view);
-                  $(".sub_container", self.el).append(subcomment_view.el);
-                });
-            },
-
-            update_subcomment: function(index_id){
-                console.log("SubComment has been updated");
-                console.log(index_id);
             },
 
             destroy_model: function(){
                 this.model.destroy();
                 this.close();
-            },            
+            },
 
             onClose: function() {
                 _.each(this.childViews, function(childView){

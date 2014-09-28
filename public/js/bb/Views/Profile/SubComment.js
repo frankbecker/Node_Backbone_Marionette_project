@@ -49,20 +49,23 @@ define([
                     this.$el.find(".edit-sub").addClass("hide");
                     this.update_comment(false, true);
                     this.editing = !this.editing;
-                }      
+                }
             },
 
             update_comment: function(event, just_update){
                 if(!just_update){
                     if (event.keyCode != 13) return;
                 }
-               
+                var self = this;
                 var value = this.$el.find(".edit-sub input").val();
-                this.model.save({body: value});
+                this.model.save({body: value}).done(function(){
                 var subcomment_index = this.$el.find(".media").attr("data-id");
-                this.trigger("sub_comment:edit" , subcomment_index);
-                this.$el.find(".sub_comment-content").removeClass("hide");
-                this.$el.find(".edit-sub").addClass("hide");
+                self.$el.find(".sub_comment-content").removeClass("hide");
+                self.$el.find(".edit-sub").addClass("hide");
+                self = null;
+                }).fail(function(){
+                    console.log("error updating subcomment");
+                });
             },
 
             hide_input:function(){
