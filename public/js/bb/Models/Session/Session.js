@@ -16,6 +16,9 @@ define([
     ) {
 
         var Session = Backbone.Model.extend({
+
+            idAttribute: '_id',
+            
             defaults: {
                 _id: null,
                 profile_pic: null,

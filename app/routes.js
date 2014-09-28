@@ -13,6 +13,11 @@ module.exports = function(app, passport) {
 		//res.render('login.ejs', { message: req.flash('loginMessage') });
 	});
 
+	/*app.post('/login', passport.authenticate('local-login', {
+		successRedirect : '/profile', // redirect to the secure profile section
+		failureRedirect : '/login', // redirect back to the signup page if there is an error
+		failureFlash : true // allow flash messages
+	}));*/
 	// process the login form
 	app.post('/login', function(req, res, next) {
 		passport.authenticate('local-login', {session: true}, function(err, user, info) {
@@ -20,9 +25,12 @@ module.exports = function(app, passport) {
 			if (user === false) {
 				return res.send(401, info);
 				} else {
-				req.app.set('user_legged_in', user._id);
-				req.session.user = user;
-				return res.send(200, user);				
+				req.logIn(user, function(err) {
+					if (err) { return res.send({'status':'err','message':err.message}); }
+					req.app.set('user_legged_in', user._id);
+					req.session.user = user;
+					return res.send(200, user);	
+				});
 			}
 		})(req, res, next);
 	});

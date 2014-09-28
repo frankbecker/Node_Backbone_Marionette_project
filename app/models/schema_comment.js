@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var SubComment_Schema = mongoose.Schema({
     body  : {type: String, required: true},
     created: { type: Date, default: Date.now },
+    index : {type: Number, required: true},
     user : {type: Schema.Types.ObjectId, required: true, ref: "User"}
 });
 

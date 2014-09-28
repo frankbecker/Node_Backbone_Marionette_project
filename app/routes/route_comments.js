@@ -12,7 +12,7 @@ exports.findById = function(req, res) {
 };
 
 exports.findByUser = function(req, res) {
-    var id = req.session.user.id;
+    var id = req.user._id;
     Comment.find({ user: id }).populate('user').populate('sub_comments.user').exec(function(err, collection) {
         if (err) return console.error(err);
         //!ATTENTION I am using this functino in order to remove both username and password from our User object
@@ -25,6 +25,7 @@ exports.findByUser = function(req, res) {
 };
 
 exports.addComment = function(req, res) {
+    console.log("addComment");
     var comment = req.body;
     var Comment_model = new Comment(comment);
     Comment_model.save(function (err, new_comment) {
@@ -36,6 +37,7 @@ exports.addComment = function(req, res) {
 exports.updateComment = function(req, res) {
     var _id = req.params.id;
     var comment = req.body;
+    console.log("updateComment");
     delete comment._id;
         Comment.update({'_id':_id}, comment, {safe:true}, function(err, result) {
             if (err) {

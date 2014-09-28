@@ -47,7 +47,7 @@ define([
             },
 
             populate_wall : function(){
-                var user_id = this.user_logged_id;
+                var user_id = this.user_logged_in.get("_id");
                 var self = this;
                 this.collection.fetch({
 
@@ -74,7 +74,7 @@ define([
               var self = this;
               this.new_comment = this.collection.create({
                   body: target.value,
-                  user: this.user_logged_id
+                  user: this.user_logged_in.get("_id")
                 },{ silent: true, wait: true, success: this.insert_needed_info_into_comments(this.new_comment), fail: this.created_comment_fail} );
 
             },
