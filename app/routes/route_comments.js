@@ -25,7 +25,6 @@ exports.findByUser = function(req, res) {
 };
 
 exports.addComment = function(req, res) {
-    console.log("addComment");
     var comment = req.body;
     var Comment_model = new Comment(comment);
     Comment_model.save(function (err, new_comment) {
@@ -37,6 +36,7 @@ exports.addComment = function(req, res) {
 exports.updateComment = function(req, res) {
     var _id = req.params.id;
     var comment = req.body;
+    comment.user = comment.user._id;
     console.log("updateComment");
     delete comment._id;
         Comment.update({'_id':_id}, comment, {safe:true}, function(err, result) {

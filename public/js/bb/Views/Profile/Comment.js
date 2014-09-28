@@ -61,7 +61,6 @@ define([
               var SubComments_array = this.model.get("sub_comments");
               var new_model = {
                   body: target.value,
-                  index: SubComments_array.length,
                   user: this.user_logged_in.get('_id'),
                   match: true
                 };
@@ -82,6 +81,7 @@ define([
                   });
                   self.childViews.push(subcomment);
                   $(".sub_container", self.el).append(subcomment.el);
+                  self = null;
               });
              
             },
@@ -104,18 +104,18 @@ define([
                     if (event.keyCode != 13) return;
                 }
                 var value = this.$el.find(".edit input").val();
-                this.model.save({comment: value});
+                this.model.save({body: value});
                 this.$el.find(".comment-content").removeClass("hide");
                 this.$el.find(".edit").addClass("hide");
             },
 
             load_sub_comments : function(){
                 var self = this;
-                var SubComments_array = this.model.get("sub_comments");
+                var SubComments_array = self.model.get("sub_comments");
                 _.each(SubComments_array, function(subcomment){
                   var MyModel = Backbone.Model.extend({});
                   var comment_user = subcomment.user;
-                    if( comment_user._id == this.user_logged_in.get('_id')){
+                    if( comment_user._id == self.user_logged_in.get('_id')){
                         subcomment.match = true;
                     }
                   var model = new MyModel(subcomment);

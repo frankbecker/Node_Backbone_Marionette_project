@@ -59,7 +59,7 @@ define([
                
                 var value = this.$el.find(".edit-sub input").val();
                 this.model.save({body: value});
-                var subcomment_index = this.$el.find(".media").attr("data-index");
+                var subcomment_index = this.$el.find(".media").attr("data-id");
                 this.trigger("sub_comment:edit" , subcomment_index);
                 this.$el.find(".sub_comment-content").removeClass("hide");
                 this.$el.find(".edit-sub").addClass("hide");
