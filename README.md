@@ -7,7 +7,8 @@ This repo uses passport for user authentication.
 I've built a commenting wall, and I am still adding more features to this project.
 
 If you wish to view it, pull the repo down, make sure you have MongoDB installed and running.
-Run npm install and node server.js at the project root and the magic should happen at port 5000
+Run npm install and node server.js at the project root and the magic should happen at port 8080.
+
 Like I said I am still adding on to the project.
 
 Oh and it's all Async.
