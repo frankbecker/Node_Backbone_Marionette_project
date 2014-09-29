@@ -65,8 +65,8 @@ define([
                 url: "/signup",
                 data: { email: input_email, password: input_password }
                 })
-                .done(function( msg ) {
-                    console.log(msg);
+                .done(function( response ) {
+                    App.Success_SignUp(response);
                 })
                 .fail(function( xhr ){
                     $alert.removeClass("hide").html(xhr.responseText);

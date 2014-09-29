@@ -43,6 +43,16 @@ define([
 
         });
 
+        
+        App.Success_SignUp = function(response) {
+            var callback = function(){
+                App.Router.navigate('about/'+App.Session.get("_id"), {
+                    trigger: true
+                 });
+            };
+            App.Session.save(response, callback); /// I need this call back because the setcookies function takes way too long to return
+        };
+
         App.Success_Login = function(response) {
             var callback = function(){
                 App.Router.navigate('profile/'+App.Session.get("_id"), {

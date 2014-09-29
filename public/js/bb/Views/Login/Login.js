@@ -68,7 +68,7 @@ define([
                 data: { email: input_email, password: input_password }
                 })
                 .done(function( response ) {
-                    App.Success_Login(response);                    
+                    App.Success_Login(response);
                 })
                 .fail(function( xhr ){
                     $alert.removeClass("hide").html(xhr.responseText);
