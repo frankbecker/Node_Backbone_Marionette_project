@@ -1,18 +1,14 @@
-# Complete Guide to Node Authentication
+# Node, Express, Mongoose, Require, Backbone, Marionette Project
 
-Code for the entire scotch.io tutorial series: Complete Guide to Node Authentication
+I pigged back off of scotch-io/node-authentication-guide
 
-We will be using Passport to authenticate users locally, with Facebook, Twitter, and Google.
+This repo use passport for user authentication.
 
-## Instructions
+I built a commenting wall, kind of like facebook, and I am still adding for features to this project.
 
-If you would like to download the code and try it for yourself:
-
-1. Clone the repo: `git clone git@github.com:scotch-io/node-authentication-guide`
-2. Install packages: `npm install`
-3. Change out the database configuration in config/database.js
-4. Launch: `node server.js`
-5. Visit in your browser at: `http://localhost:8080`
+If you wish to view it, pull the repo down, make sure you have MongoDB installed and running.
+Run npm install and node server.js at the project root and the magic should happen at port 5000
+Like I said I am still adding on to the project
 
 
 
