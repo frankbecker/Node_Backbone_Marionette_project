@@ -9,6 +9,27 @@
 	width: 18%;
 	float: left;
 }
+.choose_profile{
+	.thumb-img{
+		img{
+			width: 100%;
+		}
+	}
+	.profile_wrapper{
+		display: table;
+		h5{
+			display: table-cell;
+			vertical-align: middle;
+			padding-left: 12px;
+		}
+		&:hover{
+			cursor: pointer;
+			h5{
+				color: #428bca;
+			}
+		}
+	}
+}
 /* ===================== Loging and Signup  ============================ */
 .Signup{
 	width: 40%;
@@ -336,8 +357,7 @@ input.comment{
 
 .thumb-container a,
 .thumb-container img {
-	border: 0;
-	margin: 0;
+	width: 100%;
 }
 
 .thumb-center img,

@@ -1,7 +1,9 @@
 <div class="media" data-id="{{ _id }}">
           <a href="#profile/{{ user._id }}" class="thumb pull-left">
             <span class="thumb-container">
-              <img class="thumb-img" src="pics/{{ user.profile_pic }}" alt="Profile"/>
+              <span  class="thumb-img">
+              <img src="pics/{{ user.profile_pic }}" alt="Profile"/>
+              </span>
             </span>
           </a>
                   <div class="media-body">
@@ -24,7 +26,9 @@
                     <div class="media">
                                 <a href="#profile/{{ user_logged_in._id }}" class="thumb pull-left">
                                   <span class="thumb-container comment_input_pic">
-                                    <img class="thumb-img" src="pics/{{ user_logged_in.profile_pic }}"  alt="Profile"/>
+                                    <span  class="thumb-img">
+                                    <img src="pics/{{ user_logged_in.profile_pic }}"  alt="Profile"/>
+                                    </span>
                                   </span>
                                 </a>
                               <div class="media-body">

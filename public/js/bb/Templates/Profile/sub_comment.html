@@ -1,7 +1,11 @@
 <div class="media" data-id="{{ _id }}">
-                    <a href="#profile/{{ user._id }}" class="thumb pull-left">
-                        <span class="thumb-container"><img class="thumb-img" src="pics/{{ user.profile_pic }}" alt="Profile"/></span>
-                    </a>
+          <a href="#profile/{{ user._id }}" class="thumb pull-left">
+            <span class="thumb-container">
+              <span  class="thumb-img">
+              <img src="pics/{{ user.profile_pic }}" alt="Profile"/>
+              </span>
+            </span>
+          </a>
                   <div class="media-body-sub">
                     <a href="#profile/{{ user._id }}"><h5 class="media-heading">{{ user.first_name }}&nbsp;{{ user.last_name }}</h5></a>
                              {{#if match }}                           

@@ -26,7 +26,8 @@ define([
             template: Handlebars.compile(Template),
 
             events: {
-                "click button": "login"
+               // "click button": "login"
+               "click .profile_wrapper": "login"
             },
 
             initialize: function() {
@@ -56,11 +57,28 @@ define([
                 return false;
             },
 
-            login: function(e){
+            /*login: function(e){
                 e.preventDefault();
                 if(!this.validate())return;
                 var input_email = $("#email", this.el).val();
                 var input_password = $("#password", this.el).val();
+                var $alert = $(".alert", this.el);
+                $.ajax({
+                type: "POST",
+                url: "/login",
+                data: { email: input_email, password: input_password }
+                })
+                .done(function( response ) {
+                    App.Success_Login(response);
+                })
+                .fail(function( xhr ){
+                    $alert.removeClass("hide").html(xhr.responseText);
+                });
+            },*/
+            login: function(e){
+                e.preventDefault();
+                var input_email = $(e.currentTarget).find('.thumb-container').attr('data-username');
+                var input_password = $(e.currentTarget).find('.thumb-container').attr('data-password');
                 var $alert = $(".alert", this.el);
                 $.ajax({
                 type: "POST",

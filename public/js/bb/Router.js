@@ -9,6 +9,7 @@ define(['App',
         'bb/Views/Sidebar/Sidebar',
         'bb/Views/About/About',
         'bb/Views/Profile/Wall',
+        'bb/Views/Pictures/Pictures'
     ],
     function(
         App,
@@ -21,7 +22,8 @@ define(['App',
         Signup,
         Sidebar,
         About,
-        Wall
+        Wall,
+        Pictures
     ) {
 
 
@@ -52,7 +54,9 @@ define(['App',
             },
 
             registration: function() {
-                App.mainRegion.show(new Register());
+                //App.mainRegion.show(new Register());
+                //this.close_side_bar_view();
+                App.mainRegion.show(new Login());
                 this.close_side_bar_view();
             },
 
@@ -67,16 +71,8 @@ define(['App',
             },
 
             profile: function(_id){
-                var app_profile_in_view = this.fetch_profile(_id, this.build_side_bar_view);
-                if(App.HELPER_isPromise(app_profile_in_view)){
-                    app_profile_in_view.done(function(){
-                        App.mainRegion.show(new Wall());
-                    }).fail(function(){
-                        console.log("Something went wrong fetching profile in view");
-                    });
-                }else{
-                    App.mainRegion.show(new Wall());
-                }
+                var app_profile_in_view = this.fetch_profile(_id);
+                this.show_main_region_with_profile_in_view(app_profile_in_view , Wall);
             },
 
             pictures: function(_id){
@@ -84,26 +80,39 @@ define(['App',
             },
 
             about: function(_id){
-                this.fetch_profile(_id, this.build_about_view);
+                var app_profile_in_view = this.fetch_profile(_id);
+                this.show_main_region_with_profile_in_view(app_profile_in_view , About);
             },
 
-            build_about_view: function(profile_model){
-                App.mainRegion.show(new About({ model: profile_model }));
-                App.Router.build_side_bar_view(profile_model);
+            show_main_region_with_profile_in_view: function(app_profile_in_view, View){
+                var self = this;
+                if(App.HELPER_isPromise(app_profile_in_view)){
+                    app_profile_in_view.done(function(){
+                        self.build_side_bar_and_main_view(app_profile_in_view, View);
+                        self = null;
+                    }).fail(function(){
+                        console.log("Something went wrong fetching profile in view");
+                    });
+                }else{
+                    this.build_side_bar_and_main_view(app_profile_in_view, View);
+                }
+            },
+
+            build_side_bar_and_main_view: function(app_profile_in_view, MainView , flag){
+                App.mainRegion.show(new MainView({ model: app_profile_in_view }));
+                App.left_sidebar_region.show(new Sidebar({model : app_profile_in_view }));
             },
 
             /*
                 This callback is always expecting a profile model
              */
-            fetch_profile: function(_id, callback){
+            fetch_profile: function(_id){
                 if(App.Profile_in_View && App.Profile_in_View.get("_id") == _id){
-                   callback(App.Profile_in_View);
-                   return;
+                   return App.Profile_in_View;
                 }
                 App.Profile_in_View = new Profile({ _id : _id });
                 App.Profile_in_View.fetch({
                     success: function() {
-                        callback(App.Profile_in_View);
                     },
                     error: function(model, response) {
                         alert("User not found.");
@@ -117,18 +126,6 @@ define(['App',
                      App.left_sidebar_region.close();
                 }catch(err){
 
-                }
-            },
-
-            build_side_bar_view: function(profile_model){
-                var self = this;
-                if(!App.HELPER_isPromise(profile_model)){
-                    this.sidebar = new Sidebar({model : profile_model});
-                    App.left_sidebar_region.show(this.sidebar);
-                }else{
-                    profile_model.done(function(data, textStatus, jqXHR){
-                      self.build_side_bar_view();
-                    });
                 }
             },
 
