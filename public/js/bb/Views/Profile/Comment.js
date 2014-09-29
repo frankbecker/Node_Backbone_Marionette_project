@@ -35,12 +35,13 @@ define([
                 this.listenTo(this.model, "destroy", this.close);
                 this.listenTo(this.model, "remove", this.close);
                 this.listenTo(this.model, "change", this.render_template_only);
-                this.listenTo(this.collection, "reset", this.update_sub_comments);
+                this.listenTo(this.collection, "reset", this.load_sub_comments);
                 this.editing = false;
                 this.childViews = [];      //GARBAGE COLLECTION
                 this.user_logged_in = App.Session;
                 this.profile_in_view = App.Profile_in_View;
                 this.new_SubComment = null;
+                this.subComments_ids = [];
                 this.render();
             },
 
@@ -64,7 +65,7 @@ define([
                 if(target.value === ""){
                  $(this.el).find(".comment").attr('placeholder','Please try again!');
                  return;
-                }
+                }                
                 var self = this;
                 this.new_SubComment = this.collection.create({
                   body: target.value,
@@ -76,12 +77,14 @@ define([
                 wait : true,    // waits for server to respond with 200 before adding newly created model to collection
                 silent: true,
                 success : function(resp){
-                    self.insert_needed_info_into_comments(resp);
+                    self.append_new_subComment(resp);
                 },
                 error : function(err) {
                     console.log("Error creating new Subcomment");
                 }
                 });
+
+                target.value = "";
             },
 
             created_comment_success : function(new_comment, response, options){
@@ -92,13 +95,15 @@ define([
                 console.log("something went wrong when creating a new commment");
             },
 
-            insert_needed_info_into_comments : function(model){
+            append_new_subComment : function(model){
                 var comment_user = model.get('user');
                 if( comment_user._id == this.user_logged_in.get('_id')){
                     model.set("match", true);
                 }
                 var sub_comment = new SubComment({model: model, collection: this.collection});
                 $(".sub_container", this.el).append(sub_comment.el);
+                /// newly created subComment we need to insert the id into the array that keeps track of subcomment ids
+                this.subComments_ids.push(model.get("_id"));
             },
 
             edit_comment: function(){
@@ -132,15 +137,26 @@ define([
             load_sub_comments : function(){
                 var self = this;
                 var sub_comments = this.collection.where({parent: this.model.get('_id')});
+                var new_comments = [];
                 _.each(sub_comments, function(sub_comment_model){
-                    var comment_user = sub_comment_model.get('user');
-                    if( comment_user._id == self.user_logged_in.get('_id')){
+                    new_comments.push(sub_comment_model.get('_id'));
+                });
+                var difference = _.difference(new_comments, this.subComments_ids);
+                _.each(difference , function(sub_id){
+                    var model = self.collection.findWhere({_id: sub_id});
+                    self.add_sub_comment(model);
+                });
+                this.subComments_ids = new_comments;
+            },
+
+            add_sub_comment: function(sub_comment_model){
+                    var comment_user = sub_comment_model.get('user');         
+                    if( comment_user._id == this.user_logged_in.get('_id')){
                         sub_comment_model.set("match", true);
                     }
-                    var sub_comment_view = new SubComment({model: sub_comment_model, collection: self.collection});
-                    self.childViews.push(sub_comment_view);
-                    $(".sub_container", self.el).append(sub_comment_view.el);
-                });
+                    var sub_comment_view = new SubComment({model: sub_comment_model, collection: this.collection});
+                    this.childViews.push(sub_comment_view);
+                    $(".sub_container", this.el).append(sub_comment_view.el);
             },
 
             update_sub_comments: function(){

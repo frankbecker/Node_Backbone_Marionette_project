@@ -60,6 +60,8 @@ define([
         };
 
         App.HELPER_isPromise = function (value) {
+            ////  I have this try catch because value sometimes is not a deferred, sometimes it is a backbone model
+            ////  A little hack
             try{
                 if (typeof value.then !== "function") {
                     return false;
@@ -67,7 +69,6 @@ define([
             }catch(err){
                     return false;
             }
-
             var promiseThenSrc = String($.Deferred().then);
             var valueThenSrc = String(value.then);
             return promiseThenSrc === valueThenSrc;

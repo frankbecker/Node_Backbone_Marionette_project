@@ -84,6 +84,7 @@ define([
                  $(this.el).find("#new-todo").attr('placeholder','Please try again!');
                  return;
                 }
+                
               var self = this;
               this.new_comment = this.collection.create({
                   body: target.value,
@@ -100,7 +101,7 @@ define([
                     console.log("Error creating new Comment");
                 }
                 });
-
+              target.value = "";
             },
 
             created_comment_success : function(new_comment, response, options){
