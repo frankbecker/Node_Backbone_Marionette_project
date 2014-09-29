@@ -34,6 +34,8 @@ define([
             initialize: function(){
                 this.listenTo(this.model, "destroy", this.close);
                 this.listenTo(this.model, "remove", this.close);
+                this.listenTo(this.model, "change", this.render_template_only);
+                this.listenTo(this.collection, "reset", this.update_sub_comments);
                 this.editing = false;
                 this.childViews = [];      //GARBAGE COLLECTION
                 this.user_logged_in = App.Session;
@@ -50,6 +52,10 @@ define([
                     self = null;
                 }, 0);
                 return this;
+            },
+
+            render_template_only : function(){
+                this.$el.find(".comment-content").html(this.model.get("body"));
             },
 
             newSubComment:function(event){
@@ -116,8 +122,7 @@ define([
                 var value = this.$el.find(".edit input").val();
                 this.model.save({body: value}).done(function(){
                     self.$el.find(".comment-content").removeClass("hide");
-                    self.$el.find(".edit").addClass("hide");
-                    self.$el.find(".comment-content").html(value);
+                    self.$el.find(".edit").addClass("hide");              
                     self = null;
                 }).fail(function(){
                     console.log("Something went wrong updating comment");
@@ -133,8 +138,13 @@ define([
                         sub_comment_model.set("match", true);
                     }
                     var sub_comment_view = new SubComment({model: sub_comment_model, collection: self.collection});
+                    self.childViews.push(sub_comment_view);
                     $(".sub_container", self.el).append(sub_comment_view.el);
                 });
+            },
+
+            update_sub_comments: function(){
+                console.log("updating SubComments");
             },
 
             destroy_model: function(){

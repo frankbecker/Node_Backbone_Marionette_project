@@ -31,6 +31,7 @@ define([
             },
 
             initialize: function() {
+                this.listenTo(this.model, "change", this.render);
                 this.render();
             },
 
@@ -61,7 +62,6 @@ define([
                 this.model.save({body: value}).done(function(){
                 self.$el.find(".sub_comment-content").removeClass("hide");
                 self.$el.find(".edit-sub").addClass("hide");
-                self.$el.find(".sub_comment-content").html(value);
                 self = null;
                 }).fail(function(){
                     console.log("error updating subcomment");

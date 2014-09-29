@@ -50,8 +50,8 @@ define([
                     self.populate_wall();
                 },0);
                 setTimeout(function(){
-                   // self.fetch_comments();
-                },6000);
+                    self.fetch_comments();
+                },10000);
                 return this;
             },
 
@@ -117,12 +117,16 @@ define([
 
             fetch_comments: function(){
                 var self = this;
+                var user_id = this.profile_in_view.get("_id");
                 this.collection.fetch({
-                    update: true,
-                    success: function(){
+                    data: $.param({ user_id: user_id}),
 
+                    update: true,
+
+                    success: function(){
+                        self.collection.trigger("reset");
                     },
-                    fail: function () {
+                    error: function () {
                         console.log("Something went wrong fetching comments Wall.js");
                     }
                     });
@@ -131,7 +135,7 @@ define([
                   clearInterval(this.Interval);
                   this.Interval = null;
                 }
-                this.Interval = window.setInterval(function(){self.fetch_comments();},6000);   //Working Working Working        
+                this.Interval = window.setInterval(function(){self.fetch_comments();},10000);   //Working Working Working        
             },
 
             insert_needed_info_into_comments : function(model){

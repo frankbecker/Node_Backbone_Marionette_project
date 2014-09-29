@@ -66,7 +66,7 @@ define([
             },
 
             // Saves Session information to cookie
-            save: function(result) {
+            save: function(result, callback) {
                 this.set({
                     _id: result._id,
                     profile_pic: result.profile_pic,
@@ -75,6 +75,7 @@ define([
                 $.cookie('_id', result._id);
                 $.cookie('profile_pic', result.profile_pic);
                 $.cookie('full_name', result.full_name);
+                callback();
             }
 
 
