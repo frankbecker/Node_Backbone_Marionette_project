@@ -17,6 +17,7 @@ define([
         App.Dialog = {};
         App.Session = {};
         App.Profile_in_View = null;
+        App.comment_editing_no_comment_fecthing = false;
 
         App.addRegions({
             headerRegion: "#header_region",
@@ -44,9 +45,12 @@ define([
 
         App.Success_Login = function(response) {
             App.Session.save(response);
-            App.Router.navigate('profile/'+App.Session.get("_id"), {
-                trigger: true
-            });
+            setTimeout(function(){
+                 App.Router.navigate('profile/'+App.Session.get("_id"), {
+                    trigger: true
+                 });
+            },200);
+            
         };
 
         App.Log_User_Out = function() {
@@ -57,12 +61,26 @@ define([
         };
 
         App.HELPER_isPromise = function (value) {
-            if (typeof value.then !== "function") {
-                return false;
+            try{
+                if (typeof value.then !== "function") {
+                    return false;
+                }
+            }catch(err){
+                    return false;
             }
+
             var promiseThenSrc = String($.Deferred().then);
             var valueThenSrc = String(value.then);
             return promiseThenSrc === valueThenSrc;
+        };
+
+        App.GET_comment_editing_no_comment_fecthing = function(){
+            return this.comment_editing_no_comment_fecthing;
+        };
+
+        App.SET_comment_editing_no_comment_fecthing = function(value){  /// boolean
+            this.comment_editing_no_comment_fecthing = value;
+            this.trigger("change:comment_editing_no_comment_fecthing");
         };
 
 

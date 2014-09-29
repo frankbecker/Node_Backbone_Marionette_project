@@ -9,13 +9,17 @@
 	width: 18%;
 	float: left;
 }
+/* ===================== Loging and Signup  ============================ */
+.Signup{
+	width: 40%;
+}
 /* ===================== Side Bar  ============================ */
 .SideBar{
 	display: inline-block;
 	float: left;
 	.profile-pic{
 		width: 208px;
-		height: 208px;
+		max-height: 300px;
 		overflow: hidden;
 		img{
 			width: 208px;
@@ -85,12 +89,36 @@ position: relative;
 }
 
 
-.comment {
+.Comment {
 padding: 16px 16px 16px 16px;
 border: none;
 background: #F2F2F2;
 z-index: 2;
 box-shadow: none;
+ .todo{
+ 	min-height: 87px;
+ }
+ a{
+ 	display: inline-block;
+ }
+ .edit{
+ 	.todo-input{
+ 		height: 35px;
+		font-size: 15px;
+ 	}
+ }
+ .todo-input{
+ 	width: 87%;
+ }
+}
+.SubComment{
+	.thumb-container{
+		width: 60px;
+		height: 60px;
+	}
+	.todo{
+		min-height: 40px;
+	}
 }
 /*   ========================    Profile box ... to the left  ==============================  */
 .img-rounded {
@@ -161,6 +189,9 @@ input.comment{
 	display: inline-block;
 	float: right;
 	margin-left: 20px;
+	margin-right: 20px;
+	text-decoration: underline;
+	color: #428bca;
 	&:hover{
 		cursor: pointer;
 	}
@@ -168,6 +199,8 @@ input.comment{
 .comment-edit, .sub_comment-edit{
 	display: inline-block;
 	float: right;
+	text-decoration: underline;
+	color: #428bca;
 	&:hover{
 		cursor: pointer;
 	}
@@ -334,6 +367,26 @@ input.comment{
 }
 
 
-
+/* ====================  About Me  ==========================*/
+.About{
+	form{
+		input{
+			width: 50%!important;
+			display: inline-block;
+		}
+		textarea{
+			width: 50%!important;
+			display: inline-block;
+			height: 175px;
+		}
+		.help-inline{
+			display: inline-block;
+			color: red;
+		}
+		.help-block{
+			margin-top: 8px;
+		}
+	}
+}
 
 

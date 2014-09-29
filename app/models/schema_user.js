@@ -32,7 +32,8 @@ var userSchema = mongoose.Schema({
     last_name        : String,
     profile_pic      : String,
     about_me         : String,
-    phone_number     : String
+    phone_number     : String,
+    created          : { type: Date, default: Date.now, required: true }
     
 }, { strict: false });
 

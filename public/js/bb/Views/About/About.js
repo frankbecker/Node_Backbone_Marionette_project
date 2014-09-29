@@ -21,8 +21,18 @@ define([
 
         template: Handlebars.compile(Template),
 
-        initialize: function () {
+        events: {
+            "change"        : "change",
+            "click .save"   : "beforeSave",
+            "click .delete" : "delete",
+            "drop #picture" : "dropHandler",
+            "dragover #picture" : "dragoverHandler"
+        },
 
+        initialize: function () {
+            this.profile_in_view = App.Profile_in_View;
+            this.profile_logged_in = App.Session;
+            this.set_match();
         },
 
         render: function () {
@@ -30,12 +40,10 @@ define([
             return this;
         },
 
-        events: {
-            "change"        : "change",
-            "click .save"   : "beforeSave",
-            "click .delete" : "delete",
-            "drop #picture" : "dropHandler",
-            "dragover #picture" : "dragoverHandler"
+        set_match: function(){
+            if(this.profile_in_view.get("_id") == this.profile_logged_in.get("_id")){
+                this.model.set("match", true);
+            }
         },
 
         change: function (event) {
@@ -65,11 +73,10 @@ define([
                 return false;
             }
             // Upload picture file if a new file was dropped in the drop area
-            if (this.pictureFile) {
-                this.model.set("profile_pic", this.pictureFile.name);
+            if (this.pictureFile) {                
                 this.uploadFile(this.pictureFile,
                     function (image_name) {
-                        self.model.set("picture", image_name);
+                        self.model.set("profile_pic", image_name);
                         self.save();
                     }
                 );

@@ -22,7 +22,6 @@ define([
             idAttribute: "_id",
 
             defaults: {
-                _id: null,
                 profile_pic: null,
                 first_name: null,
                 last_name: null,

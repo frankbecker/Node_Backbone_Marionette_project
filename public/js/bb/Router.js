@@ -67,8 +67,16 @@ define(['App',
             },
 
             profile: function(_id){
-                this.fetch_profile(_id, this.build_side_bar_view);
-                App.mainRegion.show(new Wall());
+                var app_profile_in_view = this.fetch_profile(_id, this.build_side_bar_view);
+                if(App.HELPER_isPromise(app_profile_in_view)){
+                    app_profile_in_view.done(function(){
+                        App.mainRegion.show(new Wall());
+                    }).fail(function(){
+                        console.log("Something went wrong fetching profile in view");
+                    });
+                }else{
+                    App.mainRegion.show(new Wall());
+                }
             },
 
             pictures: function(_id){

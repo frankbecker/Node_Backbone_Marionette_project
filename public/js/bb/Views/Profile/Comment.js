@@ -37,6 +37,7 @@ define([
                 this.editing = false;
                 this.childViews = [];      //GARBAGE COLLECTION
                 this.user_logged_in = App.Session;
+                this.profile_in_view = App.Profile_in_View;
                 this.new_SubComment = null;
                 this.render();
             },
@@ -58,10 +59,22 @@ define([
                  $(this.el).find(".comment").attr('placeholder','Please try again!');
                  return;
                 }
-              this.new_SubComment = this.collection.create({
+                var self = this;
+                this.new_SubComment = this.collection.create({
                   body: target.value,
                   user: this.user_logged_in.get("_id"),
-                  parent: this.model.get("_id")
+                  parent: this.model.get("_id"),
+                  user_wall: this.profile_in_view.get("_id")
+                },
+                {
+                wait : true,    // waits for server to respond with 200 before adding newly created model to collection
+                silent: true,
+                success : function(resp){
+                    self.insert_needed_info_into_comments(resp);
+                },
+                error : function(err) {
+                    console.log("Error creating new Subcomment");
+                }
                 });
             },
 

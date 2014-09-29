@@ -18,7 +18,7 @@ define([
         var Session = Backbone.Model.extend({
 
             idAttribute: '_id',
-            
+
             defaults: {
                 _id: null,
                 profile_pic: null,
@@ -34,8 +34,7 @@ define([
                 this.set({
                     _id: $.cookie('_id'),
                     profile_pic: $.cookie('profile_pic'),
-                    name: $.cookie('name'),
-                    profile_in_view : $.cookie('profile_in_view')
+                    name: $.cookie('name')
                 });
             },
 
@@ -50,16 +49,10 @@ define([
             clear: function() {
                 $.removeCookie('_id');
                 $.removeCookie('profile_pic');
-                $.removeCookie('first_name');
-                $.removeCookie('last_name');
                 $.removeCookie('full_name');
-                $.removeCookie('profile_in_view');
                 this.unset("_id");
                 this.unset("profile_pic");
-                this.unset("first_name");
-                this.unset("last_name");
                 this.unset("full_name");
-                this.unset("profile_in_view");
             },
 
             remove: function(key) {
@@ -74,9 +67,14 @@ define([
 
             // Saves Session information to cookie
             save: function(result) {
+                this.set({
+                    _id: result._id,
+                    profile_pic: result.profile_pic,
+                    full_name: result.full_name
+                });                
                 $.cookie('_id', result._id);
                 $.cookie('profile_pic', result.profile_pic);
-                $.cookie('name', result.name);
+                $.cookie('full_name', result.full_name);
             }
 
 

@@ -18,9 +18,7 @@ define([
             idAttribute: '_id',
 
             defaults: {
-                _id: null,
                 body  : null,
-                created  : null,
                 user : null,
                 parent: null
             }

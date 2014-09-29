@@ -12,8 +12,9 @@ exports.findById = function(req, res) {
 };
 
 exports.findByUser = function(req, res) {
-    var id = req.user._id;
-    Comment.find({ user: id }).populate('user').exec(function(err, collection) {
+    var id = req.query.user_id;
+    var limit = 40;
+    Comment.find({ user_wall: id }).populate('user').limit(limit).exec(function(err, collection) {
         if (err) return console.error(err);
         //!ATTENTION I am using this functino in order to remove both username and password from our User object
         // I am trying to set up a getter in order to fix this issue, but I'll need to look deeper into this problem
@@ -36,7 +37,11 @@ exports.addComment = function(req, res) {
     var Comment_model = new Comment(comment);
     Comment_model.save(function (err, new_comment) {
       if (err) return console.error(err);
-      res.send(new_comment);
+      Comment.populate(new_comment, {path:"user"}, function(err, populated_comment) {  ////  this populates our need User field on response after creation
+        if (err) return console.error(err);
+        res.send(populated_comment);
+      });
+      
     });
 };
 

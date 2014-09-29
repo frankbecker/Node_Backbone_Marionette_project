@@ -1,21 +1,19 @@
 <div class="media" data-id="{{ _id }}">
-          <a href="#{{ user._id }}" class="thumb pull-left">
+          <a href="#profile/{{ user._id }}" class="thumb pull-left">
             <span class="thumb-container">
               <img class="thumb-img" src="pics/{{ user.profile_pic }}" alt="Profile"/>
             </span>
           </a>
                   <div class="media-body">
                     <div class="todo ">
-                        <h4 class="media-heading">{{ user.first_name }}&nbsp;{{ user.last_name }}</h4>
+                        <a href="#profile/{{ user._id }}"><h4 class="media-heading">{{ user.first_name }}&nbsp;{{ user.last_name }}</h4></a>
                           {{#if  match  }}                          
                               <span class="parent_destroy comment-destroy hide_important">Delete</span>
                               <span class="parent_destroy comment-edit hide_important">Edit</span>                            
                           {{/if}} 
 
                             <div class="display">
-                              <label class="comment-content">
-                                    {{ body }}</label>
-                              
+                              <label class="comment-content">{{ body }}</label>                              
                             </div>
                             <div class="edit hide">
                               <input class="todo-input" type="text" value='{{ body }}'>
@@ -24,13 +22,13 @@
                     </div>
                        <div class="sub_container"></div>             
                     <div class="media">
-                                <a href="#{{ user_logged_in._id }}" class="thumb pull-left">
+                                <a href="#profile/{{ user_logged_in._id }}" class="thumb pull-left">
                                   <span class="thumb-container comment_input_pic">
                                     <img class="thumb-img" src="pics/{{ user_logged_in.profile_pic }}"  alt="Profile"/>
                                   </span>
                                 </a>
                               <div class="media-body">
-                                <h5 class="media-heading">{{ user_logged_in.name }}</h5>
+                                <h5 class="media-heading">{{ user_logged_in.full_name }}</h5>
                                 <input class="comment" placeholder="Comment!!" />
                                 
                               </div>

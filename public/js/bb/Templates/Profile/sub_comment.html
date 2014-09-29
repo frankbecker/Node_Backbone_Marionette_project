@@ -1,9 +1,9 @@
 <div class="media" data-id="{{ _id }}">
-                    <a href="#{{ user._id }}" class="thumb pull-left">
+                    <a href="#profile/{{ user._id }}" class="thumb pull-left">
                         <span class="thumb-container"><img class="thumb-img" src="pics/{{ user.profile_pic }}" alt="Profile"/></span>
                     </a>
                   <div class="media-body-sub">
-                    <h4 class="media-heading">{{ user.name }}</h4>
+                    <a href="#profile/{{ user._id }}"><h5 class="media-heading">{{ user.first_name }}&nbsp;{{ user.last_name }}</h5></a>
                              {{#if match }}                           
                               <span class="sub_comment-destroy hide_important">Delete</span>
                               <span class="sub_comment-edit hide_important">Edit</span>
