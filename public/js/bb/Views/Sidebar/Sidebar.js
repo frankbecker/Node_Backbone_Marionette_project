@@ -5,7 +5,7 @@ define([
         'underscore',
         'backbone',
         'handlebars',
-        'text!bb/Templates/Sidebar/SideBar.html'
+        'text!bb/Templates/SideBar/SideBar.html'
     ],
     function(
         App,
