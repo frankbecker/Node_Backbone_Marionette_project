@@ -73,7 +73,7 @@ define([
                 self = null;
             },
 
-            search_for_friend: function(e){
+            search_for_friend: function(event){
                 var target = event.target;
                 if(target.value === ""){
                     this.onClose();
