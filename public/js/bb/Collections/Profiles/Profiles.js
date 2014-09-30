@@ -4,7 +4,7 @@ define([
         'marionette',
         'underscore',
         'backbone',
-        'bb/Models/Comment/Comment'
+        'bb/Models/Profile/Profile'
     ],
     function(
         App,
@@ -12,13 +12,13 @@ define([
         Marionette,
         _,
         Backbone,
-        Comment
+        Profile
     ){
 
-        var Comments = Backbone.Collection.extend({
-          model: Comment,
-          url : "/comments"
+        var Profiles = Backbone.Collection.extend({
+          model: Profile,
+          url : "/user"
         });
         // export stuff:
-        return Comments;
+        return Profiles;
     });

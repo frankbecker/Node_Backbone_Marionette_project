@@ -12,6 +12,14 @@ exports.findById = function(req, res) {
 };
 
 exports.findAll = function(req, res) {
+    var _id = req.query.user_id;
+    if(_id){
+        //  Eventually will need to update this so that it only returns friends based on ID, but I have to implement all of this design and logic
+        User.find({ '_id': { $ne: _id } } , function(err, collection) {
+            res.send(collection);
+        });
+        return;
+    }
     User.find({}, function(err, collection) {
             res.send(collection);
     });

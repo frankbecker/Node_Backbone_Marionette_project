@@ -51,7 +51,7 @@ module.exports = function(app, passport) {
 	// =====================================
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
-
+	app.get('/user', User_route.findAll);
 	app.get('/user/:id', User_route.findById);
 	app.put('/user/:id', User_route.updateUser);
 	app.delete('/user/:id', User_route.deleteUser);

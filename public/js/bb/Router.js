@@ -1,7 +1,7 @@
 define(['App',
         'jquery',
         'underscore',
-        'backbone',        
+        'backbone',
         'bb/Models/Profile/Profile',
         'bb/Views/Header/Header',
         'bb/Views/Register/Register',
@@ -10,13 +10,14 @@ define(['App',
         'bb/Views/Sidebar/Sidebar',
         'bb/Views/About/About',
         'bb/Views/Profile/Wall',
-        'bb/Views/Pictures/Pictures'
+        'bb/Views/Pictures/Pictures',
+        'bb/Views/Friends/Friends'
     ],
     function(
         App,
         $,
         _,
-        Backbone,        
+        Backbone,
         Profile,
         Header,
         Register,
@@ -25,7 +26,8 @@ define(['App',
         Sidebar,
         About,
         Wall,
-        Pictures
+        Pictures,
+        Friends
     ) {
 
 
@@ -53,6 +55,7 @@ define(['App',
                 "profile/:id" : "profile",
                 "pictures/:id" : "pictures",
                 "about/:id"   : "about",
+                "friends/:id"     : "friends",
                 "logout"      : "logout"
             },
 
@@ -64,7 +67,7 @@ define(['App',
             },
 
             login: function(){
-                App.mainRegion.show(new Login());       
+                App.mainRegion.show(new Login());
                 this.close_unecessary_views();
             },
 
@@ -83,6 +86,10 @@ define(['App',
 
             about: function(_id){
                 var app_profile_in_view = this.fetch_profile(_id, About);
+            },
+
+            friends: function(_id){
+                var app_profile_in_view = this.fetch_profile(_id, Friends);
             },
 
             build_side_bar_and_main_view: function(app_profile_in_view, MainView , flag){
