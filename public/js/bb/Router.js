@@ -1,8 +1,9 @@
 define(['App',
         'jquery',
         'underscore',
-        'backbone',
+        'backbone',        
         'bb/Models/Profile/Profile',
+        'bb/Views/Header/Header',
         'bb/Views/Register/Register',
         'bb/Views/Login/Login',
         'bb/Views/Signup/Signup',
@@ -15,8 +16,9 @@ define(['App',
         App,
         $,
         _,
-        Backbone,
+        Backbone,        
         Profile,
+        Header,
         Register,
         Login,
         Signup,
@@ -50,80 +52,78 @@ define(['App',
                 "signup"    : "signup",
                 "profile/:id" : "profile",
                 "pictures/:id" : "pictures",
-                "about/:id"   : "about"
+                "about/:id"   : "about",
+                "logout"      : "logout"
             },
 
             registration: function() {
                 //App.mainRegion.show(new Register());
                 //this.close_side_bar_view();
                 App.mainRegion.show(new Login());
-                this.close_side_bar_view();
+                this.close_unecessary_views();
             },
 
             login: function(){
-                App.mainRegion.show(new Login());
-                this.close_side_bar_view();
+                App.mainRegion.show(new Login());       
+                this.close_unecessary_views();
             },
 
             signup: function(){
                 App.mainRegion.show(new Signup());
-                this.close_side_bar_view();
+                this.close_unecessary_views();
             },
 
             profile: function(_id){
-                var app_profile_in_view = this.fetch_profile(_id);
-                this.show_main_region_with_profile_in_view(app_profile_in_view , Wall);
+                var app_profile_in_view = this.fetch_profile(_id , Wall);
             },
 
             pictures: function(_id){
-                return;
+                var app_profile_in_view = this.fetch_profile(_id, Pictures);
             },
 
             about: function(_id){
-                var app_profile_in_view = this.fetch_profile(_id);
-                this.show_main_region_with_profile_in_view(app_profile_in_view , About);
-            },
-
-            show_main_region_with_profile_in_view: function(app_profile_in_view, View){
-                var self = this;
-                if(App.HELPER_isPromise(app_profile_in_view)){
-                    app_profile_in_view.done(function(){
-                        self.build_side_bar_and_main_view(app_profile_in_view, View);
-                        self = null;
-                    }).fail(function(){
-                        console.log("Something went wrong fetching profile in view");
-                    });
-                }else{
-                    this.build_side_bar_and_main_view(app_profile_in_view, View);
-                }
+                var app_profile_in_view = this.fetch_profile(_id, About);
             },
 
             build_side_bar_and_main_view: function(app_profile_in_view, MainView , flag){
                 App.mainRegion.show(new MainView({ model: app_profile_in_view }));
-                App.left_sidebar_region.show(new Sidebar({model : app_profile_in_view }));
+                if(!App.header_built){
+                    App.headerRegion.show(new Header());
+                }
+                if(flag) return;
+                 App.left_sidebar_region.show(new Sidebar({model : app_profile_in_view }));
             },
 
             /*
                 This callback is always expecting a profile model
              */
-            fetch_profile: function(_id){
+            fetch_profile: function(_id , View, Flag){
                 if(App.Profile_in_View && App.Profile_in_View.get("_id") == _id){
-                   return App.Profile_in_View;
+                    this.build_side_bar_and_main_view(App.Profile_in_View, View, Flag);
+                   return;
                 }
+                var self = this;
                 App.Profile_in_View = new Profile({ _id : _id });
                 App.Profile_in_View.fetch({
                     success: function() {
+                        self.build_side_bar_and_main_view(App.Profile_in_View, View, Flag);
+                        self = null;
                     },
                     error: function(model, response) {
                         alert("User not found.");
                     }
                 });
-                return App.Profile_in_View;
             },
 
-            close_side_bar_view: function(){
+            close_unecessary_views: function(){
                 try{
-                     App.left_sidebar_region.close();
+                    App.left_sidebar_region.close();
+                }catch(err){
+
+                }
+                try{
+                    App.headerRegion.close();
+                    App.header_built = false;
                 }catch(err){
 
                 }
@@ -147,6 +147,10 @@ define(['App',
                     trigger: trigger,
                     replace: true
                 });
+            },
+
+            logout: function(){
+                App.Log_User_Out();
             }
         });
 

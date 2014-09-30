@@ -7,11 +7,11 @@ module.exports = function(app, passport) {
 	// LOGIN ===============================
 	// =====================================
 	// show the login form
-	app.get('/login', function(req, res) {
+	/*app.get('/login', function(req, res) {
 		console.log(req.cookies);
 		// render the page and pass in any flash data if it exists
 		//res.render('login.ejs', { message: req.flash('loginMessage') });
-	});
+	});*/
 
 	/*app.post('/login', passport.authenticate('local-login', {
 		successRedirect : '/profile', // redirect to the secure profile section

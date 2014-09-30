@@ -34,7 +34,7 @@ define([
                 this.set({
                     _id: $.cookie('_id'),
                     profile_pic: $.cookie('profile_pic'),
-                    name: $.cookie('name')
+                    full_name: $.cookie('full_name')
                 });
             },
 

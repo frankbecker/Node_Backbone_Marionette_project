@@ -40,6 +40,7 @@ define([
                 this.new_comment = null;
                 this.Interval = null;
                 this.childViews = [];      //GARBAGE COLLECTION
+                this.view_is_alive = true;
                 this.comment_editing_no_comment_fecthing = App.GET_comment_editing_no_comment_fecthing();
             },
 
@@ -136,7 +137,17 @@ define([
                   clearInterval(this.Interval);
                   this.Interval = null;
                 }
-                this.Interval = window.setInterval(function(){self.fetch_comments();},10000);   //Working Working Working        
+                if(!this.view_is_alive){
+                    try{
+                        clearInterval(this.Interval);
+                    }catch(err){
+
+                    }
+                    return;
+                }
+                this.Interval = window.setInterval(function(){self.fetch_comments();},10000);   //Working Working Working    
+                console.log("Logging from fetch comments");
+                console.log(this.Interval);
             },
 
             insert_needed_info_into_comments : function(model){
@@ -152,6 +163,9 @@ define([
             },
 
             onClose: function() {
+                console.log("Clearing Interval");
+                console.log(this.Interval);
+                this.view_is_alive = false;
                if(this.Interval){
                   clearInterval(this.Interval);
                   this.Interval = null;

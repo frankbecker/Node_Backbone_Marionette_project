@@ -17,6 +17,7 @@ define([
         App.Dialog = {};
         App.Session = {};
         App.Profile_in_View = null;
+        App.header_built = false;
         App.comment_editing_no_comment_fecthing = false;
 
         App.addRegions({
@@ -63,25 +64,20 @@ define([
         };
 
         App.Log_User_Out = function() {
+               $.ajax({
+                type: "GET",
+                url: "/logout",
+                })
+                .done(function( response ) {
+                    console.log("user has been logout");
+                })
+                .fail(function( xhr ){
+                    console.log("something went wrong in logout");
+                });
             App.Session.clear();
             App.Router.navigate('', {
                 trigger: true
             });
-        };
-
-        App.HELPER_isPromise = function (value) {
-            ////  I have this try catch because value sometimes is not a deferred, sometimes it is a backbone model
-            ////  A little hack
-            try{
-                if (typeof value.then !== "function") {
-                    return false;
-                }
-            }catch(err){
-                    return false;
-            }
-            var promiseThenSrc = String($.Deferred().then);
-            var valueThenSrc = String(value.then);
-            return promiseThenSrc === valueThenSrc;
         };
 
         App.GET_comment_editing_no_comment_fecthing = function(){
