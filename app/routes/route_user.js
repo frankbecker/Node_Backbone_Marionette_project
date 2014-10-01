@@ -70,6 +70,7 @@ exports.upload_img = function(req, res) {
             var type = type_array[0];
             var ext = type_array[1];
             var random_image_name = Math.random().toString(36).substring(7);
+            random_image_name = random_image_name + Date.now();
             random_image_name = random_image_name+"."+ext;
             /// If there's an error
             if(!imageName){

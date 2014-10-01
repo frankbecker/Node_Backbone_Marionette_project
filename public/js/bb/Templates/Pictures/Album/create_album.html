@@ -1,0 +1,53 @@
+<div class="header_container">
+<h2>Create Album</h2>
+</div>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-10">
+        {{#if name}}
+          <input type="text" id="name" class="form-control" name="name" placeholder="Name" value="{{name}}"/>
+        {{else}}
+          <input type="text" id="name" class="form-control" name="name" placeholder="Name" value=""/>
+        {{/if}}
+        <span class="help-inline"></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Description</label>
+    <div class="col-sm-10">
+        {{#if Description}}
+          <input type="text" id="description" class="form-control" name="description" placeholder="Description" value="{{description}}"/>
+        {{else}}
+          <input type="text" id="description" class="form-control" name="description" placeholder="Description" value=""/>
+        {{/if}}
+        <span class="help-inline"></span>
+    </div>
+  </div>
+    <div class="form-group">
+    <label class="col-sm-2 control-label"></label>
+    <div class="col-sm-10">
+        <span id="img_help-block" class="help-block">You need a to upload a least one image to create an album</span>
+    </div>
+  </div>
+  
+  </form>   
+<div class="span4">
+
+<div class="well" style="width: 180px;text-align: center;width:50%;margin: 0px auto;">
+    <p><img id="picture" width="180" src="pics/{{#if profile_pic}}{{profile_pic}}{{else}}default.jpg{{/if}}"/></p>
+    <p style="color:#999;">To change the picture, drag a new picture from your file system onto the box above.</p>
+</div>
+</div>
+
+    <div class="form-actions">
+    <a href="#" class="btn btn-primary save">Save</a>
+    </div>
+</form>
+<div class="row-fluid status-bar">
+    <div class="span12">
+        <div class="alert alert-success" style="display: none">
+            <b>Success!</b> Profile saved successfully
+        </div>
+    </div>
+</div>

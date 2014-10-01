@@ -14,7 +14,8 @@ exports.findById = function(req, res) {
 exports.findByUser = function(req, res) {
     var id = req.query.user_id;
     var limit = 40;
-    Comment.find({ user_wall: id }).populate('user').limit(limit).exec(function(err, collection) {
+    /// we don't comments with img_number set
+    Comment.find({ user_wall: id , img_number : null}).populate('user').limit(limit).exec(function(err, collection) {
         if (err) return console.error(err);
         //!ATTENTION I am using this functino in order to remove both username and password from our User object
         // I am trying to set up a getter in order to fix this issue, but I'll need to look deeper into this problem
@@ -70,6 +71,13 @@ exports.deleteComment = function(req, res) {
             } else {
                 console.log('' + result + ' document(s) deleted');
                 res.send(req.body);
+                Comment.remove( { parent : id }, {safe:true}, function(err, result) {
+                    if (err) {
+                        res.send({'error':'An error has occurred removing images associated with album - ' + err});
+                    } else {
+                        console.log('' + result + ' delete all images associated with album document(s) deleted');
+                    }
+                });
             }
         });
 };
