@@ -91,9 +91,17 @@ background-color: #080808;
 			width: 208px;
 		}
 	}
+	.active{
+		color: #fff;
+		background-color: #428bca;
+		&:hover{  /// overriding hover
+			color: #fff;
+			background-color: #428bca;
+		}	
+	}
 }
 
-/* =====================  Helper Functions   ======================== */
+/* =====================  Helper Classes   ======================== */
 
 .hide{
 	display: none!important;
@@ -107,6 +115,13 @@ background-color: #080808;
 .no_opacity{
 	opacity: 0;
 }
+.required:after {
+    content: "*";
+    padding-left:1%;
+    color: red;
+    font-weight: bold;
+}
+
 /* ==========================   Choose Profile   =================================*/
 #choose_profile{
 	width: 300px;
@@ -479,18 +494,54 @@ input.comment{
 /*  ===================  Pictures   =============================  */
 .Pictures{
 	button {
-		line-height: 34px;
+		line-height: 24px;
+		margin-top: 13px;
 		font-size: 16px;
+		display: inline-block;
+		float: right;
 			.glyphicon{
-				font-size: 31px;
+				font-size: 16px;
 				margin: 0;
 				margin-right: 10px;
 			}		
 		}
+	.Album_Cover{
+		h5{
+			text-align: center;
+		}
+	}
+	.album_container{
+		ul{
+			list-style: none;
+			li{
+				margin: 16px;
+				div{
+					width: 200px;
+					height: 200px;
+					overflow: hidden;
+				}
+				display: inline-block;
+				img{
+					width: 200px;
+				}
+			}
+		}
+	}
+
+}
+.Create_Album{
+		.form-control{
+		    width:50%;
+		    float:left;
+		}	
 }
 .header_container{
 	padding-bottom: 0px;
 	border-bottom: 1px solid black;
 	margin-bottom: 40px;
 }
-
+.header_container{
+	h2,h3,h4,h5,h6{
+		display: inline-block;
+	}
+}

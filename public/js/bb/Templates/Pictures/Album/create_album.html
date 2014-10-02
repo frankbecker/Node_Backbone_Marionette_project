@@ -4,7 +4,7 @@
 <form class="form-horizontal" role="form">
   <div class="form-group">
     <label class="col-sm-2 control-label">Name</label>
-    <div class="col-sm-10">
+    <div class="col-sm-10 required">
         {{#if name}}
           <input type="text" id="name" class="form-control" name="name" placeholder="Name" value="{{name}}"/>
         {{else}}
@@ -16,10 +16,11 @@
   <div class="form-group">
     <label class="col-sm-2 control-label">Description</label>
     <div class="col-sm-10">
-        {{#if Description}}
+        {{#if description}}
           <input type="text" id="description" class="form-control" name="description" placeholder="Description" value="{{description}}"/>
+          <textarea class="form-control" id="description" placeholder="Description" rows="3">{{description}}</textarea>
         {{else}}
-          <input type="text" id="description" class="form-control" name="description" placeholder="Description" value=""/>
+          <textarea class="form-control" id="description" placeholder="Description" rows="3"></textarea>
         {{/if}}
         <span class="help-inline"></span>
     </div>
@@ -42,6 +43,8 @@
 
     <div class="form-actions">
     <a href="#" class="btn btn-primary save">Save</a>
+    <!-- Indicates a dangerous or potentially negative action -->
+    <button id="cancel" type="button" class="btn btn-danger">Cancel</button>
     </div>
 </form>
 <div class="row-fluid status-bar">

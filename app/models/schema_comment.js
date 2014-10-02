@@ -6,7 +6,7 @@ var Comments_Schema = mongoose.Schema({
     body  : {type: String, required: true, trim: true},
     created: { type: Date, default: Date.now, required: true },
     parent: { type: String, default: null },
-    img_number: { type: String, default: null },
+    img_number: { type: Schema.Types.ObjectId, default: null , ref: "Image"},
     user : {type: Schema.Types.ObjectId, required: true, ref: "User"},
     user_wall : {type: Schema.Types.ObjectId, default: null, ref: "User"}
 });

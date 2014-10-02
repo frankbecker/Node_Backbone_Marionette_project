@@ -163,8 +163,6 @@ define([
             },
 
             onClose: function() {
-                console.log("Clearing Interval");
-                console.log(this.Interval);
                 this.view_is_alive = false;
                if(this.Interval){
                   clearInterval(this.Interval);

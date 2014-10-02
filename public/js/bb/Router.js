@@ -11,6 +11,8 @@ define(['App',
         'bb/Views/About/About',
         'bb/Views/Profile/Wall',
         'bb/Views/Pictures/Pictures',
+        'bb/Views/Pictures/Create_Album',
+        'bb/Views/Pictures/Album',
         'bb/Views/Friends/Friends'
     ],
     function(
@@ -27,6 +29,8 @@ define(['App',
         About,
         Wall,
         Pictures,
+        Create_Album,
+        Album,
         Friends
     ) {
 
@@ -56,6 +60,8 @@ define(['App',
                 "pictures/:id" : "pictures",
                 "about/:id"   : "about",
                 "friends/:id"     : "friends",
+                "create_album"    : "create_album",
+                "album/:id"     : "album",
                 "logout"      : "logout"
             },
 
@@ -92,13 +98,29 @@ define(['App',
                 var app_profile_in_view = this.fetch_profile(_id, Friends);
             },
 
-            build_side_bar_and_main_view: function(app_profile_in_view, MainView , flag){
-                App.mainRegion.show(new MainView({ model: app_profile_in_view }));
+            create_album: function(){
+                this.build_side_bar_and_main_view(Create_Album, false);
+            },
+
+            album: function(_id){
+                var options = {
+                    _id : _id
+                };
+                var album = new Album(options);
+                this.build_side_bar_and_main_view(album, false);
+             },
+
+            build_side_bar_and_main_view: function(MainView , flag){
+                if(typeof MainView === 'object'){
+                    App.mainRegion.show(MainView);  /// view has already been initialized
+                }else{
+                    App.mainRegion.show(new MainView());
+                }                
                 if(!App.header_built){
                     App.headerRegion.show(new Header());
                 }
                 if(flag) return;
-                 App.left_sidebar_region.show(new Sidebar({model : app_profile_in_view }));
+                 App.left_sidebar_region.show(new Sidebar());
             },
 
             /*
@@ -106,14 +128,14 @@ define(['App',
              */
             fetch_profile: function(_id , View, Flag){
                 if(App.Profile_in_View && App.Profile_in_View.get("_id") == _id){
-                    this.build_side_bar_and_main_view(App.Profile_in_View, View, Flag);
+                    this.build_side_bar_and_main_view(View, Flag);
                    return;
                 }
                 var self = this;
                 App.Profile_in_View = new Profile({ _id : _id });
                 App.Profile_in_View.fetch({
                     success: function() {
-                        self.build_side_bar_and_main_view(App.Profile_in_View, View, Flag);
+                        self.build_side_bar_and_main_view(View, Flag);
                         self = null;
                     },
                     error: function(model, response) {

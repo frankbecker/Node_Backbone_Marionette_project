@@ -30,7 +30,7 @@ define([
         },
 
         initialize: function () {
-            this.profile_in_view = App.Profile_in_View;
+            this.model = App.Profile_in_View;
             this.profile_logged_in = App.Session;
             this.set_match();
         },
@@ -41,7 +41,7 @@ define([
         },
 
         set_match: function(){
-            if(this.profile_in_view.get("_id") == this.profile_logged_in.get("_id")){
+            if(this.model.get("_id") == this.profile_logged_in.get("_id")){
                 this.model.set("match", true);
             }
         },
@@ -180,6 +180,10 @@ define([
 
         hideAlert: function() {
             $('.alert').hide();
+        },
+
+        onClose: function(){
+            
         }
 
     });

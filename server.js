@@ -3,7 +3,8 @@
 // set up ======================================================================
 // get all the tools we need
 var express  = require('express');
-var app      = express();
+// making this a global /// because I also need to access this in my schema so that I can delete some files
+app      = express();
 var port     = process.env.PORT || 8080;
 var mongoose = require('mongoose');
 var passport = require('passport');
