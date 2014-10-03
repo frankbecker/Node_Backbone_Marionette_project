@@ -1,3 +1,21 @@
 <div class="header_container">
-<h2>Album: <span>{{name}}</span></h2>
+<h2>Album</h2>
+</div>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <b>Title: </b><span id="name" contenteditable="false" class="edit_content">{{#if name}}{{name}}{{/if}}</span>
+  </div>
+    <div class="panel-body">
+    <b>Description: </b><span id="description" contenteditable="false" class="edit_content">{{#if description}}{{description}}{{/if}}</span>
+  </div>
+</div>
+<div class="row-fluid status-bar">
+    <div class="span12">
+        <div class="alert alert-success hide" >
+            <b>Success!</b> Album saved successfully
+        </div>
+        <div class="alert alert-danger hide">
+            <b>Error!</b> Oops, something went wrong
+        </div>
+    </div>
 </div>

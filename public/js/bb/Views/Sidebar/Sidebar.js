@@ -62,7 +62,7 @@ define([
 
             match_route : function(route_name){
                 var array_paths = [];
-                array_paths[0] =["pictures", "create_album"];  /// pictures
+                array_paths[0] =["pictures", "create_album", "album"];  /// pictures
 
                 _.each(array_paths,function(array){
                     _.each(array, function(path){

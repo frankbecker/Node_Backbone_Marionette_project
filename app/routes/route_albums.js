@@ -48,10 +48,10 @@ exports.updateAlbum = function(req, res) {
         Album.update({'_id':_id}, album, {safe:true}, function(err, result) {
             if (err) {
                 console.log('Error updating User: ' + err);
-                res.send({'error':'An error has occurred'});
+                res.send(500,{'error':'An error has occurred'});
             } else {
                 console.log('' + result + ' document(s) updated');
-                res.send(result);
+                res.send(album);
             }
         });
 };
@@ -59,19 +59,20 @@ exports.updateAlbum = function(req, res) {
 exports.deleteAlbum = function(req, res) {
     var id = req.params.id;
 
-        Album.findOneAndRemove({'_id':id }, {safe:true}, function(err, result) {
+        Album.findOne({'_id':id }, {safe:true}, function(err, result) {
             if (err) {
                 res.send({'error':'An error has occurred - ' + err});
             } else {
                 console.log('' + result + ' document(s) deleted');
+                result.remove();
                 res.send(result);
-                Image.remove( { album : id }, {safe:true}, function(err, result) {
+                /*Image.remove( { album : id }, {safe:true}, function(err, result) {
                     if (err) {
                         res.send({'error':'An error has occurred removing images associated with album - ' + err});
                     } else {
                         console.log('' + result + ' delete all images associated with album document(s) deleted');
                     }
-                });
+                });*/
             }
         });
 };

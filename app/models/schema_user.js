@@ -82,11 +82,6 @@ userSchema.path('profile_pic').set(function (newVal) {
   return newVal;
 });
 
-userSchema.pre('save', function (next) {
-    console.log("Pre Save");
-    console.log(this);
-    next();
-});
 
 // Enable Mongoose getter functions
 userSchema.set('toObject', { getters: true , setters: true , virtuals: true });
