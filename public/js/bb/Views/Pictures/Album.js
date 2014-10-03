@@ -7,7 +7,8 @@ define([
         'handlebars',
         'text!bb/Templates/Pictures/Album/Album.html',
         'bb/Models/Pictures/Album',
-        'bb/Collections/Pictures/Images'
+        'bb/Collections/Pictures/Images',
+        'bb/Views/Pictures/Image_Thumb'
     ],
     function(
         App,
@@ -18,7 +19,8 @@ define([
         Handlebars,
         Template,
         Album_model,
-        Images
+        Images,
+        Image_Thumb
     ) {
 
         var Album = Marionette.View.extend({
@@ -43,9 +45,12 @@ define([
                 this.model = new Album_model({ _id : options._id });
                 this.fetch_this_model();
                 this.collection = new Images();
+                this.childViews = [];      //GARBAGE COLLECTION
             },
 
             render: function() {
+                //  I created a new render function, because I want this view to render after the fetch has been complete
+                //  I should probably add a back up in case something goes wrong with the fetch, just to show the user that something went wrong 
                 return this;
             },
 
@@ -66,7 +71,7 @@ define([
 
             my_own_render : function(){
                 $(this.el).html(this.template(this.model.toJSON()));
-                //this.fetch_image_collection();
+                this.fetch_image_collection();
                 if(this.match){
                     this.add_buttons();
                 }
@@ -82,6 +87,7 @@ define([
             },
 
             fetch_image_collection: function(){
+                var self = this;
                 var album_id = this.model.get("_id");
                 this.collection.fetch({
 
@@ -90,13 +96,25 @@ define([
                    silent: true,
 
                    success:function(collection, response, options){
-                    console.log(collection);
+                    self.populate_images();
+                    self = null;
                    },
 
                    fail:function(collection, response, options){
                     console.log("Falied to retrieve images for album");
                    }
                });
+            },
+
+            populate_images: function(){
+                var self = this;
+                var $ul = this.$el.find(".album_container ul");
+                this.collection.each(function(image){
+                    var image_thumb = new Image_Thumb({model : image});
+                    self.childViews.push(image_thumb);
+                    $ul.append(image_thumb.el);
+                });
+                self = null;
             },
 
             edit: function(e){
@@ -160,7 +178,11 @@ define([
             },
 
             onClose: function() {
-
+                _.each(this.childViews, function(childView){
+                      if (childView.close){
+                        childView.close();
+                      }
+                });
             }
         });
         // export stuff:
