@@ -26,8 +26,8 @@ define([
             template: Handlebars.compile(Template),
 
             events: {
-               // "click button": "login"
-               "click .profile_wrapper": "login"
+               "click button": "login",
+               "click .profile_wrapper": "login_profile_thumb"
             },
 
             initialize: function() {
@@ -35,8 +35,20 @@ define([
             },
 
             render: function() {
+                var self = this;
                 $(this.el).html(this.template());
+                setTimeout(function(){
+                    self.show_form();
+                    self = null;
+                },0);
                 return this;
+            },
+
+            show_form: function(){
+                if(Backbone.history.fragment == "login"){
+                    $("#login_form",this.el).removeClass("hide");
+                    $(".choose_profile",this.el).addClass("hide");
+                }
             },
 
             validate: function(){
@@ -57,7 +69,7 @@ define([
                 return false;
             },
 
-            /*login: function(e){
+            login: function(e){
                 e.preventDefault();
                 if(!this.validate())return;
                 var input_email = $("#email", this.el).val();
@@ -74,8 +86,9 @@ define([
                 .fail(function( xhr ){
                     $alert.removeClass("hide").html(xhr.responseText);
                 });
-            },*/
-            login: function(e){
+            },
+
+            login_profile_thumb: function(e){
                 e.preventDefault();
                 var input_email = $(e.currentTarget).find('.thumb-container').attr('data-username');
                 var input_password = $(e.currentTarget).find('.thumb-container').attr('data-password');

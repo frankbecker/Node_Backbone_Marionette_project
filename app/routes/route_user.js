@@ -34,7 +34,7 @@ exports.addUser = function(req, res) {
     });
 };
 
-exports.updateUser = function(req, res) {
+/*exports.updateUser = function(req, res) {
     var _id = req.params.id;
     var user = req.body;
     delete User._id;
@@ -47,6 +47,27 @@ exports.updateUser = function(req, res) {
                 res.send(user);
             }
         });
+};*/
+
+exports.updateUser = function(req, res) {
+    var _id = req.params.id;
+    var user = req.body;
+   User.findOne({ "_id": _id }, function (err, subject) {
+      subject.set({
+            first_name       : user.first_name,
+            last_name        : user.last_name,
+            profile_pic      : user.profile_pic,
+            about_me         : user.about_me,
+            phone_number     : user.phone_number
+      });
+ 
+
+      // You can only pass one param to the model's save method
+      subject.save(function (err, doc, numAffected) {
+        if (err) return console.error(err);
+          res.send(doc);
+      });
+    });
 };
 
 exports.deleteUser = function(req, res) {

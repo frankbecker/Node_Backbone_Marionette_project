@@ -2,6 +2,7 @@
 // load the things we need
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
+var fs = require("fs");
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
@@ -30,7 +31,7 @@ var userSchema = mongoose.Schema({
     },
     first_name       : {type: String, required: true, trim: true},
     last_name        : {type: String, required: true, trim: true},
-    profile_pic      : String,
+    profile_pic      : {type: String, trim: true},
     about_me         : {type: String, required: true, trim: true},
     phone_number     : {type: String, required: true, trim: true},
     created          : { type: Date, default: Date.now, required: true }
@@ -62,6 +63,29 @@ userSchema.virtual('full_name').set(function () {
 
 userSchema.set('toJSON', {
     virtuals: true
+});
+
+userSchema.path('profile_pic').set(function (newVal) {
+  var originalVal = this.profile_pic;
+
+    var app_path = app.get('root_directory');
+    var newPath = app_path+"/public/pics/" + originalVal;
+    console.log(newPath);
+        fs.exists(newPath, function (exists) {
+            console.log("File does exist");
+            fs.unlink(newPath, function (err) {
+              if (err) return console.error("Error Deleting user Profile Image: "+err);
+              console.log('successfully deleted : '+ newPath );
+            });
+        });
+
+  return newVal;
+});
+
+userSchema.pre('save', function (next) {
+    console.log("Pre Save");
+    console.log(this);
+    next();
 });
 
 // Enable Mongoose getter functions
