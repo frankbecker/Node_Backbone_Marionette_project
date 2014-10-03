@@ -23,12 +23,21 @@ exports.addAlbum = function(req, res) {
     var user_id = req.body.user;
     var album = req.body;
     var img_name = req.body.img_cover;  /// this will get replaced with the _id of the new image, at first it'll be the image name for now on POST
+    var description = req.body.description;
+    var name = req.body.name;
     delete req.body.img_cover;
     var Album_model = new Album(album);
     Album_model.save(function (err, album_created) {
       if (err) return console.error(err);
 
-      var image_model = new Image({ "img_name" : img_name , "user" : user_id, "album" : album_created._id });
+      var image_model = new Image({
+        "img_name" : img_name ,
+        "user" : user_id,
+        "album" : album_created._id,
+        "img_cover": true,   /// first image will be cover by default
+        "description": description,   /// we will create the first image with the name and description of our Album
+        "name" : name
+         });
       image_model.save(function (error, img_created) {
         if (error) return console.error(error);
 

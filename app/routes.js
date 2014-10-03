@@ -2,6 +2,7 @@
 var User_route = require('./routes/route_user');
 var Comments_route = require('./routes/route_comments');
 var Albums_route = require('./routes/route_albums');
+var Image_route = require('./routes/route_image');
 module.exports = function(app, passport) {
 
 	// =====================================
@@ -69,13 +70,22 @@ module.exports = function(app, passport) {
 	app.post('/comments', Comments_route.addComment);
 
 	// =====================================
-	// COMMENTS WALL, MAINLY =========================
+	// Album API =========================
 	// =====================================
 	app.get('/album', Albums_route.findAll);
 	app.get('/album/:id', Albums_route.Album_findById);
 	app.put('/album/:id', Albums_route.updateAlbum);
 	app.delete('/album/:id', Albums_route.deleteAlbum);
 	app.post('/album', Albums_route.addAlbum);
+
+	// =====================================
+	// Images API =========================
+	// =====================================
+	app.get('/image', Image_route.findAll);
+	app.get('/image/:id', Image_route.Image_findById);
+	app.put('/image/:id', Image_route.updateImage);
+	app.delete('/image/:id', Image_route.deleteImage);
+	app.post('/image', Image_route.addImage);
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================
