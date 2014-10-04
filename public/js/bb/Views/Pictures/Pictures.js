@@ -41,14 +41,14 @@ define([
 
             render: function() {
                 $(this.el).html(this.template());
-                if(this.match){
                     var self = this;
                     setTimeout(function(){
-                        self.add_create_button();
                         self.fetch_albums();
+                        if(self.match){                            
+                            self.add_create_button();
+                        }
                         self = null;
                     },0);
-                }
                 return this;
             },
 

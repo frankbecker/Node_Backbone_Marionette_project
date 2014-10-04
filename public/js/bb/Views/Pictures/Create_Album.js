@@ -95,19 +95,9 @@ define([
             },
 
             save: function () {
-                var self = this;
-                console.log('before save');
-               /* this.model.save(null, {
-                    success: function (model) {
-                        self.render();
-                        self.showAlert('Success!', 'Info saved successfully', 'alert-success');
-                    },
-                    error: function () {
-                        self.showAlert('Error', 'An error occurred while trying to save this user', 'alert-error');
-                    }
-                });*/
               var self = this;
-              this.model.set("user", this.session.get("_id"));
+              var session_id = this.session.get("_id");
+              this.model.set("user", session_id );
               this.new_album = this.collection.create(this.model.toJSON(),
                 {
                 wait : true,    // waits for server to respond with 200 before adding newly created model to collection
@@ -115,12 +105,12 @@ define([
                 success : function(resp){
                     console.log(resp);
                     self.showAlert('Success!', 'Info saved successfully', 'alert-success');
-                    App.Router.navigate('album/'+resp.get("_id"), { trigger: true });  ////  Once we are done creating the Album lets foward the user there
+                    App.Router.navigate('album/'+session_id+'/'+resp.get("_id"), { trigger: true });  ////  Once we are done creating the Album lets foward the user there
                     self = null;
                 },
                 error : function(err) {
                     console.log("Error creating new Comment");
-                    self.showAlert('Error', 'An error occurred while trying to save this user', 'alert-error');
+                    self.showAlert('Error', 'An error occurred while trying to save this user', 'alert-danger');
                     self = null;
                 }
                 });
@@ -161,7 +151,7 @@ define([
                         this.addValidationError(key, messages[key]);
                     }
                 }
-                this.showAlert('Warning!', 'Fix validation errors and try again', 'alert-warning');
+                this.showAlert('Warning!', 'Fix validation errors and try again', 'alert-danger');
             },
 
             uploadFile: function (file, callbackSuccess) {
@@ -181,7 +171,7 @@ define([
                     callbackSuccess(data);
                 })
                 .fail(function () {
-                    self.showAlert('Error!', 'An error occurred while uploading ' + file.name, 'alert-error');
+                    self.showAlert('Error!', 'An error occurred while uploading ' + file.name, 'alert-danger');
                 });
             },
 

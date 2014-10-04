@@ -22,6 +22,7 @@ define([
             defaults: {
                 album  : null,
                 img_name  : null,
+                name: null,
                 description  : null,
                 user : null,
                 img_cover: false

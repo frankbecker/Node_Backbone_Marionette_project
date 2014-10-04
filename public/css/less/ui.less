@@ -507,7 +507,10 @@ input.comment{
 		}
 }
 .album_container{
+	text-align: center;
 		ul{
+			margin: 0px;
+			padding: 0px;
 			list-style: none;
 			li{
 				margin: 16px;
@@ -532,6 +535,11 @@ input.comment{
 .Album_Cover, .Image_Thumb{
 		h5{
 			text-align: center;
+		}
+		.thumb-container{
+			&:hover{
+				cursor: pointer;
+			}
 		}
 	}
 .header_container{
@@ -564,5 +572,15 @@ input.comment{
 		width: 85%;
 	}
 	}
-
+	#Add_Image{
+		margin-top: 40px;
+		.form-control{
+		    width:50%;
+		    float:left;
+		}
+	}
+	#pagination_container{
+		width: 100%;
+		text-align: center;
+	}
 }

@@ -1,6 +1,7 @@
 <div class="header_container">
 <h2>Album</h2>
 </div>
+<div id="album">
 <div class="panel panel-default">
   <div class="panel-body">
     <b>Title: </b><span id="name" contenteditable="false" class="edit_content">{{#if name}}{{name}}{{/if}}</span>
@@ -20,3 +21,73 @@
     </div>
 </div>
 <div class="album_container"><ul></ul></div>
+  <div id="pagination_container">
+  <ul class="pagination"></ul>
+  </div>
+</div>
+
+<div id="Add_Image" class="hide">
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Title</label>
+    <div class="col-sm-10 required">      
+          <input type="text" id="name" class="form-control" name="name" placeholder="Title" value=""/>
+        <span class="help-inline"></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Description</label>
+    <div class="col-sm-10">
+          <textarea class="form-control" id="description" placeholder="Description" rows="3"></textarea>
+        <span class="help-inline"></span>
+    </div>
+  </div>
+    <div class="form-group">
+    <label class="col-sm-2 control-label"></label>
+    <div class="col-sm-10">
+        <span id="img_help-block" class="help-block">Add image to Album</span>
+    </div>
+  </div>
+  
+  </form>   
+<div class="span4">
+
+<div class="well" style="width: 180px;text-align: center;width:50%;margin: 0px auto;">
+    <p><img id="picture" width="180" src="pics/{{#if profile_pic}}{{profile_pic}}{{else}}default.jpg{{/if}}"/></p>
+    <p style="color:#999;">To change the picture, drag a new picture from your file system onto the box above.</p>
+</div>
+</div>
+
+    <div class="form-actions">
+    <button  class="btn btn-primary save">Save</button>
+    <!-- Indicates a dangerous or potentially negative action -->
+    <button id="cancel" type="button" class="btn btn-danger">Cancel</button>
+    </div>
+</form>
+<div id="img_alert" class="row-fluid status-bar">
+    <div class="span12">
+        <div class="alert alert-success" style="display: none">
+            <b>Success!</b> Profile saved successfully
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- Modal -->
+<div id="yes_no_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Delete</h4>
+      </div>
+      <div class="modal-body">
+        Are you sure you would like to delete this entire Album?
+      </div>
+      <div class="modal-footer">
+        <button id="no" type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+        <button id="yes" type="button" class="btn btn-primary" data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,6 +9,7 @@ var Image_Schema = mongoose.Schema({
     album  : {type: Schema.Types.ObjectId, required: true, trim: true},
     img_name  : {type: String, required: true, trim: true},
     description  : {type: String, trim: true},
+    name  : {type: String, trim: true},
     created: { type: Date, default: Date.now, required: true },
     user : {type: Schema.Types.ObjectId, required: true, ref: "User"},
     img_cover: { type: Boolean, default: false }
