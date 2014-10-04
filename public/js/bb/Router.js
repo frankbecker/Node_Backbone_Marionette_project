@@ -61,7 +61,7 @@ define(['App',
                 "about/:id"   : "about",
                 "friends/:id"     : "friends",
                 "create_album"    : "create_album",
-                "album/:id"     : "album",
+                "album/:user_id/:album_id"     : "album",
                 "logout"      : "logout"
             },
 
@@ -102,12 +102,15 @@ define(['App',
                 this.build_side_bar_and_main_view(Create_Album, false);
             },
 
-            album: function(_id){
+            album: function(user_id, album_id, img_id, commment_id){
                 var options = {
-                    _id : _id
+                    album_id : album_id,
+                    user_id : user_id,
+                    img_id : img_id,
+                    commment_id : commment_id
                 };
                 var album = new Album(options);
-                this.build_side_bar_and_main_view(album, false);
+                var app_profile_in_view = this.fetch_profile(user_id, album);
              },
 
             build_side_bar_and_main_view: function(MainView , flag){

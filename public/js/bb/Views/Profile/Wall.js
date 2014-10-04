@@ -105,14 +105,6 @@ define([
               target.value = "";
             },
 
-            created_comment_success : function(new_comment, response, options){
-           
-            },
-
-            created_comment_fail: function(new_comment, response, options){
-                console.log("something went wrong when creating a new commment");
-            },
-
             handle_interval_fetching: function(){
                 this.comment_editing_no_comment_fecthing = App.GET_comment_editing_no_comment_fecthing();
             },
@@ -146,8 +138,6 @@ define([
                     return;
                 }
                 this.Interval = window.setInterval(function(){self.fetch_comments();},10000);   //Working Working Working    
-                console.log("Logging from fetch comments");
-                console.log(this.Interval);
             },
 
             insert_needed_info_into_comments : function(model){
