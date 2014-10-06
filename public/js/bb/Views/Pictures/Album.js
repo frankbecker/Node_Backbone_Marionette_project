@@ -47,7 +47,12 @@ define([
                 "click .thumb-container"  :  "show_image_pop_up"
             },
             /*
-                options = {album_id, user_id}
+                var options = {
+                    album_id : album_id,
+                    user_id : user_id,
+                    img_id : img_id,
+                    commment_id : commment_id
+                };
              */
             initialize: function(options) {
                 this.profile_in_view = App.Profile_in_View;
@@ -65,6 +70,8 @@ define([
                 this.pictureFile = null;
                 this.page = 1;
                 this.image_pop_up_view = null;
+                this.img_to_pop_up = options.img_id;
+                this.comment_to_highlight = options.commment_id;
             },
 
             render: function() {
@@ -116,6 +123,7 @@ define([
 
                    success:function(collection, response, options){
                     self.populate_images();
+                    self.fire_pop_up();
                     self = null;
                    },
 
@@ -171,6 +179,9 @@ define([
                 $(".edit_content", this.el).addClass("editable").attr("contenteditable", true);
             },
 
+            fire_pop_up: function(){
+                if(this.img_to_pop_up) this.show_image_pop_up(this.img_to_pop_up);
+            },
 
             save_album: function(e){
                 $(e.currentTarget, this.el).addClass("hide");
@@ -251,10 +262,18 @@ define([
             },
 
             show_image_pop_up: function(e){
-                var image_id = $(e.currentTarget).attr("data-id");
+                var image_id;                                    
+                if(typeof e === "string"){
+                    image_id = e;                    
+                }else{
+                    image_id = $(e.currentTarget).attr("data-id");
+                }
+                console.log(image_id);
+                var comment_to_highlight = this.comment_to_highlight;
+                this.comment_to_highlight = null;
                 var $image_pop_up = $('#img_pop_up',this.el);
                 var image_model = this.collection.findWhere({ "_id" : image_id });
-                this.image_pop_up_view = new Image_Pop_Up({ model : image_model , collection: this.collection });
+                this.image_pop_up_view = new Image_Pop_Up({ model : image_model , collection: this.collection , comment_to_highlight : comment_to_highlight });
                 $image_pop_up.find(".modal-content").append(this.image_pop_up_view.el);
                 $image_pop_up.modal('show');
                 var self = this;

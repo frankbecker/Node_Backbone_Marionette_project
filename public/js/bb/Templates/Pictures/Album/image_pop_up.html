@@ -61,6 +61,7 @@
   <b id="img_title" class="title">Title:</b>
   <b class="title">{{name}}</b>
   </div>
+  <div id="comments"></div>
         <div class="media">
                     <a href="#profile/{{ user_logged_in._id }}" class="thumb pull-left">
                       <span class="thumb-container comment_input_pic">
@@ -75,7 +76,7 @@
                     
                   </div>
          </div> 
-</div>
+</div> <!-- comments_container  -->
 </div><!-- modal-body -->
 <div class="modal-footer">
   {{#if img_cover}}  
@@ -116,7 +117,35 @@
   <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
     <span class="glyphicon glyphicon-chevron-right"></span>
   </a>
-</div>      
+</div> <!--  #carousel-example-generic  --> 
+<div id="comments_container">
+  <div id="user_img">
+  <a href="#profile/{{ user._id }}" class="thumb pull-left">
+  <span class="thumb-container">
+    <span  class="thumb-img">
+    <img src="pics/{{ user.profile_pic }}"  alt="Profile"/>
+    </span>
+  </span>
+  </a>
+  <b id="img_title" class="title">Title:</b>
+  <b class="title">{{name}}</b>
+  </div>
+  <div id="comments"></div>
+        <div class="media">
+                    <a href="#profile/{{ user_logged_in._id }}" class="thumb pull-left">
+                      <span class="thumb-container comment_input_pic">
+                        <span  class="thumb-img">
+                        <img src="pics/{{ user_logged_in.profile_pic }}"  alt="Profile"/>
+                        </span>
+                      </span>
+                    </a>
+                  <div class="media-body">
+                    <h5 class="media-heading">{{ user_logged_in.full_name }}</h5>
+                    <input class="comment" placeholder="Comment!!" />
+                    
+                  </div>
+         </div> 
+</div> <!-- comments_container  -->   
 </div><!-- modal-body -->
 <div class="modal-footer">
 </div>

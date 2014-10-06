@@ -57,11 +57,15 @@ define(['App',
                 "login"     : "login",
                 "signup"    : "signup",
                 "profile/:id" : "profile",
+                "profile/:id/:comment" : "profile",
+                "profile/:id/:comment/:sub_comment_id" : "profile",
                 "pictures/:id" : "pictures",
                 "about/:id"   : "about",
                 "friends/:id"     : "friends",
                 "create_album"    : "create_album",
                 "album/:user_id/:album_id"     : "album",
+                "album/:user_id/:album_id/:img_id"     : "album",
+                "album/:user_id/:album_id/:img_id/:commment_id"     : "album",
                 "logout"      : "logout"
             },
 
@@ -82,8 +86,12 @@ define(['App',
                 this.close_unecessary_views();
             },
 
-            profile: function(_id){
-                var app_profile_in_view = this.fetch_profile(_id , Wall);
+            profile: function(_id, commment_id, sub_comment_id){
+                var options = {
+                    comment_id : commment_id,
+                    sub_comment_id : sub_comment_id
+                };
+                var app_profile_in_view = this.fetch_profile(_id , Wall, options);
             },
 
             pictures: function(_id){
@@ -113,12 +121,14 @@ define(['App',
                 var app_profile_in_view = this.fetch_profile(user_id, album);
              },
 
-            build_side_bar_and_main_view: function(MainView , flag){
+            build_side_bar_and_main_view: function(MainView , options, flag){
                 if(typeof MainView === 'object'){
                     App.mainRegion.show(MainView);  /// view has already been initialized
+                }else if(options){
+                    App.mainRegion.show(new MainView(options));
                 }else{
                     App.mainRegion.show(new MainView());
-                }                
+                }            
                 if(!App.header_built){
                     App.headerRegion.show(new Header());
                 }
@@ -129,16 +139,16 @@ define(['App',
             /*
                 This callback is always expecting a profile model
              */
-            fetch_profile: function(_id , View, Flag){
+            fetch_profile: function(_id , View, options, Flag){
                 if(App.Profile_in_View && App.Profile_in_View.get("_id") == _id){
-                    this.build_side_bar_and_main_view(View, Flag);
+                    this.build_side_bar_and_main_view(View, options, Flag);
                    return;
                 }
                 var self = this;
                 App.Profile_in_View = new Profile({ _id : _id });
                 App.Profile_in_View.fetch({
                     success: function() {
-                        self.build_side_bar_and_main_view(View, Flag);
+                        self.build_side_bar_and_main_view(View, options, Flag);
                         self = null;
                     },
                     error: function(model, response) {

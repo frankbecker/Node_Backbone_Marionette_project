@@ -11,31 +11,45 @@ exports.findById = function(req, res) {
     });
 };
 
-exports.findByUser = function(req, res) {
-    var user_id = req.query.user_id;
-    var img_id = req.query.img_id;
+exports.findComments = function(req, res) {
+    var user_id = req.query.user_id;  /// find by user
+    var img_id = req.query.img_id;     ///  find by image number
+    var comment_id = req.query.comment_id;  /// find by comment _id
     var limit = 40;
 
     /// we don't comments with img_number set
     if(user_id){
         Comment.find({ user_wall: user_id , img_number : null}).populate('user').limit(limit).exec(function(err, collection) {
             if (err) return console.error(err);
-            //!ATTENTION I am using this functino in order to remove both username and password from our User object
+            //!ATTENTION I am using this function in order to remove both username and password from our User object
             // I am trying to set up a getter in order to fix this issue, but I'll need to look deeper into this problem
-            var temp_collection = {};
             _.each(collection , function(model){
                 model.user.local = "";
                 Comment.find({ parent: model._id },function(err, sub_collection) {
                     _.each(sub_collection, function(sub){
+                        sub.user.local = "";
                         collection.push(sub);
                     });
                 });
             });
-             res.send(collection);
+            res.send(collection);
         });
     }else if(img_id){
         Comment.find({ img_number: img_id }).populate('user').exec(function(err, collection) {
             if (err) return console.error(err);
+            _.each(collection , function(model){
+                model.user.local = "";
+            });
+            res.send(collection);
+        });
+    }else if(comment_id){
+        Comment.find({ $or: [ { _id: comment_id }, { parent: comment_id } ] }).populate('user').exec(function(err, collection) {
+            if (err) return console.error(err);
+            //!ATTENTION I am using this function in order to remove both username and password from our User object
+            // I am trying to set up a getter in order to fix this issue, but I'll need to look deeper into this problem
+            _.each(collection , function(model){
+                model.user.local = "";
+            });
             res.send(collection);
         });
     }

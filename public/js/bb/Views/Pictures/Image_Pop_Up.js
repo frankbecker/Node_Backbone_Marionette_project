@@ -5,7 +5,9 @@ define([
         'underscore',
         'backbone',
         'handlebars',
-        'text!bb/Templates/Pictures/Album/image_pop_up.html'
+        'text!bb/Templates/Pictures/Album/image_pop_up.html',
+        'bb/Views/Profile/SubComment',
+        'bb/Collections/Comments/Comments'
     ],
     function(
         App,
@@ -14,7 +16,9 @@ define([
         _,
         Backbone,
         Handlebars,
-        Template
+        Template,
+        SubComment,
+        Comments
     ) {
 
         var Image_Pop_Up = Marionette.View.extend({
@@ -32,18 +36,31 @@ define([
                 "click #next"           : "next_image",
                 "click #edit_image"     : "edit_image",
                 "click #save_image"     : "save_image",
-                "keypress .edit_content" : "press_enter"
+                "keypress .edit_content" : "press_enter",
+                "keypress input.comment"  : "new_comment"
             },
 
-            initialize: function() {
+           /*
+            options= {,
+                model,
+                collection,
+                comment_to_highlight
+            }
+             */
+
+            initialize: function(options) {
+                this.comment_to_highlight = options.comment_to_highlight;
                 this.profile_in_view = App.Profile_in_View;
-                this.session = App.Session;        
+                this.session = App.Session;
+                this.new_Comment = null;
+                this.childViews = [];      //GARBAGE COLLECTION
+                this.comments = new Comments();
                 this.render();
             },
 
             render: function() {
                 this.set_match();
-                console.log(this.model);
+                this.fetch_comments();
                 $(this.el).html(this.template(this.model.toJSON()));
                 return this;
             },
@@ -162,6 +179,7 @@ define([
                 $(".panel", this.el).addClass("hide");
                 var new_name = $("#name", this.el).html();
                 var description = $("#description", this.el).html();
+                var user = this.model.get("user");
                 this.model.set({
                     "name" : new_name,
                     "description": description
@@ -191,8 +209,78 @@ define([
                 if (event.keyCode === 13) this.save_image();
             },
 
-            onClose: function() {
+            fetch_comments: function(){
+                var self = this;
+                var image_id = this.model.get("_id");
+                this.comments.fetch({
 
+                   data: $.param({ img_id: image_id}),
+
+                   silent: true,
+
+                   success:function(collection, response, options){
+                    self.comments.each(function(model){
+                        self.append_new_Comment(model);
+                    });
+                    self = null;
+                   },
+
+                   fail:function(collection, response, options){
+                    console.log("Error fetching comments for this image");
+                    self = null;
+                   }
+               });
+            },
+
+            new_comment: function(event){
+                if (event.keyCode != 13) return;
+                var target = event.target;
+                if(target.value === ""){
+                 $(this.el).find("input.comment").attr('placeholder','Please try again!');
+                 return;
+                }
+                var self = this;
+                var img_id = this.model.get("_id");
+                var user_id = this.session.get("_id");
+                var comment = target.value;
+                this.comments.create({
+                  body: comment,
+                  user: user_id,
+                  img_number: img_id
+                },
+                {
+                wait : true,    // waits for server to respond with 200 before adding newly created model to collection
+                silent: true,
+                success : function(resp){
+                    self.append_new_Comment(resp);
+                },
+                error : function(err) {
+                    console.log("Error creating new Image comment");
+                }
+                });
+
+                target.value = "";
+            },
+
+            append_new_Comment: function(new_comment){
+                var user = new_comment.get("user");
+                if(user._id == this.session.get('_id')){  //  I am doing this here because I don't want to change the original SubComment implementation, at least not now
+                    new_comment.set("match", true);
+                }
+                if(new_comment.get("_id") == this.comment_to_highlight){
+                    new_comment.set("highlight", true);
+                }
+                var comment = new SubComment({ model : new_comment });
+                this.childViews.push(comment);
+                $("#comments", this.el).append(comment.el);
+            },
+
+            onClose: function() {
+                _.each(this.childViews, function(childView){
+                      if (childView.close){
+                        childView.close();
+                      }
+                });
             }
         });
         // export stuff:

@@ -63,7 +63,7 @@ module.exports = function(app, passport) {
 	// =====================================
 	// COMMENTS WALL, MAINLY =========================
 	// =====================================
-	app.get('/comments', Comments_route.findByUser);
+	app.get('/comments', Comments_route.findComments);
 	app.get('/comments/:id', Comments_route.findById);
 	app.put('/comments/:id', Comments_route.updateComment);
 	app.delete('/comments/:id', Comments_route.deleteComment);
@@ -104,5 +104,6 @@ function isLoggedIn(req, res, next) {
 		return next();
 
 	// if they aren't redirect them to the home page
+	req.logout();
 	res.send(401,'Session Expired');
 }

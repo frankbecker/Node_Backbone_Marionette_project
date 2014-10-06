@@ -39,7 +39,18 @@ define([
 
             render: function() {
                 $(this.el).html(this.template(this.model.toJSON()));
+                var self = this;
+                setTimeout(function(){
+                    self.highlight();
+                    self = null;
+                },0);
                 return this;
+            },
+
+            highlight: function(){
+                if(this.model.get("highlight") == true){
+                    $(this.el).addClass("highlight");
+                }
             },
 
             update_only_comment: function (){

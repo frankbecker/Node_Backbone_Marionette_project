@@ -36,6 +36,15 @@ background-color: #080808;
 		background-color: #080808;	
 	}
 }
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
 
 /* =====================  Regions   =========================== */
 #container_region{
@@ -193,6 +202,11 @@ box-shadow: none;
  }
 }
 .SubComment{
+		&.highlight{
+		   	background: rgba(202, 255, 232, 0.98);
+			border-bottom: 2px solid black;
+			border-top: 2px solid black;
+		}
 	.thumb-container{
 		width: 60px;
 		height: 60px;
@@ -603,6 +617,7 @@ input.comment{
 		background-image: linear-gradient(to bottom, #3c3c3c 0, #222 100%);
 		background-color: #222;
 		border-color: #080808;
+		height: 500px;
 		img{
 			margin: 0 auto;
 		}
@@ -649,6 +664,9 @@ input.comment{
 	}
 }
 #img_pop_up{
+	.modal-body{
+		height: 520px;
+	}
 	.modal-lg{
 		width: 1200px;
 		max-width: 1200px;
@@ -666,6 +684,15 @@ input.comment{
 		float: right;
 		display: inline-block;
 		overflow: hidden;
+	}
+	#comments{
+		overflow-y: scroll;
+		overflow: -moz-scrollbars-vertical;
+		max-height: 300px;
+	}
+	#user_img{
+		display: inline-block;
+		margin-bottom: 20px;
 	}
 	input.comment{
 		width: 100%;
@@ -685,5 +712,43 @@ input.comment{
 	}
 	#img_title{
 
+	}
+	.SubComment{
+		padding-top: 4px;
+		.todo{
+			min-height: 29px;
+		}
+		a{
+			h5{
+				font-size: 12px;
+				display: inline-block;
+			}
+			.thumb-container{
+				width: 45px;
+				height: 45px;
+			}
+			.thumb-img{
+
+			}			
+		}
+		.sub_comment-destroy{
+			display: inline-block;
+			font-size: 12px;
+			margin: 0 7px;
+		}
+		.sub_comment-edit{
+			display: inline-block;
+			font-size: 12px;
+		}
+		.sub_comment-content{
+			font-size: 12px;
+			font-weight: 500;
+		}
+		.edit-sub{
+			input{
+				width: 75%;
+				font-size: 12px;
+			}
+		}
 	}
 }

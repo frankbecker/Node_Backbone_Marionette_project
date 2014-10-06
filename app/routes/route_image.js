@@ -30,6 +30,8 @@ exports.addImage = function(req, res) {
 exports.updateImage = function(req, res) {
     var _id = req.params.id;
     var image = req.body;
+    var temp_user = image.user;
+    image.user = image.user._id;
         Image.findOneAndUpdate({'_id':_id}, image, {safe:true}, function(err, result) {
             if (err) {
                 console.log('Error updating User: ' + err);
@@ -43,6 +45,7 @@ exports.updateImage = function(req, res) {
                         }
                     });
                 }
+                image.user = temp_user;
                 res.send(image);
             }
         });

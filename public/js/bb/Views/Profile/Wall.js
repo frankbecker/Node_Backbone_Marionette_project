@@ -30,8 +30,13 @@ define([
             events: {
                "keypress #new-todo"      : "newComment"
             },
-
-            initialize: function() {
+            /*
+            var options = {
+                    comment_id : commment_id,
+                    sub_comment_id : sub_comment_id
+             };
+             */
+            initialize: function(options) {
                 this.collection = new Comments();
                 this.user_logged_in = App.Session;
                 this.listenTo(App, "change:comment_editing_no_comment_fecthing", this.handle_interval_fetching);
@@ -41,15 +46,18 @@ define([
                 this.Interval = null;
                 this.childViews = [];      //GARBAGE COLLECTION
                 this.view_is_alive = true;
+                this.comment_id = options.comment_id;
+                this.sub_comment_id = options.sub_comment_id;
                 this.comment_editing_no_comment_fecthing = App.GET_comment_editing_no_comment_fecthing();
             },
 
             render: function() {
-                var self = this;
                 $(this.el).html(this.template());
+                var self = this;
                 setTimeout(function(){
                     self.populate_wall();
                 },0);
+                if(this.comment_id)return this;
                 setTimeout(function(){
                     self.fetch_comments();
                 },10000);
@@ -57,11 +65,17 @@ define([
             },
 
             populate_wall : function(){
-                var user_id = this.profile_in_view.get("_id");
+                var param = {};
+                if(this.comment_id){
+                    $("#todoapp",this.el).addClass("hide");
+                    param["comment_id"] = this.comment_id;
+                }else{
+                    param["user_id"] = this.profile_in_view.get("_id");
+                }
                 var self = this;
                 this.collection.fetch({
 
-                   data: $.param({ user_id: user_id}),
+                   data: $.param(param),
 
                    silent: true,
 
@@ -71,14 +85,13 @@ define([
                     });
                    },
 
-                   fail:function(collection, response, options){
-
+                   error:function(collection, response, options){
+                    console.log("Something went wrong when fetching for comments");
                    }
                });
             },
 
             newComment:function(event){
-
               if (event.keyCode != 13) return;
                 var target = event.target;
                 if(target.value === ""){
@@ -140,8 +153,15 @@ define([
                 this.Interval = window.setInterval(function(){self.fetch_comments();},10000);   //Working Working Working    
             },
 
+            fetch_sigle_comment: function(){
+
+            },
+
             insert_needed_info_into_comments : function(model){
                 var comment_user = model.get('user');
+                if(model.get("_id") == this.sub_comment_id){
+                    model.set("highlight", true);
+                }
                 if(model.get("parent"))return;
                 if( comment_user._id == this.user_logged_in.get('_id')){
                     model.set("match", true);
