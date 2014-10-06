@@ -15,9 +15,6 @@ var Image_Schema = mongoose.Schema({
     img_cover: { type: Boolean, default: false }
 });
 
-
-
-
 Image_Schema.pre('remove', function(next) {
     console.log("removing image");
     var originalVal = this.img_name;

@@ -12,24 +12,34 @@ exports.findById = function(req, res) {
 };
 
 exports.findByUser = function(req, res) {
-    var id = req.query.user_id;
+    var user_id = req.query.user_id;
+    var img_id = req.query.img_id;
     var limit = 40;
+
     /// we don't comments with img_number set
-    Comment.find({ user_wall: id , img_number : null}).populate('user').limit(limit).exec(function(err, collection) {
-        if (err) return console.error(err);
-        //!ATTENTION I am using this functino in order to remove both username and password from our User object
-        // I am trying to set up a getter in order to fix this issue, but I'll need to look deeper into this problem
-        var temp_collection = {};
-        _.each(collection , function(model){
-            model.user.local = "";
-            Comment.find({ parent: id },function(err, sub_collection) {
-                _.each(sub_collection, function(sub){
-                    collection.push(sub);
+    if(user_id){
+        Comment.find({ user_wall: user_id , img_number : null}).populate('user').limit(limit).exec(function(err, collection) {
+            if (err) return console.error(err);
+            //!ATTENTION I am using this functino in order to remove both username and password from our User object
+            // I am trying to set up a getter in order to fix this issue, but I'll need to look deeper into this problem
+            var temp_collection = {};
+            _.each(collection , function(model){
+                model.user.local = "";
+                Comment.find({ parent: model._id },function(err, sub_collection) {
+                    _.each(sub_collection, function(sub){
+                        collection.push(sub);
+                    });
                 });
             });
+             res.send(collection);
         });
-         res.send(collection);
-    });
+    }else if(img_id){
+        Comment.find({ img_number: img_id }).populate('user').exec(function(err, collection) {
+            if (err) return console.error(err);
+            res.send(collection);
+        });
+    }
+
 };
 
 exports.addComment = function(req, res) {

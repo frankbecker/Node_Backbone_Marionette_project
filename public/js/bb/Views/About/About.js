@@ -31,7 +31,7 @@ define([
 
         initialize: function () {
             this.model = App.Profile_in_View;
-            this.profile_logged_in = App.Session;
+            this.session = App.Session;
             this.set_match();
         },
 
@@ -41,9 +41,8 @@ define([
         },
 
         set_match: function(){
-            if(this.model.get("_id") == this.profile_logged_in.get("_id")){
-                this.model.set("match", true);
-            }
+            var match =(this.model.get("_id") == this.session.get("_id")) ? true : false;
+            this.model.set("match", match);
         },
 
         change: function (event) {

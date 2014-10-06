@@ -26,7 +26,8 @@ define([
                 first_name: null,
                 last_name: null,
                 phone_number: null,
-                about_me: null
+                about_me: null,
+                match: false
             },
 
             initialize: function () {

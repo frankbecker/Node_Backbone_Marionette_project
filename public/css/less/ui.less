@@ -537,8 +537,14 @@ input.comment{
 			text-align: center;
 		}
 		.thumb-container{
+			&.img_cover{
+				border: 2px solid;
+				border-color: #4cae4c;
+			}
 			&:hover{
 				cursor: pointer;
+				border: 2px solid;
+				border-color: #428bca;
 			}
 		}
 	}
@@ -582,5 +588,102 @@ input.comment{
 	#pagination_container{
 		width: 100%;
 		text-align: center;
+	}
+	.pagination{
+		&:hover{
+			cursor: pointer;
+		}
+	}
+}
+
+
+/*  ========================   Image Popup   =====================  */
+.Image_Pop_Up{
+	.item{
+		background-image: linear-gradient(to bottom, #3c3c3c 0, #222 100%);
+		background-color: #222;
+		border-color: #080808;
+		img{
+			margin: 0 auto;
+		}
+	}
+	.modal-header{
+		h4{
+			display: inline-block;
+		}
+		#edit_image, #save_image{
+			display: inline-block;
+			float: right;
+			display: inline-block;
+			float: right;
+			height: 27px;
+			line-height: 15px;
+			margin-right: 20px;
+		}
+	}
+	.modal-footer{
+		span{
+			display: inline-block;
+			margin-right: 20px;
+		}
+	}
+	#img_cover_check{
+		font-size: 20px;
+		&.green{
+			color: #4cae4c;
+		}	
+	}
+	.carousel-caption{
+		span{
+			padding: 7px;
+			background: rgba(0,0,0,0.5);
+			border-radius: 6px;
+		}
+	}
+	.editable{
+		border: dashed 2px #428bca;
+		padding: 4px;
+	}
+	.modal-body{
+		display: inline-block;
+	}
+}
+#img_pop_up{
+	.modal-lg{
+		width: 1200px;
+		max-width: 1200px;
+	}
+	#carousel-example-generic{
+		width: 870px;
+		float: left;
+		max-height: 500px;
+		display: inline-block;
+	}
+	#comments_container{
+		padding: 8px;
+		padding-right: 0px;
+		width: 298px;
+		float: right;
+		display: inline-block;
+		overflow: hidden;
+	}
+	input.comment{
+		width: 100%;
+		border: 1px solid;
+		padding: 3px;
+	}
+	.thumb-container{
+		padding: 1px;
+	}
+	.media{
+		display: inline-block;
+		width: 100%;
+	}
+	.title{
+		display: inline-block;
+		padding: 10px;
+	}
+	#img_title{
+
 	}
 }

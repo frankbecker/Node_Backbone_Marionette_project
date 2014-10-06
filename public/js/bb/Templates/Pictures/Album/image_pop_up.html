@@ -1,0 +1,124 @@
+{{#if match}}      
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">{{name}}</h4>
+        <button id='edit_image' type='button' class='btn btn-info'>Edit</button>
+        <button id="save_image" type="button" class="btn btn-success hide">Save</button>
+        <div class="panel panel-default hide">
+          <div class="panel-body">
+            <b>Title: </b><span id="name" contenteditable="true" class="edit_content editable">{{#if name}}{{name}}{{/if}}</span>
+          </div>
+            <div class="panel-body">
+            <b>Description: </b><span id="description" contenteditable="true" class="edit_content editable">{{#if description}}{{description}}{{/if}}</span>
+          </div>
+        </div>  
+        <div class="row-fluid status-bar">
+            <div class="span12">
+                <div class="alert alert-success hide" >
+                    <b>Success!</b> Album saved successfully
+                </div>
+                <div class="alert alert-danger hide">
+                    <b>Error!</b> Oops, something went wrong
+                </div>
+                <div class="alert alert-warning hide">
+                    <b>Error!</b> Cannot Delete this image, because it is the Album cover
+                </div>
+            </div>
+        </div>    
+      </div>
+      <div class="modal-body">
+
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img src="pics/{{img_name}}" alt="...">
+      <div class="carousel-caption">
+        <span>
+        {{description}}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <a id="prev" class="left carousel-control" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a id="next" class="right carousel-control" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div> <!--  #carousel-example-generic  --> 
+<div id="comments_container">
+  <div id="user_img">
+  <a href="#profile/{{ user._id }}" class="thumb pull-left">
+  <span class="thumb-container">
+    <span  class="thumb-img">
+    <img src="pics/{{ user.profile_pic }}"  alt="Profile"/>
+    </span>
+  </span>
+  </a>
+  <b id="img_title" class="title">Title:</b>
+  <b class="title">{{name}}</b>
+  </div>
+        <div class="media">
+                    <a href="#profile/{{ user_logged_in._id }}" class="thumb pull-left">
+                      <span class="thumb-container comment_input_pic">
+                        <span  class="thumb-img">
+                        <img src="pics/{{ user_logged_in.profile_pic }}"  alt="Profile"/>
+                        </span>
+                      </span>
+                    </a>
+                  <div class="media-body">
+                    <h5 class="media-heading">{{ user_logged_in.full_name }}</h5>
+                    <input class="comment" placeholder="Comment!!" />
+                    
+                  </div>
+         </div> 
+</div>
+</div><!-- modal-body -->
+<div class="modal-footer">
+  {{#if img_cover}}  
+  <span>Make this image Album Cover: <span id="img_cover_check" class="glyphicon glyphicon-check green"></span></span>
+  {{else}}
+  <span>Make this image Album Cover: <span id="img_cover_check" class="glyphicon glyphicon-check"></span></span>
+  {{/if}}
+  <button id='delete_image' type='button' class='btn btn-danger'>Delete</button>
+  <button id="no_image" type="button" class="btn btn-danger yes_no hide">No</button>
+  <button id="yes_image" type="button" class="btn btn-primary yes_no hide">Yes</button>
+</div>
+
+{{else}}   <!--  Match -->
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+<h4 class="modal-title" id="myModalLabel">{{name}}</h4>
+</div>
+<div class="modal-body">
+
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img src="pics/{{img_name}}" alt="...">
+      <div class="carousel-caption">
+        <span>
+        {{description}}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>      
+</div><!-- modal-body -->
+<div class="modal-footer">
+</div>
+
+{{/if}}

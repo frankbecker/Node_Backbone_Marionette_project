@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
 var Image = require('../models/schema_image');
+var Album = require('../models/schema_album');
 
 exports.Image_findById = function(req, res) {
     var id = req.params.id;
-    Image.findOne({ _id: id }, function(err, image){
+    Image.findOne({ _id: id }).populate('user').exec(function(err, image) {
         if (err) return console.error(err);
          res.send(image);
     });
@@ -11,7 +12,7 @@ exports.Image_findById = function(req, res) {
 
 exports.findAll = function(req, res) {
     var album_id = req.query.album_id;
-    Image.find({'album': album_id} , function(err, image_collection){
+    Image.find({'album': album_id}).populate('user').exec(function(err, image_collection) {
         if (err) return console.error(err);
          res.send(image_collection);
     });
@@ -29,12 +30,19 @@ exports.addImage = function(req, res) {
 exports.updateImage = function(req, res) {
     var _id = req.params.id;
     var image = req.body;
-        Image.update({'_id':_id}, image, {safe:true}, function(err, result) {
+        Image.findOneAndUpdate({'_id':_id}, image, {safe:true}, function(err, result) {
             if (err) {
                 console.log('Error updating User: ' + err);
                 res.send(500,{'error':'An error updating image'});
             } else {
                 console.log('' + result + ' document(s) updated');
+                if(image.img_cover == true){
+                    Album.findOneAndUpdate({'_id':image.album}, { $set: { "img_cover" : image._id } }, function(error, result) {
+                        if(error){
+                            console.log('Could not update Album with new cover: ' + err);
+                        }
+                    });
+                }
                 res.send(image);
             }
         });
@@ -43,7 +51,7 @@ exports.updateImage = function(req, res) {
 exports.deleteImage = function(req, res) {
     var id = req.params.id;
 
-        Image.findOne({'_id':id }, {safe:true}, function(err, result) {
+        Image.findOne({'_id':id }, function(err, result) {
             if (err) {
                 res.send({'error':'An error has occurred - ' + err});
             } else {

@@ -9,7 +9,8 @@ define([
         'text!bb/Templates/Pictures/Album/Album.html',
         'bb/Models/Pictures/Album',
         'bb/Collections/Pictures/Images',
-        'bb/Views/Pictures/Image_Thumb'
+        'bb/Views/Pictures/Image_Thumb',
+        'bb/Views/Pictures/Image_Pop_Up'
     ],
     function(
         App,
@@ -22,7 +23,8 @@ define([
         Template,
         Album_model,
         Images,
-        Image_Thumb
+        Image_Thumb,
+        Image_Pop_Up
     ) {
 
         var Album = Marionette.View.extend({
@@ -41,7 +43,8 @@ define([
                 "click .save"       : "validate",
                 "drop #picture" : "dropHandler",
                 "dragover #picture" : "dragoverHandler",
-                "click .pagination a"  : "handle_pagination"
+                "click .pagination a"  : "handle_pagination",
+                "click .thumb-container"  :  "show_image_pop_up"
             },
             /*
                 options = {album_id, user_id}
@@ -55,10 +58,13 @@ define([
                 this.fetch_this_model();
                 this.collection = new Images();
                 this.listenTo(this.collection, "add", this.add_image_to_view);
+                this.listenTo(this.collection, "change", this.populate_images);
+                this.listenTo(this.collection, "remove", this.populate_images);
                 this.childViews = [];      //GARBAGE COLLECTION
                 this.image_name = null;
                 this.pictureFile = null;
                 this.page = 1;
+                this.image_pop_up_view = null;
             },
 
             render: function() {
@@ -120,6 +126,7 @@ define([
             },
 
             populate_images: function(){
+                this.close_child_views();
                 var $ul = this.$el.find(".album_container ul");
                 var len = this.collection.length;
                 var startPos = (this.page - 1) * 6;
@@ -147,7 +154,7 @@ define([
             handle_pagination: function(e){
                 var page_number = $(e.currentTarget, this.el).attr("data-id");
                 this.page = parseInt(page_number, 10);
-                this.onClose();
+                this.close_child_views();
                 this.populate_images();
             },
 
@@ -241,6 +248,23 @@ define([
                 this.pictureFile = null;
                 $('#Add_Image #picture',this.el).attr('src', "pics/default.jpg");
                 this.hideAlert();
+            },
+
+            show_image_pop_up: function(e){
+                var image_id = $(e.currentTarget).attr("data-id");
+                var $image_pop_up = $('#img_pop_up',this.el);
+                var image_model = this.collection.findWhere({ "_id" : image_id });
+                this.image_pop_up_view = new Image_Pop_Up({ model : image_model , collection: this.collection });
+                $image_pop_up.find(".modal-content").append(this.image_pop_up_view.el);
+                $image_pop_up.modal('show');
+                var self = this;
+                $image_pop_up.on('hidden.bs.modal', function (e) {
+                    self.remove_image_pop_up();
+                });
+            },
+
+            remove_image_pop_up : function(){
+                this.image_pop_up_view.close();
             },
 
             ///  +++++++++++++++++++++++++++++++++++++++++++++++++
@@ -386,7 +410,16 @@ define([
                 this.beforeSave();
             },
 
+            close_child_views: function(){
+                _.each(this.childViews, function(childView){
+                      if (childView.close){
+                        childView.close();
+                      }
+                });
+            },
+
             onClose: function() {
+                if(this.image_pop_up_view) this.image_pop_up_view.close();
                 _.each(this.childViews, function(childView){
                       if (childView.close){
                         childView.close();
