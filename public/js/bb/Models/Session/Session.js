@@ -36,7 +36,9 @@ define([
                 this.set({
                     _id: $.cookie('_id'),
                     profile_pic: $.cookie('profile_pic'),
-                    full_name: $.cookie('full_name')
+                    full_name: $.cookie('full_name'),
+                    notif_before_last_checked: $.cookie('notif_before_last_checked'),
+                    notif_last_checked: $.cookie('notif_last_checked')
                 });
             },
 
@@ -52,9 +54,13 @@ define([
                 $.removeCookie('_id');
                 $.removeCookie('profile_pic');
                 $.removeCookie('full_name');
+                $.removeCookie('profile_pic');
+                $.removeCookie('full_name');
                 this.unset("_id");
                 this.unset("profile_pic");
                 this.unset("full_name");
+                this.unset("notif_before_last_checked");
+                this.unset("notif_last_checked");
             },
 
             remove: function(key) {
@@ -72,11 +78,15 @@ define([
                 this.set({
                     _id: result._id,
                     profile_pic: result.profile_pic,
-                    full_name: result.full_name
+                    full_name: result.full_name,
+                    notif_before_last_checked: result.notif_before_last_checked,
+                    notif_last_checked: result.notif_last_checked
                 });                
                 $.cookie('_id', result._id);
                 $.cookie('profile_pic', result.profile_pic);
                 $.cookie('full_name', result.full_name);
+                $.cookie('notif_before_last_checked', result.notif_before_last_checked);
+                $.cookie('notif_last_checked', result.notif_last_checked);
                 if(!callback)return;
                 callback();
             }

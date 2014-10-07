@@ -3,6 +3,7 @@ var User_route = require('./routes/route_user');
 var Comments_route = require('./routes/route_comments');
 var Albums_route = require('./routes/route_albums');
 var Image_route = require('./routes/route_image');
+var Notif_route = require('./routes/route_notifications');
 module.exports = function(app, passport) {
 
 	// =====================================
@@ -86,13 +87,15 @@ module.exports = function(app, passport) {
 	app.put('/image/:id', Image_route.updateImage);
 	app.delete('/image/:id', Image_route.deleteImage);
 	app.post('/image', Image_route.addImage);
+
+	// =====================================
+	// Notifications API =========================
+	// =====================================
+	app.get('/notification', Notif_route.findAll);
 	// =====================================
 	// LOGOUT ==============================
-	// =====================================
-	app.get('/logout', function(req, res) {
-		req.logout();
-		res.redirect('/');
-	});
+	// =====================================	
+	app.get('/logout', User_route.logOut);
 	//app.all('*', isLoggedIn);
 };
 

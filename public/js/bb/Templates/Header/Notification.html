@@ -1,0 +1,24 @@
+{{#if parent }}
+<a href="#profile/{{user_wall}}/{{parent}}/{{_id}}">commented on the <b>same comment</b></a>
+<span class="thumb-container">
+  <span class="thumb-img">
+  <img src="pics/{{user.profile_pic}}" alt="Profile">
+  </span>
+</span>
+{{else}}
+ {{#if img_number }}
+<a href="#album/{{img_number.user}}/{{img_number.album}}/{{img_number._id}}/{{_id}}">commented on an <b>image</b></a>
+<span class="thumb-container">
+  <span class="thumb-img">
+  <img src="pics/{{user.profile_pic}}" alt="Profile">
+  </span>
+</span>    
+{{else}}
+<a href="#profile/{{user_wall}}/{{_id}}">commented on your <b>wall</b></a>
+<span class="thumb-container">
+  <span class="thumb-img">
+  <img src="pics/{{user.profile_pic}}" alt="Profile">
+  </span>
+</span>
+    {{/if}}
+{{/if}}

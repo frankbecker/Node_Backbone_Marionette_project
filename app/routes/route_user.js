@@ -2,6 +2,10 @@ var mongoose = require('mongoose');
 var User = require('../models/schema_user');
 var fs = require("fs");
 
+exports.logOut = function(req, res){
+        req.logout();
+};
+
 exports.findById = function(req, res) {
     var id = req.params.id;
     console.log(id);

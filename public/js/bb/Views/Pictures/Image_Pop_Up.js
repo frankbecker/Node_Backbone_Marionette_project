@@ -59,10 +59,26 @@ define([
             },
 
             render: function() {
+                var self = this;
                 this.set_match();
                 this.fetch_comments();
                 $(this.el).html(this.template(this.model.toJSON()));
+                setTimeout(function(){
+                      self.scroll_to_comment();
+                      self= null;
+                },400);
                 return this;
+            },
+
+            scroll_to_comment: function() {
+                $.fn.scrollView = function () {
+                  return this.each(function () {
+                    $('#comments').animate({
+                      scrollTop: $(this).offset().top
+                    }, 1000);
+                  });
+                };
+                $('.highlight').scrollView();
             },
 
             set_match: function(){
@@ -97,7 +113,7 @@ define([
                 this.model.destroy({
                     wait: true,
                     success : function(model,resp){
-                        $("button.close",self.el).trigger("click");                        
+                        $("button.close",self.el).trigger("click");
                         self = null;
                     },
                     error: function(){
@@ -242,11 +258,13 @@ define([
                 var self = this;
                 var img_id = this.model.get("_id");
                 var user_id = this.session.get("_id");
+                var profile_in_view = this.profile_in_view.get("_id");
                 var comment = target.value;
                 this.comments.create({
                   body: comment,
                   user: user_id,
-                  img_number: img_id
+                  img_number: img_id,
+                  user_wall : profile_in_view
                 },
                 {
                 wait : true,    // waits for server to respond with 200 before adding newly created model to collection
