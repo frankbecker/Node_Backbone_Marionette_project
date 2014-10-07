@@ -34,12 +34,17 @@ define([
             initialize: function() {
                 this.model = App.Session;
                 this.collection = new Notifications();
+                this.front_end_collection = new Notifications();  /// I use this collection just to compare with the one coming in
+                this.listenTo(this.front_end_collection, "add", this.populate_notifications);
                 this.Interval = null;
                 this.view_is_alive = true;
                 this.fetch_notifications();
                 this.childViews = [];      //GARBAGE COLLECTION
                 this.warning_is_up = false;
+                self.collec_legth = 0;
                 this.listenTo(this.model, "change:profile_pic", this.render);
+                this.listenTo(this.model, "change:full_name", this.render);
+
             },
 
             render: function() {
@@ -72,6 +77,8 @@ define([
 
                    silent: true,
 
+                   update: true,
+
                    success:function(collection, response, options){
                     $(".badge", self.el).html(self.collection.length);
                     if(self.collection.length === 0){
@@ -81,9 +88,7 @@ define([
                        $(".badge", self.el).removeClass("no_opacity");
                        self.remove_no_notification_warning();
                     }
-                    self.collection.each(function(model){
-                        self.populate_notifications(model);
-                    });
+                    self.after_fetch();
                    },
 
                    error:function(collection, response, options){
@@ -106,19 +111,25 @@ define([
                 this.Interval = window.setInterval(function(){self.fetch_notifications();},10000);   //Working Working Working  
             },
 
+            after_fetch: function() {
+                var self = this;
+                  this.collection.each(function (model) {
+                    var found = self.front_end_collection.findWhere( {"_id" : model._id });
+                    if(!found){
+                        self.front_end_collection.push(model);
+                    }
+                  });
+            },
+
             populate_notifications : function(notif){
                 var notif_view = new Notification({ model : notif });
                 this.childViews.push(notif_view);
-                $("#dropdown", this.el).append(notif_view.el);
+                $("#dropdown", this.el).prepend(notif_view.el);
             },
 
             add_no_notification_warning: function() {
-                if(this.warning_is_up)return;
-                if($('#dropdown .to_remove').length){
-                    $('#dropdown .to_remove', this.el).removeClass('hide');
-                }else{
-                    $("#dropdown", this.el).append("<li class='to_remove divider'></li><li class='warning to_remove'><b>No Notifications at this time</b></li>");
-                }
+                $("#dropdown .to_remove", this.el).remove();
+                $("#dropdown", this.el).append("<li class='to_remove divider'></li><li class='warning to_remove'><b>No Notifications at this time</b></li>");
                 this.warning_is_up = true;
             },
 

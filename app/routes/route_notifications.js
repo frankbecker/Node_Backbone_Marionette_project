@@ -1,18 +1,12 @@
 var mongoose = require('mongoose');
 var Comment = require('../models/schema_comment');
-var async = require("async");
 var _ = require('underscore');
-
-exports.findById = function(req, res) {
-
-};
 
 exports.findAll = function(req, res) {
     var user_id = req.query.user_id;
     var last_checked = req.query.notif_time;
     last_checked = new Date(last_checked);
-    console.log("logging from notification");
-    /// wall comments
+    ///  I probably need a better implementation for this but it works for now
     var temp_collection = [];
     var promise = Comment.find({ user_wall: user_id ,'created': { "$gte": last_checked }, 'user': { $ne: user_id } }).populate('user').populate("img_number").exec();
     
@@ -21,7 +15,6 @@ exports.findAll = function(req, res) {
             comment.local = "";
             temp_collection.push(comment);
         });
-       // res.send(temp_collection);
        return Comment.find({ 'user': user_id, parent: { $ne: null } }).exec();
     }).then(function(comments){
        _.each(comments, function(comment){
@@ -35,32 +28,19 @@ exports.findAll = function(req, res) {
        return Comment.find({ 'user': user_id, 'parent': null }).exec();
     }).then(function(comments){
         console.log("Logging comments where I am parent");
-
-       _.each(comments, function(comment){
-                Comment.find({ 'parent': comment._id, 'created': { "$gte": last_checked }, 'user': { $ne: user_id } }).populate('user').exec(function(err, sub_collection) {
-                    console.log(sub_collection);
-                    _.each(sub_collection, function(sub){
-                        sub.user.local = "";
-                        temp_collection.push(sub);
-                    });
-                });
+        var array_of_ids = [];
+        _.each(comments, function(comment){
+            array_of_ids.push(comment._id);
         });
-       res.send(temp_collection);
+       return Comment.find({ 'parent': { $in: array_of_ids }, 'created': { "$gte": last_checked }, 'user': { $ne: user_id } }).populate('user').exec();
+       
+    }).then(function (sub_collection) {
+        _.each(sub_collection, function(sub){
+            sub.user.local = "";
+            temp_collection.push(sub);
+        });        
+        res.send(temp_collection);
     });
-    // find all sub comments
-    /*Comment.find({ 'user': user_id, parent: { $ne: null } } , function(err, comments) {
-        console.log(comments);
-        _.each(comments, function(comment){            
-                Comment.find({ parent: comment.parent, 'created': { "$gte": last_checked }, 'user': { $ne: user_id } }).populate('user').exec(function(err, sub_collection) {
-                    _.each(sub_collection, function(sub){
-                        sub.user.local = "";
-                        temp_collection.push(sub);
-                    });
-                });
-        });
-    });*/
-
-    //res.send(temp_collection);
 };
 
 /*

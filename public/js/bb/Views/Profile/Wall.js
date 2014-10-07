@@ -42,6 +42,7 @@ define([
                 this.listenTo(App, "change:comment_editing_no_comment_fecthing", this.handle_interval_fetching);
                 this.listenTo(this.collection, 'add',this.insert_needed_info_into_comments);
                 this.profile_in_view = App.Profile_in_View;
+                this.model = App.Profile_in_View;
                 this.new_comment = null;
                 this.Interval = null;
                 this.childViews = [];      //GARBAGE COLLECTION
@@ -52,7 +53,7 @@ define([
             },
 
             render: function() {
-                $(this.el).html(this.template());
+                $(this.el).html(this.template(this.model.toJSON()));
                 var self = this;
                 setTimeout(function(){
                     self.populate_wall();
