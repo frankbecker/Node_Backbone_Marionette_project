@@ -17,6 +17,8 @@ define([
 
         var Session = Backbone.Model.extend({
 
+            urlRoot: "/user",
+
             idAttribute: '_id',
 
             defaults: {
@@ -66,7 +68,7 @@ define([
             },
 
             // Saves Session information to cookie
-            save: function(result, callback) {
+            save_session: function(result, callback) {
                 this.set({
                     _id: result._id,
                     profile_pic: result.profile_pic,
@@ -75,6 +77,7 @@ define([
                 $.cookie('_id', result._id);
                 $.cookie('profile_pic', result.profile_pic);
                 $.cookie('full_name', result.full_name);
+                if(!callback)return;
                 callback();
             }
 

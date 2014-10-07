@@ -3,6 +3,7 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 var fs = require("fs");
+var moment = require("moment");
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
@@ -34,7 +35,10 @@ var userSchema = mongoose.Schema({
     profile_pic      : {type: String, trim: true},
     about_me         : {type: String, required: true, trim: true},
     phone_number     : {type: String, required: true, trim: true},
-    created          : { type: Date, default: Date.now, required: true }
+    created          : { type: Date, default: Date.now, required: true },
+    last_login       : { type: Date, default: Date.now, required: true },
+    notif_last_checked: { type: Date, default: Date.now, required: true  },
+    notif_before_last_checked: { type: Date, default: Date.now, required: true },
     
 }, { strict: false });
 

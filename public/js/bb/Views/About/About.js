@@ -88,8 +88,11 @@ define([
         save: function () {
             var self = this;
             console.log('before save');
+            this.model.set("update_notif" , false);
             this.model.save(null, {
                 success: function (model) {
+                    App.Session.set("profile_pic", model.get("profile_pic"));
+                    App.Session.save_session(model.toJSON(), null);  /// this is a little hack, I should have a better design for this
                     self.render();
                     self.showAlert('Success!', 'Info saved successfully', 'alert-success');
                 },

@@ -9,11 +9,12 @@
                   <div class="media-body">
                     <div class="todo ">
                         <a href="#profile/{{ user._id }}"><h4 class="media-heading">{{ user.first_name }}&nbsp;{{ user.last_name }}</h4></a>
+
                           {{#if  match  }}                          
                               <span class="parent_destroy comment-destroy hide_important">Delete</span>
                               <span class="parent_destroy comment-edit hide_important">Edit</span>                            
                           {{/if}} 
-
+                          <span class="created">{{created}}</span>
                             <div class="display">
                               <label class="comment-content">{{ body }}</label>                              
                             </div>

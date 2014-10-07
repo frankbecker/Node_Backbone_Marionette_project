@@ -60,7 +60,7 @@ module.exports = function(passport) {
                 newUser.local.email    = email;
                 newUser.local.password = newUser.generateHash(password); // use the generateHash function in our user model
 
-				// save the user
+				// save the user                
                 newUser.save(function(err) {
                     if (err)
                         throw err;
@@ -100,7 +100,7 @@ module.exports = function(passport) {
             // if the user is found but the password is wrong
             if (!user.validPassword(password))
                 return done(null, false, "Password is incorrect!"); // create the loginMessage and save it to session as flashdata
-
+            user.set("last_login", Date.now);
             // all is well, return successful user
             return done(null, user);
         });

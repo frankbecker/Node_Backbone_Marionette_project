@@ -5,7 +5,7 @@ var Album = require('../models/schema_album');
 exports.Image_findById = function(req, res) {
     var id = req.params.id;
     Image.findOne({ _id: id }).populate('user').exec(function(err, image) {
-        if (err) return console.error(err);
+        if (err) return res.send(404,"Image not found");
          res.send(image);
     });
 };

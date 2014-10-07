@@ -6,7 +6,7 @@ exports.findById = function(req, res) {
     var id = req.params.id;
     console.log(id);
     User.findOne({ _id: id }, function(err, User){
-        if (err) return console.error(err);
+        if (err) return res.send(404,"User not found");
          res.send(User);
     });
 };
@@ -52,19 +52,29 @@ exports.addUser = function(req, res) {
 exports.updateUser = function(req, res) {
     var _id = req.params.id;
     var user = req.body;
+    var update_notif = user.update_notif;
    User.findOne({ "_id": _id }, function (err, subject) {
-      subject.set({
+    if (err) return res.send(404,"User not found");
+    if(update_notif){
+          subject.set({
+                notif_last_checked               : Date.now(),
+                notif_before_last_checked        : user.notif_last_checked
+          });
+     }else{
+        subject.set({
             first_name       : user.first_name,
             last_name        : user.last_name,
             profile_pic      : user.profile_pic,
             about_me         : user.about_me,
             phone_number     : user.phone_number
-      });
- 
+        });
+     }
 
       // You can only pass one param to the model's save method
       subject.save(function (err, doc, numAffected) {
+        console.log(doc);
         if (err) return console.error(err);
+        doc.local = "";
           res.send(doc);
       });
     });

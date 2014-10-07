@@ -12,7 +12,8 @@
     "passport-google-oauth": "~0.1.5",
     "connect-flash": "~0.1.1",
     "bcrypt-nodejs": "latest",
-    "mongodb": "~1.4.17"
+    "mongodb": "~1.4.17",
+    "moment": "~2.8.3"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

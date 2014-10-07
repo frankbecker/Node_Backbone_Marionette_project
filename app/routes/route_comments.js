@@ -6,7 +6,7 @@ var _ = require('underscore');
 exports.findById = function(req, res) {
     var id = req.params.id;
     Comment.findOne({ _id: id }, function(err, Comment){
-        if (err) return console.error(err);
+        if (err) return res.send(404,"Comment not found");
          res.send(Comment);
     });
 };
@@ -15,7 +15,7 @@ exports.findComments = function(req, res) {
     var user_id = req.query.user_id;  /// find by user
     var img_id = req.query.img_id;     ///  find by image number
     var comment_id = req.query.comment_id;  /// find by comment _id
-    var limit = 40;
+    var limit = 500;  // for now
 
     /// we don't comments with img_number set
     if(user_id){

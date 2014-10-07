@@ -8,10 +8,12 @@
           </a>
                   <div class="media-body-sub">
                     <a href="#profile/{{ user._id }}"><h5 class="media-heading">{{ user.first_name }}&nbsp;{{ user.last_name }}</h5></a>
+
                              {{#if match }}                           
                               <span class="sub_comment-destroy hide_important">Delete</span>
                               <span class="sub_comment-edit hide_important">Edit</span>
                               {{/if}}
+                              <span class="created">{{created}}</span>
                        <div class="todo ">
                             <div class="display">
                                   <label class="sub_comment-content">{{ body }}</label>

@@ -51,7 +51,7 @@ define([
                     trigger: true
                  });
             };
-            App.Session.save(response, callback); /// I need this call back because the setcookies function takes way too long to return
+            App.Session.save_session(response, callback); /// I need this call back because the setcookies function takes way too long to return
         };
 
         App.Success_Login = function(response) {
@@ -60,7 +60,7 @@ define([
                     trigger: true
                  });
             };
-            App.Session.save(response, callback); /// I need this call back because the setcookies function takes way too long to return
+            App.Session.save_session(response, callback); /// I need this call back because the setcookies function takes way too long to return
         };
 
         App.Log_User_Out = function() {

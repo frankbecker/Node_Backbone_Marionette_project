@@ -6,7 +6,7 @@ var fs = require("fs");
 exports.Album_findById = function(req, res) {
     var id = req.params.id;
     Album.findOne({ _id: id }).populate('img_cover').exec(function(err, album) {
-        if (err) return console.error(err);
+        if (err) return res.send(404,"Album not found");
          res.send(album);
     });
 };
@@ -14,6 +14,7 @@ exports.Album_findById = function(req, res) {
 exports.findAll = function(req, res) {
     var user_id = req.query.user_id;
     Album.find({'user': user_id}).populate('img_cover').exec(function(err, collection) {
+        if (err) return res.send(404,"Albums not found");
             res.send(collection);
     });
 };
