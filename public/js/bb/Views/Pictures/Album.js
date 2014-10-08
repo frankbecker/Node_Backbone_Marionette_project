@@ -88,10 +88,9 @@ define([
                     self.my_own_render();
                     self = null;
                    },
-
-                   fail:function(model, response, options){
-                    console.log("Failure to fetch album model");
-                   }
+                    error: function (err, resp, options) {
+                        App.handle_bad_response(resp);
+                    }
                });
             },
 
@@ -127,9 +126,9 @@ define([
                     self = null;
                    },
 
-                   fail:function(collection, response, options){
-                    console.log("Falied to retrieve images for album");
-                   }
+                   error: function (err, resp, options) {
+                        App.handle_bad_response(resp);
+                    }
                });
             },
 
@@ -227,7 +226,7 @@ define([
                              });
                             self = null;
                         },
-                        fail : function (model, response) {
+                        error : function (model, response) {
                             $(".panel", self.el).addClass("hide");
                             $(".alert-danger", self.el).removeClass("hide");
                             setTimeout(function(){
@@ -342,10 +341,9 @@ define([
                     self.show_album_again();
                     self = null;
                 },
-                error : function(err) {
-                    console.log("Error creating new Comment");
-                    self.showAlert('Error', 'An error occurred while trying to save this user', 'alert-danger');
+                error: function (err, resp, options) {
                     self = null;
+                    App.handle_bad_response(resp);
                 }
                 });
             },

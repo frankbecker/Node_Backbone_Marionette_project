@@ -38,7 +38,7 @@ var userSchema = mongoose.Schema({
     created          : { type: Date, default: Date.now, required: true },
     last_login       : { type: Date, default: Date.now, required: true },
     notif_last_checked: { type: Date, default: Date.now, required: true  },
-    notif_before_last_checked: { type: Date, default: Date.now, required: true },
+    notif_before_last_checked: { type: Date, default: Date.now, required: true }
     
 }, { strict: false });
 

@@ -65,7 +65,7 @@ define([
                 if(target.value === ""){
                  $(this.el).find(".comment").attr('placeholder','Please try again!');
                  return;
-                }                
+                }
                 var self = this;
                 this.new_SubComment = this.collection.create({
                   body: target.value,
@@ -79,8 +79,8 @@ define([
                 success : function(resp){
                     self.append_new_subComment(resp);
                 },
-                error : function(err) {
-                    console.log("Error creating new Subcomment");
+                error: function (err, resp, options) {
+                    App.handle_bad_response(resp);
                 }
                 });
 

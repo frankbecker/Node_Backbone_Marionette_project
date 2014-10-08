@@ -4,22 +4,25 @@
 // get all the tools we need
 var express  = require('express');
 // making this a global /// because I also need to access this in my schema so that I can delete some files
+var MongoStore = require('connect-mongo')(express);
 app      = express();
 var port     = process.env.PORT || 8080;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
-
 var configDB = require('./config/database.js');
+mongoose.connect(configDB.url); // connect to our database
 var sessionOpts = {
 	key: "token",
 	secret: 'ilovescotchscotchyscotchscotch',
-    cookie: 'secure'
+	cookie: { maxAge: 61000 },  /// Half Hour Session
+	store: new MongoStore({
+      db : mongoose.connection.db
+    })
 };
 
 app.set('root_directory', __dirname);
 // configuration ===============================================================
-mongoose.connect(configDB.url); // connect to our database
 
 require('./config/passport')(passport); // pass passport for configuration
 

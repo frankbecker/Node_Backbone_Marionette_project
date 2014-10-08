@@ -57,10 +57,10 @@ define([
                     self.display_list_of_friends();
                     self = null;
                    },
-
-                   fail:function(collection, response, options){
-
-                   }
+                   
+                    error: function (err, resp, options) {
+                        App.handle_bad_response(resp);
+                    }
                });
             },
 

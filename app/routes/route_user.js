@@ -3,6 +3,7 @@ var User = require('../models/schema_user');
 var fs = require("fs");
 
 exports.logOut = function(req, res){
+        req.session.destroy();
         req.logout();
 };
 

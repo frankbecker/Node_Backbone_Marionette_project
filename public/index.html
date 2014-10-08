@@ -11,6 +11,23 @@
     <div id="left_sidebar_region"></div>
     <div id="container_region"></div>    
     <div id="footer_region"></div> 
+    <!-- App message Modal -->
+    <!-- This will have to be a view at some point -->
+<div id="app_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+      <div class="modal-body"><b></b></div>
+      <div class="modal-footer">
+        <button id="yes" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 <div id="dialogs"></div>
 <script data-main='js/config.js' src='js/lib/require.js'></script>

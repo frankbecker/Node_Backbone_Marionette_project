@@ -3,10 +3,11 @@ define([
         "underscore",
         "marionette",
         "backbone",
-        "jquery.cookie"
+        "jquery.cookie",
+        "idle"
     ],
 
-    function(_, Marionette, Backbone, cookie) {
+    function(_, Marionette, Backbone, cookie, idle) {
 
         var App;
 
@@ -18,6 +19,7 @@ define([
         App.Session = {};
         App.Profile_in_View = null;
         App.header_built = false;
+        App.user_idle = false;
         App.comment_editing_no_comment_fecthing = false;
 
         App.addRegions({
@@ -29,7 +31,7 @@ define([
         });
 
         App.on("initialize:before", function(options) {
-
+            App.start_idle();
         });
 
 
@@ -87,6 +89,40 @@ define([
         App.SET_comment_editing_no_comment_fecthing = function(value){  /// boolean
             this.comment_editing_no_comment_fecthing = value;
             this.trigger("change:comment_editing_no_comment_fecthing");
+        };
+
+        /*  !!!!!! ATTENTION
+        The function below is very important, if the user becomes idle all requests that are happening in Interval will be suspended
+        Check Views : Wall.js and Header.js for more info.
+        Any other place in the code where there is a request being made every few seconds, this implementation will be necessary,
+        so that we can let the Backend Session expire properly, more info in Server.js and routes.js
+         */
+
+        App.start_idle = function () {
+            $(document).idle({
+              onIdle: function(){
+                App.user_idle = true;
+                App.trigger("user_idle");
+              },
+              onActive: function(){
+                App.user_idle = false;
+                App.trigger("user_idle");
+              },
+              idle: 10000
+            });
+        };
+
+        App.handle_bad_response = function(resp){
+            var status_code = resp.status;
+            var message;
+            if(status_code == 401){
+                message = "Your Session has expired.";
+                App.Router.navigate('', {
+                    trigger: true
+                });
+            }
+            $("#app_modal .modal-body b").html(message);
+            $("#app_modal").modal('show');
         };
 
 

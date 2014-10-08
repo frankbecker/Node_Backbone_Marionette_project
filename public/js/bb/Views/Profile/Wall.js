@@ -40,7 +40,9 @@ define([
                 this.collection = new Comments();
                 this.user_logged_in = App.Session;
                 this.listenTo(App, "change:comment_editing_no_comment_fecthing", this.handle_interval_fetching);
-                this.listenTo(this.collection, 'add',this.insert_needed_info_into_comments);
+                this.listenTo(App, "user_idle", this.is_user_idle);
+                this.listenTo(this.collection, 'add', this.insert_needed_info_into_comments);
+                this.user_idle = false;
                 this.profile_in_view = App.Profile_in_View;
                 this.model = App.Profile_in_View;
                 this.new_comment = null;
@@ -87,7 +89,7 @@ define([
                    },
 
                    error:function(collection, response, options){
-                    console.log("Something went wrong when fetching for comments");
+                    App.handle_bad_response(response);
                    }
                });
             },
@@ -112,8 +114,8 @@ define([
                 success : function(resp){
                     self.insert_needed_info_into_comments(resp);
                 },
-                error : function(err) {
-                    console.log("Error creating new Comment");
+                error : function(err, resp, options) {
+                    App.handle_bad_response(resp);
                 }
                 });
               target.value = "";
@@ -126,7 +128,8 @@ define([
             fetch_comments: function(){
                 var self = this;
                 var user_id = this.profile_in_view.get("_id");
-                this.collection.fetch({
+                if(!this.user_idle){
+                    this.collection.fetch({
                     data: $.param({ user_id: user_id}),
 
                     update: true,
@@ -134,11 +137,11 @@ define([
                     success: function(){
                         self.collection.trigger("reset");
                     },
-                    error: function () {
-                        console.log("Something went wrong fetching comments Wall.js");
+                    error: function (err, resp, options) {
+                        App.handle_bad_response(resp);
                     }
                     });
-
+                }
                 if(this.Interval){
                   clearInterval(this.Interval);
                   this.Interval = null;
@@ -171,6 +174,10 @@ define([
                 var comment = new Comment({model: model, collection: this.collection});
                 this.childViews.push(comment);
                 $("#wall", this.el).prepend(comment.el);
+            },
+
+            is_user_idle: function () {
+                this.user_idle = App.user_idle;
             },
 
             onClose: function() {

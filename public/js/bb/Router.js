@@ -151,8 +151,8 @@ define(['App',
                         self.build_side_bar_and_main_view(View, options, Flag);
                         self = null;
                     },
-                    error: function(model, response) {
-                        alert("User not found.");
+                    error: function (err, resp, options) {
+                        App.handle_bad_response(resp);
                     }
                 });
             },

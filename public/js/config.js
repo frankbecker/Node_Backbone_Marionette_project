@@ -25,7 +25,8 @@ require.config({
         'jquery.cookie': 'lib/jquery.cookie',
         marionette: 'lib/backbone.marionette.min',
         'backbone.wreqr': 'lib/backbone.wreqr',
-        'backbone.babysitter': 'lib/backbone.babysitter'
+        'backbone.babysitter': 'lib/backbone.babysitter',
+        'idle'   :  'lib/jquery.idle.min'
 
     },
 
@@ -59,6 +60,11 @@ require.config({
         marionette: {
             deps: ['jquery', 'underscore', 'backbone'],
             exports: 'Marionette'
+        },
+
+        idle: {
+            deps: ['jquery'],
+            exports: 'idle'
         }
 
     }

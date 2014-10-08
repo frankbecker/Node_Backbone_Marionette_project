@@ -73,8 +73,9 @@ define([
                         self.populate_albums();
                         self = null;
                     },
-                    error: function (albums, response, options) {
-                        console.log("Something went wrong fetching comments Wall.js");
+                    error: function (err, resp, options) {
+                        self = null;
+                    App.handle_bad_response(resp);
                     }
                 });
             },

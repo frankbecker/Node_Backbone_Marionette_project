@@ -12,11 +12,11 @@ exports.findById = function(req, res) {
 };
 
 exports.findComments = function(req, res) {
+    console.log(req.user);
     var user_id = req.query.user_id;  /// find by user
     var img_id = req.query.img_id;     ///  find by image number
     var comment_id = req.query.comment_id;  /// find by comment _id
-    var limit = 500;  // for now
-
+    var limit = 500;  // for now    
     /// we don't comments with img_number set
     if(user_id){
         Comment.find({ user_wall: user_id , img_number : null}).populate('user').limit(limit).exec(function(err, collection) {

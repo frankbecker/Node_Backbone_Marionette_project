@@ -108,10 +108,9 @@ define([
                     App.Router.navigate('album/'+session_id+'/'+resp.get("_id"), { trigger: true });  ////  Once we are done creating the Album lets foward the user there
                     self = null;
                 },
-                error : function(err) {
-                    console.log("Error creating new Comment");
-                    self.showAlert('Error', 'An error occurred while trying to save this user', 'alert-danger');
+                error: function (err, resp, options) {
                     self = null;
+                    App.handle_bad_response(resp);
                 }
                 });
             },

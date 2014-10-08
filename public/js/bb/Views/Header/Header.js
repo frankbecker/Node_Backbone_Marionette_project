@@ -36,6 +36,8 @@ define([
                 this.collection = new Notifications();
                 this.front_end_collection = new Notifications();  /// I use this collection just to compare with the one coming in
                 this.listenTo(this.front_end_collection, "add", this.populate_notifications);
+                this.listenTo(App, "user_idle", this.is_user_idle);
+                this.user_idle = false;
                 this.Interval = null;
                 this.view_is_alive = true;
                 this.fetch_notifications();
@@ -59,8 +61,8 @@ define([
                 success: function (model) {
                     App.Session.save_session(model.toJSON(), null);
                 },
-                error: function () {
-                    console.log("Could not update notification");
+                error: function (err, resp, options) {
+                    App.handle_bad_response(resp);
                 }
                 });
             },
@@ -71,30 +73,32 @@ define([
                     user_id : this.model.get("_id"),
                     notif_time: this.model.get("notif_last_checked")
                 };
-                this.collection.fetch({
+                if(!this.user_idle){
+                    this.collection.fetch({
 
-                   data: decodeURIComponent($.param(param)),
+                       data: decodeURIComponent($.param(param)),
 
-                   silent: true,
+                       silent: true,
 
-                   update: true,
+                       update: true,
 
-                   success:function(collection, response, options){
-                    $(".badge", self.el).html(self.collection.length);
-                    if(self.collection.length === 0){
-                       $(".badge", self.el).addClass("no_opacity");
-                       self.add_no_notification_warning();
-                    }else{
-                       $(".badge", self.el).removeClass("no_opacity");
-                       self.remove_no_notification_warning();
-                    }
-                    self.after_fetch();
-                   },
-
-                   error:function(collection, response, options){
-                    console.log("Something went wrong when fetching for comments");
-                   }
-               });
+                       success:function(collection, response, options){
+                        $(".badge", self.el).html(self.collection.length);
+                        if(self.collection.length === 0){
+                           $(".badge", self.el).addClass("no_opacity");
+                           self.add_no_notification_warning();
+                        }else{
+                           $(".badge", self.el).removeClass("no_opacity");
+                           self.remove_no_notification_warning();
+                        }
+                        self.after_fetch();
+                       },
+                       
+                        error: function (err, resp, options) {
+                            App.handle_bad_response(resp);
+                        }
+                   });
+                }
 
                 if(this.Interval){
                   clearInterval(this.Interval);
@@ -137,6 +141,10 @@ define([
                 console.log("removing to_remove");
                 $(".to_remove", this.el).addClass("hide");
                 this.warning_is_up = false;
+            },
+
+            is_user_idle: function () {
+                this.user_idle = App.user_idle;
             },
 
             onClose: function() {

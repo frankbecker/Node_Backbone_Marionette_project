@@ -241,9 +241,9 @@ define([
                     self = null;
                    },
 
-                   fail:function(collection, response, options){
-                    console.log("Error fetching comments for this image");
+                   error: function (err, resp, options) {
                     self = null;
+                    App.handle_bad_response(resp);
                    }
                });
             },
@@ -272,8 +272,8 @@ define([
                 success : function(resp){
                     self.append_new_Comment(resp);
                 },
-                error : function(err) {
-                    console.log("Error creating new Image comment");
+                error: function (err, resp, options) {
+                    App.handle_bad_response(resp);
                 }
                 });
 
