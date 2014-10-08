@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var User = require('../models/schema_user');
+var Sessions = require('../models/schema_session');
 var fs = require("fs");
+var _ = require('underscore');
 
 exports.logOut = function(req, res){
         req.session.destroy();
@@ -18,6 +20,9 @@ exports.findById = function(req, res) {
 
 exports.findAll = function(req, res) {
     var _id = req.query.user_id;
+    Sessions.find({ 'session_obj.passport.user' : _id}, function(err, sessions) {
+        console.log(sessions);
+    });
     if(_id){
         //  Eventually will need to update this so that it only returns friends based on ID, but I have to implement all of this design and logic
         User.find({ '_id': { $ne: _id } } , function(err, collection) {
@@ -25,6 +30,7 @@ exports.findAll = function(req, res) {
         });
         return;
     }
+
     User.find({}, function(err, collection) {
             res.send(collection);
     });

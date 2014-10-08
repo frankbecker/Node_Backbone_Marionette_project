@@ -12,7 +12,7 @@ exports.findById = function(req, res) {
 };
 
 exports.findComments = function(req, res) {
-    console.log(req.user);
+    //console.log(req.user);
     var user_id = req.query.user_id;  /// find by user
     var img_id = req.query.img_id;     ///  find by image number
     var comment_id = req.query.comment_id;  /// find by comment _id
