@@ -15,7 +15,7 @@ mongoose.connect(configDB.url); // connect to our database
 var sessionOpts = {
 	key: "token",
 	secret: 'ilovescotchscotchyscotchscotch',
-	cookie: { maxAge: 61000 },  /// Half Hour Session
+	cookie: { maxAge: 30 * 60 * 1000 },  /// Half Hour Session
 	store: new MongoStore({
       db : mongoose.connection.db
     })

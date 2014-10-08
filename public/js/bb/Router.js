@@ -36,15 +36,13 @@ define(['App',
 
 
         //Instantiated  == App.Router == new AppRouter();
-        /**
-         * We will not keep any code related to routes in AppRouter. We will rather create proper controllers that oversee management for a specific
-         * route.  Within these controllers we can also have other controllers that can oversee specific TAB related interactions,
-         * which should lead to different Views and user interactions within a common region that should be managed by a controller.
-         *
-         */
+        // You can access App.Router any where in the application, if you define "App" as a dependency in your modules
         var AppRouter = Backbone.Router.extend({
 
             initialize: function() {
+                this.on('all', function(routeEvent) {
+                    $('html, body').animate({ scrollTop: 0 }, 0);  /// scroll to top on every route
+                });
                 this.routesHit = 0;
                 this.history_fragment_array = [];
                 //keep count of number of routes handled by your application
