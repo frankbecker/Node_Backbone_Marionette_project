@@ -54,7 +54,7 @@ module.exports = function(app, passport) {
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
 	app.get('/user', isLoggedIn, User_route.findAll);
-	app.get('/user/:id', isLoggedIn, User_route.findById);
+	app.get('/user/:id', User_route.findById);
 	app.put('/user/:id', isLoggedIn, User_route.updateUser);
 	app.delete('/user/:id', isLoggedIn, User_route.deleteUser);
 	app.post('/upload_img', isLoggedIn, User_route.upload_img);
@@ -110,7 +110,6 @@ function isLoggedIn(req, res, next) {
 }
 function loggedIn(req, res, next) {
   if (!req.user) {
-  	console.log(req.user);
     next();
   } else {
     res.send(499,'You are already logged in with this Browser, please login with a different one. Thanks!');

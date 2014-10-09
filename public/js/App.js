@@ -17,6 +17,7 @@ define([
         App.Footer = {};
         App.Dialog = {};
         App.Session = {};
+        App.Friends = {};
         App.Profile_in_View = null;
         App.header_built = false;
         App.user_idle = false;

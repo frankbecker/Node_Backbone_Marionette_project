@@ -6,7 +6,6 @@ define([
         'backbone',
         'handlebars',
         'text!bb/Templates/Friends/Friends.html',
-        'bb/Collections/Profiles/Profiles',
         'bb/Views/Friends/Friend'
     ],
     function(
@@ -17,7 +16,6 @@ define([
         Backbone,
         Handlebars,
         Template,
-        Profiles,
         Friend
     ) {
 
@@ -33,35 +31,19 @@ define([
             },
 
             initialize: function() {
-                this.collection = new Profiles();
-                this.profile_in_view = App.Profile_in_View;
                 this.childViews = [];      //GARBAGE COLLECTION
-                this.fetch_collection();
+                this.collection = App.Friends;
+                this.listenTo(this.collection, "reset", this.display_list_of_friends);
             },
 
             render: function() {
                 $(this.el).html(this.template());
-                return this;
-            },
-
-            fetch_collection: function(){
                 var self = this;
-                var profile_in_view_id = this.profile_in_view.get("_id");
-                this.collection.fetch({
-
-                   data: $.param({ user_id: profile_in_view_id}),
-
-                   silent: true,
-
-                   success:function(collection, response, options){
+                setTimeout(function(){
                     self.display_list_of_friends();
                     self = null;
-                   },
-                   
-                    error: function (err, resp, options) {
-                        App.handle_bad_response(resp);
-                    }
-               });
+                },0);
+                return this;
             },
 
             display_list_of_friends : function(){

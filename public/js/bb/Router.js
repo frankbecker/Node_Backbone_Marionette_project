@@ -47,7 +47,6 @@ define(['App',
                 this.history_fragment_array = [];
                 //keep count of number of routes handled by your application
                 Backbone.history.on('route', this.keep_track_history, this);
-                this.sidebar = null;
             },
 
             routes: {
@@ -147,6 +146,7 @@ define(['App',
                 App.Profile_in_View.fetch({
                     success: function() {
                         self.build_side_bar_and_main_view(View, options, Flag);
+                        self.fetch_friends();
                         self = null;
                     },
                     error: function (err, resp, options) {
@@ -167,6 +167,25 @@ define(['App',
                 }catch(err){
 
                 }
+            },
+
+            fetch_friends: function () {
+                var self = this;
+                var profile_in_view_id = App.Profile_in_View.get("_id");
+                App.Friends.fetch({
+
+                    data: $.param({ user_id: profile_in_view_id}),
+
+                    silent: true,
+
+                    success:function(collection, response, options){
+                        App.Friends.trigger("reset");
+                    },
+                   
+                    error: function (err, resp, options) {
+                        App.handle_bad_response(resp);
+                    }
+               });
             },
 
             keep_track_history: function(e) {

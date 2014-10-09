@@ -76,13 +76,15 @@ require([
     "jquery",
     "backbone",
     "bb/Router",
-    "bb/Models/Session/Session"
-], function(App, $, Backbone, AppRouter, Session) {
+    "bb/Models/Session/Session",
+    'bb/Collections/Profiles/Profiles'
+], function(App, $, Backbone, AppRouter, Session, Profiles) {
     /// This file and addInitializer function server as an abstraction layer,
     /// so that we don't create a circular dependecy,
     /// meaning Session requires App, and if we require Session in App we will create a circular dependency
     App.addInitializer(function() {
          App.Router = new AppRouter();
+         App.Friends = new Profiles();
           App.reload_session = function() {
             App.Session = new Session();
         }();
