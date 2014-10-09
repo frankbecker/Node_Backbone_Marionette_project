@@ -33,7 +33,7 @@ define([
             initialize: function() {
                 this.childViews = [];      //GARBAGE COLLECTION
                 this.collection = App.Friends;
-                this.listenTo(this.collection, "reset", this.display_list_of_friends);
+                this.listenTo(this.collection, "fetched", this.display_list_of_friends);
             },
 
             render: function() {

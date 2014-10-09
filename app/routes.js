@@ -22,7 +22,7 @@ module.exports = function(app, passport) {
 		failureFlash : true // allow flash messages
 	}));*/
 	// process the login form
-	app.post('/login', loggedIn, function(req, res, next) {
+	app.post('/login', function(req, res, next) {
 		passport.authenticate('local-login', {session: true}, function(err, user, info) {
 			if (err)return next(err);
 			if (user === false) {
@@ -37,7 +37,7 @@ module.exports = function(app, passport) {
 		})(req, res, next);
 	});
 
-	app.post('/signup', loggedIn, function(req, res, next) {
+	app.post('/signup', function(req, res, next) {
 		passport.authenticate('local-signup', function(err, user, info) {
 		if (err) return next(err);
 		if (user === false) {
@@ -53,44 +53,44 @@ module.exports = function(app, passport) {
 	// =====================================
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
-	app.get('/user', isLoggedIn, User_route.findAll);
+	app.get('/user', User_route.findAll);
 	app.get('/user/:id', User_route.findById);
-	app.put('/user/:id', isLoggedIn, User_route.updateUser);
-	app.delete('/user/:id', isLoggedIn, User_route.deleteUser);
-	app.post('/upload_img', isLoggedIn, User_route.upload_img);
+	app.put('/user/:id', User_route.updateUser);
+	app.delete('/user/:id', User_route.deleteUser);
+	app.post('/upload_img', User_route.upload_img);
 
 
 	// =====================================
 	// COMMENTS WALL, MAINLY =========================
 	// =====================================
-	app.get('/comments', isLoggedIn, Comments_route.findComments);
-	app.get('/comments/:id', isLoggedIn, Comments_route.findById);
-	app.put('/comments/:id', isLoggedIn, Comments_route.updateComment);
-	app.delete('/comments/:id', isLoggedIn, Comments_route.deleteComment);
-	app.post('/comments', isLoggedIn, Comments_route.addComment);
+	app.get('/comments', Comments_route.findComments);
+	app.get('/comments/:id', Comments_route.findById);
+	app.put('/comments/:id', Comments_route.updateComment);
+	app.delete('/comments/:id', Comments_route.deleteComment);
+	app.post('/comments', Comments_route.addComment);
 
 	// =====================================
 	// Album API =========================
 	// =====================================
-	app.get('/album', isLoggedIn, Albums_route.findAll);
-	app.get('/album/:id', isLoggedIn, Albums_route.Album_findById);
-	app.put('/album/:id', isLoggedIn, Albums_route.updateAlbum);
-	app.delete('/album/:id', isLoggedIn, Albums_route.deleteAlbum);
-	app.post('/album', isLoggedIn, Albums_route.addAlbum);
+	app.get('/album', Albums_route.findAll);
+	app.get('/album/:id', Albums_route.Album_findById);
+	app.put('/album/:id', Albums_route.updateAlbum);
+	app.delete('/album/:id', Albums_route.deleteAlbum);
+	app.post('/album', Albums_route.addAlbum);
 
 	// =====================================
 	// Images API =========================
 	// =====================================
-	app.get('/image', isLoggedIn, Image_route.findAll);
-	app.get('/image/:id', isLoggedIn, Image_route.Image_findById);
-	app.put('/image/:id', isLoggedIn, Image_route.updateImage);
-	app.delete('/image/:id', isLoggedIn, Image_route.deleteImage);
-	app.post('/image', isLoggedIn, Image_route.addImage);
+	app.get('/image', Image_route.findAll);
+	app.get('/image/:id', Image_route.Image_findById);
+	app.put('/image/:id', Image_route.updateImage);
+	app.delete('/image/:id', Image_route.deleteImage);
+	app.post('/image', Image_route.addImage);
 
 	// =====================================
 	// Notifications API =========================
 	// =====================================
-	app.get('/notification', isLoggedIn, Notif_route.findAll);
+	app.get('/notification', Notif_route.findAll);
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================	
@@ -101,6 +101,7 @@ module.exports = function(app, passport) {
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
 	// if user is authenticated in the session, carry on
+	console.log("isLoggedIn");
 	if (req.isAuthenticated())
 		return next();
 

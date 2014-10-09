@@ -1,3 +1,9 @@
+html { 
+    height:100%;
+}
+body { 
+    min-height:100%;
+}
 /*  ======================   Header Nav   =========================  */
 .Header{
 	width: 100%;
@@ -9,6 +15,7 @@ header.navbar{
 	background-color: #222;
 	border-color: #080808;
 	color: #777;
+	margin-bottom: 0px;
 	#profile_thumb{
 		padding-bottom: 0px;
 		padding-top: 2px;
@@ -805,6 +812,34 @@ input.comment{
 		}
 		.created{
 			display: none;
+		}
+	}
+}
+
+/*  ==============================   Chat and related Style  =================================   */
+#chat_region{
+	position: fixed;
+	z-index: 100;
+	right:0;
+	height: 100%;
+	background: #E9E9E9;
+	margin-top: -20px;
+	border-left: 2px solid black;
+	.Chat{
+		width: 200px;
+	}
+	#user_list{
+		padding: 0px;
+		list-style: none;
+		margin-left: 10px;
+		position: fixed;
+		bottom: 10px;
+		li{
+			line-height: 24px;
+			&:hover{
+				color: #428bca;
+				cursor: pointer;
+			}
 		}
 	}
 }

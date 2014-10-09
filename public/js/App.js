@@ -19,7 +19,6 @@ define([
         App.Session = {};
         App.Friends = {};
         App.Profile_in_View = null;
-        App.header_built = false;
         App.user_idle = false;
         App.comment_editing_no_comment_fecthing = false;
 
@@ -28,6 +27,7 @@ define([
             mainRegion: "#container_region",
             left_sidebar_region: "#left_sidebar_region",
             footerRegion: "#footer_region",
+            chatRegion: "#chat_region",
             dialogsRegion: "#dialogs"
         });
 
