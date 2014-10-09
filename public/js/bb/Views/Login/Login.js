@@ -103,6 +103,7 @@ define([
                 })
                 .fail(function( xhr ){
                     $alert.removeClass("hide").html(xhr.responseText);
+                    App.handle_bad_response(xhr);
                 });
             },
 

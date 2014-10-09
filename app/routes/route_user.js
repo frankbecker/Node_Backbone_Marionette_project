@@ -4,9 +4,9 @@ var Sessions = require('../models/schema_session');
 var fs = require("fs");
 var _ = require('underscore');
 
-exports.logOut = function(req, res){
-        req.session.destroy();
+exports.logOut = function(req, res){        
         req.logout();
+        req.session.destroy();
 };
 
 exports.findById = function(req, res) {
@@ -20,19 +20,49 @@ exports.findById = function(req, res) {
 
 exports.findAll = function(req, res) {
     var _id = req.query.user_id;
-    Sessions.find({ 'session_obj.passport.user' : _id}, function(err, sessions) {
-        console.log(sessions);
-    });
+    var my_array = [];
+
     if(_id){
-        //  Eventually will need to update this so that it only returns friends based on ID, but I have to implement all of this design and logic
         User.find({ '_id': { $ne: _id } } , function(err, collection) {
-            res.send(collection);
+            _.each(collection, function(friend) {
+                friend.local = "";
+                my_array.push(friend._id.toString());
+            });
+            Sessions.find({ 'user' : {$in: my_array } }, function(err, sessions) {
+                //console.log(sessions);
+                _.each(sessions,function(sess, index){
+                    console.log(index);
+                    console.log(sess.user);
+                    _.each( collection ,function (friend) {
+                        if(friend._id.toString() == sess.user){
+                            friend.online = true;
+                        }
+                    });
+                });
+                res.send(collection);
+            });
         });
         return;
     }
 
     User.find({}, function(err, collection) {
-            res.send(collection);
+            _.each(collection, function(friend) {
+                friend.local = "";
+                my_array.push(friend._id.toString());
+            });
+            Sessions.find({ 'user' : {$in: my_array } }, function(err, sessions) {
+                //console.log(sessions);
+                _.each(sessions,function(sess, index){
+                    console.log(index);
+                    console.log(sess.user);
+                    _.each( collection ,function (friend) {
+                        if(friend._id.toString() == sess.user){
+                            friend.online = true;
+                        }
+                    });
+                });
+                res.send(collection);
+            });
     });
 };
 

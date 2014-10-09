@@ -22,7 +22,7 @@ module.exports = function(app, passport) {
 		failureFlash : true // allow flash messages
 	}));*/
 	// process the login form
-	app.post('/login', function(req, res, next) {
+	app.post('/login', loggedIn, function(req, res, next) {
 		passport.authenticate('local-login', {session: true}, function(err, user, info) {
 			if (err)return next(err);
 			if (user === false) {
@@ -37,7 +37,7 @@ module.exports = function(app, passport) {
 		})(req, res, next);
 	});
 
-	app.post('/signup', function(req, res, next) {
+	app.post('/signup', loggedIn, function(req, res, next) {
 		passport.authenticate('local-signup', function(err, user, info) {
 		if (err) return next(err);
 		if (user === false) {
@@ -100,7 +100,6 @@ module.exports = function(app, passport) {
 
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
-	console.log("isLoggedIn");
 	// if user is authenticated in the session, carry on
 	if (req.isAuthenticated())
 		return next();
@@ -108,4 +107,12 @@ function isLoggedIn(req, res, next) {
 	// if they aren't redirect them to the home page
 	req.logout();
 	res.send(401,'Session Expired');
+}
+function loggedIn(req, res, next) {
+  if (!req.user) {
+  	console.log(req.user);
+    next();
+  } else {
+    res.send(499,'You are already logged in with this Browser, please login with a different one. Thanks!');
+  }
 }

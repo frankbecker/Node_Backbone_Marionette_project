@@ -120,6 +120,8 @@ define([
                 App.Router.navigate('', {
                     trigger: true
                 });
+            }else if(status_code == 499){
+                message = resp.responseText;
             }
             $("#app_modal .modal-body b").html(message);
             $("#app_modal").modal('show');

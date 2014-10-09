@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var Session_Schema = mongoose.Schema({
     session  : Object,
     expires  : Date,
-    session_parsed : Object
+    user:  String
 });
 
 // Enable Mongoose getter functions

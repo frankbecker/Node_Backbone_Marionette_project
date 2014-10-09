@@ -14,4 +14,10 @@ Like I said I am still adding on to the project.
 Oh and it's all Async.
 
 
-
+Heads up!!!!
+I modified one of the node-modules : "connect-mongo"
+node_modules/connect-mongo/lib/connect-mongo.js //////  Line #248, I added a session_obj to the record being created.
+I did this so that I could easily query for current sessions.
+"connect-mongo" is a great package but for some reason it would break when setting stringify to false as an option.
+So I hacked it, the session was being set as a string, but I need an object. 
+I <3 Objects

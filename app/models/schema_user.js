@@ -38,7 +38,8 @@ var userSchema = mongoose.Schema({
     created          : { type: Date, default: Date.now, required: true },
     last_login       : { type: Date, default: Date.now, required: true },
     notif_last_checked: { type: Date, default: Date.now, required: true  },
-    notif_before_last_checked: { type: Date, default: Date.now, required: true }
+    notif_before_last_checked: { type: Date, default: Date.now, required: true },
+    online     : {type: Boolean, default: false}
     
 }, { strict: false });
 
@@ -63,10 +64,6 @@ userSchema.virtual('full_name').get(function () {
 
 userSchema.virtual('full_name').set(function () {
   return this.first_name + ' ' + this.last_name;
-});
-
-userSchema.set('toJSON', {
-    virtuals: true
 });
 
 userSchema.path('profile_pic').set(function (newVal) {
