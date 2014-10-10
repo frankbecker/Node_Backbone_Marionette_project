@@ -7,7 +7,8 @@ define([
         'handlebars',
         'text!bb/Templates/Chat/Chat.html',
         'bb/Views/Chat/Member',
-        'bb/Views/Chat/ChatBox'
+        'bb/Views/Chat/ChatBox',
+        'io'
     ],
     function(
         App,
@@ -18,7 +19,8 @@ define([
         Handlebars,
         Template,
         Member,
-        ChatBox
+        ChatBox,
+        io
     ) {
 
         var Chat = Marionette.View.extend({
@@ -36,6 +38,7 @@ define([
                 this.listenTo(this.collection, "fetched", this.populate_chat_members);
                 this.childViews = [];      //GARBAGE COLLECTION
                 this.chat_built = false;
+                this.socket = io();
                 this.render();
             },
  

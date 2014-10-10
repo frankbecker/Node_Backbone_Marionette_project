@@ -26,7 +26,8 @@ require.config({
         marionette: 'lib/backbone.marionette.min',
         'backbone.wreqr': 'lib/backbone.wreqr',
         'backbone.babysitter': 'lib/backbone.babysitter',
-        'idle'   :  'lib/jquery.idle.min'
+        'idle'   :  'lib/jquery.idle.min',
+        io  : 'lib/socket.io-1.1.0'
 
     },
 

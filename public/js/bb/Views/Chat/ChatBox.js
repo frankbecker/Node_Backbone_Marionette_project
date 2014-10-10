@@ -25,11 +25,13 @@ define([
 
             events: {
                 "click .glyphicon-minus" : "minimize",
-                "click .glyphicon-remove-circle" : "close"
+                "click .glyphicon-remove-circle" : "close",
+                'keypress input'         : 'insert_my_message'
             },
 
             initialize: function() {
                 //this.listenTo(this.model, "change", this.render);
+                this.session = App.Session;
                 this.render();
             },
 
@@ -40,6 +42,13 @@ define([
 
             minimize: function(){
                 $(this.el).toggleClass( "minimize" );
+            },
+
+            insert_my_message: function(event){
+                if (event.keyCode != 13) return;
+                var value = this.$el.find("input").val();
+                $(".chat_container", this.el).append("<span class='message me'><b>Me:</b>"+value+"</span>");
+                this.$el.find("input").val("");
             },
 
             onClose: function() {
