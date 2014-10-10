@@ -128,7 +128,7 @@ define([
             fetch_comments: function(){
                 var self = this;
                 var user_id = this.profile_in_view.get("_id");
-                if(!this.user_idle){
+                if(!this.user_idle && this.view_is_alive){
                     this.collection.fetch({
                     data: $.param({ user_id: user_id}),
 

@@ -75,16 +75,19 @@ define(['App',
                 //this.close_side_bar_view();
                 App.mainRegion.show(new Login());
                 this.close_unecessary_views();
+                this.logout();
             },
 
             login: function(){
                 App.mainRegion.show(new Login());
                 this.close_unecessary_views();
+                this.logout();
             },
 
             signup: function(){
                 App.mainRegion.show(new Signup());
                 this.close_unecessary_views();
+                this.logout();
             },
 
             profile: function(_id, commment_id, sub_comment_id){
@@ -224,7 +227,9 @@ define(['App',
             },
 
             logout: function(){
-                App.Log_User_Out();
+                if(App.logged_in){
+                    App.Log_User_Out();
+                }
             }
         });
 

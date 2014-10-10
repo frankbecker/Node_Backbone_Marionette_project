@@ -73,7 +73,7 @@ define([
                     user_id : this.model.get("_id"),
                     notif_time: this.model.get("notif_last_checked")
                 };
-                if(!this.user_idle){
+                if(!this.user_idle && this.view_is_alive){
                     this.collection.fetch({
 
                        data: decodeURIComponent($.param(param)),

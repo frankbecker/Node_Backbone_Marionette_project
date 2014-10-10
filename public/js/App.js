@@ -20,6 +20,7 @@ define([
         App.Friends = {};
         App.Profile_in_View = null;
         App.user_idle = false;
+        App.logged_in = false;
         App.comment_editing_no_comment_fecthing = false;
 
         App.addRegions({
@@ -54,6 +55,7 @@ define([
                     trigger: true
                  });
             };
+            App.logged_in = true;
             App.Session.save_session(response, callback); /// I need this call back because the setcookies function takes way too long to return
         };
 
@@ -63,6 +65,7 @@ define([
                     trigger: true
                  });
             };
+            App.logged_in = true;
             App.Session.save_session(response, callback); /// I need this call back because the setcookies function takes way too long to return
         };
 
