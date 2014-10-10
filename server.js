@@ -14,8 +14,8 @@ var configDB = require('./config/database.js');
 mongoose.connect(configDB.url); // connect to our database
 var sessionOpts = {
 	key: "token",
-	secret: Math.random().toString(36).slice(2),
-	cookie: { maxAge: 20 * 60 * 1000 },  /// Half Hour Session	
+	secret: 'ilovescotchscotchyscotchscotch',
+	cookie: { maxAge: 30 * 60 * 1000 },  /// Half Hour Session
 	store: new MongoStore({
       db : mongoose.connection.db
     })
