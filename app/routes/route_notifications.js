@@ -27,7 +27,6 @@ exports.findAll = function(req, res) {
         });
        return Comment.find({ 'user': user_id, 'parent': null }).exec();
     }).then(function(comments){
-        console.log("Logging comments where I am parent");
         var array_of_ids = [];
         _.each(comments, function(comment){
             array_of_ids.push(comment._id);
