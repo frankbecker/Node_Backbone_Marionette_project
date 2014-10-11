@@ -153,6 +153,8 @@ define([
             },
 
             new_message: function (data) {
+                var user_id = this.session.get("_id");
+                if(data.from == user_id)return;
                 this.counter++;
                 this.show_counter();
                _.each(this.childViews, function(childView){

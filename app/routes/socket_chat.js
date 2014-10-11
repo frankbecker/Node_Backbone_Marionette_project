@@ -22,6 +22,7 @@ module.exports = function(app, io) {
     socket.on('new message', function (data) {
       var to_id = data.to_id;
       var message = data.message;
+      if(to_id == socket._id)return;
       io.sockets.emit('new message', {
           from: socket._id,
           to: to_id,

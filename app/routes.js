@@ -9,20 +9,7 @@ module.exports = function(app, passport) {
 	// =====================================
 	// LOGIN ===============================
 	// =====================================
-	// show the login form
-	/*app.get('/login', function(req, res) {
-		console.log(req.cookies);
-		// render the page and pass in any flash data if it exists
-		//res.render('login.ejs', { message: req.flash('loginMessage') });
-	});*/
-
-	/*app.post('/login', passport.authenticate('local-login', {
-		successRedirect : '/profile', // redirect to the secure profile section
-		failureRedirect : '/login', // redirect back to the signup page if there is an error
-		failureFlash : true // allow flash messages
-	}));*/
-	// process the login form
-	app.post('/login', function(req, res, next) {
+	app.post('/login', already_logged_in, function(req, res, next) {
 		passport.authenticate('local-login', {session: true}, function(err, user, info) {
 			if (err)return next(err);
 			if (user === false) {
@@ -37,7 +24,7 @@ module.exports = function(app, passport) {
 		})(req, res, next);
 	});
 
-	app.post('/signup', function(req, res, next) {
+	app.post('/signup', already_logged_in, function(req, res, next) {
 		passport.authenticate('local-signup', function(err, user, info) {
 		if (err) return next(err);
 		if (user === false) {
@@ -94,7 +81,7 @@ module.exports = function(app, passport) {
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================	
-	app.get('/logout', isLoggedIn, User_route.logOut);
+	app.post('/loggin_out', isLoggedIn, User_route.logOut);
 	//app.all('*', isLoggedIn);
 	
 	// route middleware to make sure

@@ -77,7 +77,7 @@ define([
                 $(".chat_container", this.el).append("<span class='message me'><b>Me:</b>"+value+"</span>");
                 this.$el.find("input").val("");
                 this.socket.emit("new message",{
-                        //from_id : user_id,
+                        from_id : user_id,
                         to_id : to_id,
                         message : value
                 });

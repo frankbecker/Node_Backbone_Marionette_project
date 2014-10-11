@@ -5,7 +5,7 @@ var fs = require("fs");
 var _ = require('underscore');
 
 exports.logOut = function(req, res){
-    console.log("user_logged_in");
+    console.log("USER LOGOUT ----  user_logged_in");
     var user_id = req.app.get("user_logged_in");
     console.log(user_id);
     Sessions.findOne({ 'user' : user_id }, function(err, session) {
@@ -40,19 +40,6 @@ exports.findAll = function(req, res) {
                 friend.local = "";
                 my_array.push(friend._id.toString());
             });
-            /*Sessions.find({ 'user' : {$in: my_array } }, function(err, sessions) {
-                //console.log(sessions);
-                _.each(sessions,function(sess, index){
-                    console.log(index);
-                    console.log(sess.user);
-                    _.each( collection ,function (friend) {
-                        if(friend._id.toString() == sess.user){
-                            friend.online = true;
-                        }
-                    });
-                });
-                res.send(collection);
-            });*/
             res.send(collection);
         });
         return;
@@ -87,21 +74,6 @@ exports.addUser = function(req, res) {
       console.log("User was saved");
     });
 };
-
-/*exports.updateUser = function(req, res) {
-    var _id = req.params.id;
-    var user = req.body;
-    delete User._id;
-        User.update({'_id':_id}, user, {safe:true}, function(err, result) {
-            if (err) {
-                console.log('Error updating User: ' + err);
-                res.send({'error':'An error has occurred'});
-            } else {
-                console.log('' + result + ' document(s) updated');
-                res.send(user);
-            }
-        });
-};*/
 
 exports.updateUser = function(req, res) {
     var _id = req.params.id;
