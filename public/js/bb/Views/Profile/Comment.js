@@ -32,8 +32,8 @@ define([
             },
 
             initialize: function(){
-                this.listenTo(this.model, "destroy", this.close);
-                this.listenTo(this.model, "remove", this.close);
+                this.listenTo(this.model, "destroy", this._close);
+                this.listenTo(this.model, "remove", this._close);
                 this.listenTo(this.model, "change", this.render_template_only);
                 this.listenTo(this.collection, "reset", this.load_sub_comments);
                 this.editing = false;
@@ -165,7 +165,6 @@ define([
 
             destroy_model: function(){
                 this.model.destroy();
-                this.close();
             },
 
             onClose: function() {
@@ -173,6 +172,14 @@ define([
                       if (childView.close){
                         childView.close();
                       }
+                });
+            },
+
+            _close: function(){
+                var self = this;
+                $(this.el).fadeOut( 700,function() {
+                    self.close();
+                    self = null;
                 });
             }
         });

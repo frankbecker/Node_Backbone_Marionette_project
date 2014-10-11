@@ -43,7 +43,6 @@ define([
                 this.listenTo(App, "user_idle", this.is_user_idle);
                 this.listenTo(this.collection, 'add', this.insert_needed_info_into_comments);
                 this.user_idle = false;
-                this.profile_in_view = App.Profile_in_View;
                 this.model = App.Profile_in_View;
                 this.new_comment = null;
                 this.Interval = null;
@@ -73,7 +72,7 @@ define([
                     $("#todoapp",this.el).addClass("hide");
                     param["comment_id"] = this.comment_id;
                 }else{
-                    param["user_id"] = this.profile_in_view.get("_id");
+                    param["user_id"] = this.model.get("_id");
                 }
                 var self = this;
                 this.collection.fetch({
@@ -106,7 +105,7 @@ define([
               this.new_comment = this.collection.create({
                   body: target.value,
                   user: this.user_logged_in.get("_id"),
-                  user_wall: this.profile_in_view.get("_id")
+                  user_wall: this.model.get("_id")
                 },
                 {
                 wait : true,    // waits for server to respond with 200 before adding newly created model to collection
@@ -127,7 +126,7 @@ define([
 
             fetch_comments: function(){
                 var self = this;
-                var user_id = this.profile_in_view.get("_id");
+                var user_id = this.model.get("_id");
                 if(!this.user_idle && this.view_is_alive){
                     this.collection.fetch({
                     data: $.param({ user_id: user_id}),

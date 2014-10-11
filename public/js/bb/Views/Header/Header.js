@@ -55,6 +55,7 @@ define([
             },
 
             update_notification : function(e){
+                $("#notification .badge", this.el).addClass("no_opacity");
                 if($(".navbar-right").hasClass("open"))return;
                 this.model.set("update_notif" , true);
                 this.model.save(null, {
@@ -85,10 +86,10 @@ define([
                        success:function(collection, response, options){
                         $(".badge", self.el).html(self.collection.length);
                         if(self.collection.length === 0){
-                           $(".badge", self.el).addClass("no_opacity");
+                           $("#notification .badge", self.el).addClass("no_opacity");
                            self.add_no_notification_warning();
                         }else{
-                           $(".badge", self.el).removeClass("no_opacity");
+                           $("#notification .badge", self.el).removeClass("no_opacity");
                            self.remove_no_notification_warning();
                         }
                         self.after_fetch();
