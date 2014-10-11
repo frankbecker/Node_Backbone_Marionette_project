@@ -132,7 +132,7 @@ define(['App',
                     App.mainRegion.show(new MainView(options));
                 }else{
                     App.mainRegion.show(new MainView());
-                }            
+                }
                 if(!this.header_built){
                     App.headerRegion.show(new Header());
                     this.header_built = true;
@@ -158,7 +158,7 @@ define(['App',
                 App.Profile_in_View.fetch({
                     success: function() {
                         self.build_side_bar_and_main_view(View, options, Flag);
-                        self.fetch_friends();
+                        self.fetch_session_friends();
                         self = null;
                     },
                     error: function (err, resp, options) {
@@ -187,12 +187,12 @@ define(['App',
                 }
             },
 
-            fetch_friends: function () {
+            fetch_session_friends: function () {
                 var self = this;
-                var profile_in_view_id = App.Profile_in_View.get("_id");
+                var session_id = App.Session.get("_id");
                 App.Friends.fetch({
 
-                    data: $.param({ user_id: profile_in_view_id}),
+                    data: $.param({ user_id: session_id}),
 
                     silent: true,
 

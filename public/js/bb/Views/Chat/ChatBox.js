@@ -73,6 +73,7 @@ define([
 
                 if (event.keyCode != 13) return;
                 var value = this.$el.find("input").val();
+                if(value == "") return;
                 $(".chat_container", this.el).append("<span class='message me'><b>Me:</b>"+value+"</span>");
                 this.$el.find("input").val("");
                 this.socket.emit("new message",{
@@ -80,6 +81,7 @@ define([
                         to_id : to_id,
                         message : value
                 });
+                $(".chat_container", this.el).animate({ scrollTop: $(".chat_container", this.el).height() }, 0);  /// scroll to bottom with every new message
             },
 
             add_message: function (message) {
@@ -88,6 +90,7 @@ define([
                 if(this.minimized){
                     $(".header",this.el).addClass("highlight");
                 }
+                $(".chat_container", this.el).animate({ scrollTop: $(".chat_container", this.el).height() }, 0);  /// scroll to bottom with every new message
             },
 
             typing: function () {
@@ -101,7 +104,11 @@ define([
             },
 
             hide: function  () {
+              this.minimized = false;
+              $(".header",this.el).removeClass("highlight");
+              $(this.el).removeClass( "minimize" );
               this.$el.addClass("hide");
+              this.trigger("hide");
             },
 
             show: function  () {

@@ -22,8 +22,10 @@ module.exports = function(passport , app) {
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
+        console.log("deserializeUser: "+ id);
         app.set('user_logged_in', id);
         User.findById(id, function(err, user) {
+            //console.log(user);
             done(err, user);
         });
     });

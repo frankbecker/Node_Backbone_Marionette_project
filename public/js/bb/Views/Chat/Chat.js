@@ -26,7 +26,8 @@ define([
             template: Handlebars.compile(Template),
 
             events: {
-
+                "click #chat_button" : "open_chat",
+                "click #close" : "close_chat"
             },
 
             initialize: function() {
@@ -39,6 +40,8 @@ define([
                 this.bind_socket_io();
                 this.chat_add_user();
                 this.users_online = [];
+                this.counter = 0;
+                this.chat_open = false;
                 this.render();
             },
  
@@ -70,7 +73,6 @@ define([
 
             chat_add_user: function () {
                 var user_id = this.session.get('_id');
-                console.log("add user: "+user_id);
                 this.socket.emit('add user', {
                   _id: user_id
                 });
@@ -124,15 +126,10 @@ define([
 
             user_left: function (data) {
                 var user_id = data.user_id;
-                var self = this;
-                setTimeout(function(){
-                    var friend = self.collection.findWhere({"_id" : user_id});
-                    if(friend){
-                        friend.set("online", false);
-                    }
-                    self = null;
-                }, 1500);
-
+                var friend = this.collection.findWhere({"_id" : user_id});
+                if(friend){
+                    friend.set("online", false);
+                }
                 var index = this.users_online.indexOf(user_id);
                 if (index > -1) {
                     this.users_online.splice(index, 1);
@@ -148,7 +145,6 @@ define([
             },
 
             user_stop_typing: function (data) {
-                console.log("user stopped typing");
                 var user_id = data.user_id;
                 var friend = this.collection.findWhere({"_id" : user_id});
                 if(friend){
@@ -157,6 +153,8 @@ define([
             },
 
             new_message: function (data) {
+                this.counter++;
+                this.show_counter();
                _.each(this.childViews, function(childView){
                     var user_id = childView.model.get("_id");
                     if(data.from == user_id){
@@ -167,8 +165,31 @@ define([
                 });
             },
 
+            open_chat: function(){
+                this.chat_open = true;
+                $("#chat_region").removeClass("chat_closed");
+            },
+
+            close_chat: function(){
+                this.chat_open = false;
+                $("#chat_region").addClass("chat_closed");
+                this.counter = 0;
+                this.show_counter();
+            },
+
+            show_counter: function (argument) {
+                if( this.counter !== 0 ){
+                    this.$el.find("#chat_button .badge").html(this.counter).addClass("highlight");
+                }else{
+                    this.$el.find("#chat_button .badge").html(this.counter).removeClass("highlight");
+                }
+            },
+
             onClose: function() {
-                this.socket.emit("user left");
+                var user_id = this.session.get('_id');
+                this.socket.emit("user left", {
+                  _id: user_id
+                });
                 //this.socket.disconnect();
                 console.log("closing chat view");
                 _.each(this.childViews, function(childView){

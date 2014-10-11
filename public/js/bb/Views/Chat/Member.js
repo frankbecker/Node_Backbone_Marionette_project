@@ -35,9 +35,8 @@ define([
                 this.listenTo(this.model, "change", this.render);
                 this.socket = options.socket;
                 this.counter = 0;
-                this.chat_box = null;
+                this.chat_box = null;                
                 this.chat_box_opened = false;
-                this.chat_box_initiated = false;
                 this.messages = [];
                 this.render();
             },
@@ -62,12 +61,11 @@ define([
                 this.counter = 0;
                 this.show_counter();
                 if(!this.chat_box_opened){
-                    if(this.chat_box_initiated === false){
+                    if(!this.chat_box){
                         this.open_chat_box();
-                    }else{
-                        this.show_chat_box();
+                        return;
                     }
-                    this.chat_box_opened = true;
+                    this.show_chat_box();
                 }else{
                     this.hide_chat_box();
                 }
@@ -75,7 +73,7 @@ define([
 
             open_chat_box: function (e) {
                 this.chat_box = new ChatBox({ model: this.model , socket: this.socket});
-                this.chat_box_initiated = true;
+                this.listenTo(this.chat_box, "hide", this.set_chat_box_opened_false);
                 $("#chat_boxes").prepend(this.chat_box.el);
                 if(this.messages.length !== 0){
                     var self = this;
@@ -84,10 +82,16 @@ define([
                     });
                     self = null;
                 }
+                this.chat_box_opened = true;
             },
 
             hide_chat_box: function () {
                 this.chat_box.hide();
+                this.chat_box_opened = false;
+            },
+
+            set_chat_box_opened_false: function (argument) {
+                console.log("hiding box");
                 this.chat_box_opened = false;
             },
 
@@ -97,6 +101,9 @@ define([
             },
 
             show_counter: function (argument) {
+                if(this.chat_box_opened){
+                    this.counter = 0;
+                }
                 if( this.counter !== 0 ){
                     this.$el.find("span").html(this.counter).addClass("highlight");
                 }else{

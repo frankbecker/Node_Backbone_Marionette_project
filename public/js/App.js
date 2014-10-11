@@ -79,7 +79,7 @@ define([
             });
                $.ajax({
                 type: "GET",
-                url: "/logout",
+                url: "/logout"
                 })
                 .done(function( response ) {
                     console.log("user has been logout");

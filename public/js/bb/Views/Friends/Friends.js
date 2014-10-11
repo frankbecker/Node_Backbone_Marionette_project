@@ -6,7 +6,8 @@ define([
         'backbone',
         'handlebars',
         'text!bb/Templates/Friends/Friends.html',
-        'bb/Views/Friends/Friend'
+        'bb/Views/Friends/Friend',
+        'bb/Collections/Profiles/Profiles'
     ],
     function(
         App,
@@ -16,7 +17,8 @@ define([
         Backbone,
         Handlebars,
         Template,
-        Friend
+        Friend,
+        Profiles
     ) {
 
         var Friends = Marionette.View.extend({
@@ -32,18 +34,31 @@ define([
 
             initialize: function() {
                 this.childViews = [];      //GARBAGE COLLECTION
-                this.collection = App.Friends;
-                this.listenTo(this.collection, "fetched", this.display_list_of_friends);
+                this.collection = new Profiles();
+                this.profile_in_view = App.Profile_in_View;
+                this.listenTo(this.collection, "reset", this.display_list_of_friends);
+                this.fetch_profile_friends();
             },
 
             render: function() {
                 $(this.el).html(this.template());
-                var self = this;
-                setTimeout(function(){
-                    self.display_list_of_friends();
-                    self = null;
-                },0);
                 return this;
+            },
+
+            fetch_profile_friends: function  (argument) {
+                var profile_id = this.profile_in_view.get("_id");
+                this.collection.fetch({
+
+                    data: $.param({ user_id: profile_id}),
+
+                    success:function(collection, response, options){
+                        collection.trigger("reset");
+                    },
+                   
+                    error: function (err, resp, options) {
+                        App.handle_bad_response(resp);
+                    }
+               });
             },
 
             display_list_of_friends : function(){

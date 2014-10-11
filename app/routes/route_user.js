@@ -5,20 +5,20 @@ var fs = require("fs");
 var _ = require('underscore');
 
 exports.logOut = function(req, res){
+    console.log("user_logged_in");
     var user_id = req.app.get("user_logged_in");
     console.log(user_id);
     Sessions.findOne({ 'user' : user_id }, function(err, session) {
-        if (err) return res.send(404,"session not found");
+        if (err) return res.send(404,"err deleting session");
         try{
+            req.logout();
             session.remove();
         }catch(error){
-            console.log("session doesn't exist");
+            res.send(404,"session not found");
         }
         req.session.destroy();
-        res.send(401,'Session Expired');
+        res.send(200,'Successfully delete session');
     });
-    //req.logout();
-    //req.session.destroy();
 };
 
 exports.findById = function(req, res) {

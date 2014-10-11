@@ -94,7 +94,7 @@ module.exports = function(app, passport) {
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================	
-	app.get('/logout', User_route.logOut);
+	app.get('/logout', isLoggedIn, User_route.logOut);
 	//app.all('*', isLoggedIn);
 	
 	// route middleware to make sure
@@ -105,7 +105,13 @@ module.exports = function(app, passport) {
 			return next();
 
 		// if they aren't redirect them to the home page
-		User_route.logOut();
+		req.logout();
 		res.send(401,'Session Expired');
+	}
+
+	function already_logged_in (req, res, next) {
+		if (!req.isAuthenticated()) return next();
+
+		res.send(499,'You are already logged in with this Browser, please use a different one. Thanks!');
 	}
 };
