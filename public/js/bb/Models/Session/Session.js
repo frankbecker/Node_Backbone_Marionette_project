@@ -56,11 +56,11 @@ define([
                 $.removeCookie('full_name');
                 $.removeCookie('profile_pic');
                 $.removeCookie('full_name');
-                this.unset("_id");
-                this.unset("profile_pic");
-                this.unset("full_name");
-                this.unset("notif_before_last_checked");
-                this.unset("notif_last_checked");
+                this.unset("_id" , {silent: true});
+                this.unset("profile_pic", {silent: true});
+                this.unset("full_name", {silent: true});
+                this.unset("notif_before_last_checked", {silent: true});
+                this.unset("notif_last_checked", {silent: true});
             },
 
             remove: function(key) {

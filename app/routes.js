@@ -4,7 +4,7 @@ var Comments_route = require('./routes/route_comments');
 var Albums_route = require('./routes/route_albums');
 var Image_route = require('./routes/route_image');
 var Notif_route = require('./routes/route_notifications');
-module.exports = function(app, passport) {
+module.exports = function(app, passport) {	
 
 	// =====================================
 	// LOGIN ===============================
@@ -30,7 +30,7 @@ module.exports = function(app, passport) {
 				} else {
 				req.logIn(user, function(err) {
 					if (err) { return res.send({'status':'err','message':err.message}); }
-					req.app.set('user_legged_in', user._id);
+					req.app.set('user_logged_in', user._id);
 					return res.send(200, user);	
 				});
 			}
@@ -96,16 +96,16 @@ module.exports = function(app, passport) {
 	// =====================================	
 	app.get('/logout', User_route.logOut);
 	//app.all('*', isLoggedIn);
+	
+	// route middleware to make sure
+	function isLoggedIn(req, res, next) {
+		console.log("isLoggedIn");
+		// if user is authenticated in the session, carry on
+		if (req.isAuthenticated())
+			return next();
+
+		// if they aren't redirect them to the home page
+		User_route.logOut();
+		res.send(401,'Session Expired');
+	}
 };
-
-// route middleware to make sure
-function isLoggedIn(req, res, next) {
-	console.log("isLoggedIn");
-	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated())
-		return next();
-
-	// if they aren't redirect them to the home page
-	req.logout();
-	res.send(401,'Session Expired');
-}

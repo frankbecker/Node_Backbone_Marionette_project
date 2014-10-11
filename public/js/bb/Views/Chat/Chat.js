@@ -6,9 +6,7 @@ define([
         'backbone',
         'handlebars',
         'text!bb/Templates/Chat/Chat.html',
-        'bb/Views/Chat/Member',
-        'bb/Views/Chat/ChatBox',
-        'io'
+        'bb/Views/Chat/Member'        
     ],
     function(
         App,
@@ -18,9 +16,7 @@ define([
         Backbone,
         Handlebars,
         Template,
-        Member,
-        ChatBox,
-        io
+        Member
     ) {
 
         var Chat = Marionette.View.extend({
@@ -30,15 +26,19 @@ define([
             template: Handlebars.compile(Template),
 
             events: {
-                "click li"  : "open_chat_box"
+
             },
 
             initialize: function() {
+                this.session = App.Session;
                 this.collection = App.Friends;
                 this.listenTo(this.collection, "fetched", this.populate_chat_members);
                 this.childViews = [];      //GARBAGE COLLECTION
                 this.chat_built = false;
-                this.socket = io();
+                this.socket = App.io;
+                this.bind_socket_io();
+                this.chat_add_user();
+                this.users_online = [];
                 this.render();
             },
  
@@ -58,22 +58,119 @@ define([
                     self.collection.each(function (member) {
                         self.chat_built = true;
                         if(!member.get("first_name"))return;
-                        var member_view = new Member({ model: member });
+                        if(_.indexOf(self.users_online , member.get('_id')) !== -1){
+                            member.set("online", true);
+                        }
+                        var member_view = new Member({ model: member, socket: self.socket});
                         self.childViews.push(member_view);
                         $ul.append(member_view.el);
                     });
                     self = null;
             },
 
-            open_chat_box: function (e) {
-                var id = $("b",e.currentTarget).attr("id");
-                var user = this.collection.findWhere({_id : id});
-                var chat_box = new ChatBox({ model: user });
-                this.childViews.push(chat_box);
-                $("#chat_boxes").prepend(chat_box.el);
+            chat_add_user: function () {
+                var user_id = this.session.get('_id');
+                console.log("add user: "+user_id);
+                this.socket.emit('add user', {
+                  _id: user_id
+                });
+            },
+
+            bind_socket_io: function(){
+                var self = this;
+                this.socket.removeAllListeners();
+
+                // Whenever the server emits 'new message', update the chat body
+                this.socket.on('new message', function (data) {
+                    self.new_message(data);
+                });
+
+                // Whenever the server emits 'user joined', log it in the chat body
+                this.socket.on('user joined', function (data) {
+                    self.user_joined(data);
+                });
+
+                // Whenever the server emits 'user left', log it in the chat body
+                this.socket.on('user left', function (data) {
+                     self.user_left(data);
+                });
+
+                // Whenever the server emits 'typing', show the typing message
+                this.socket.on('typing', function (data) {
+                    self.user_typing(data);
+                });
+
+                // Whenever the server emits 'stop typing', show the typing message
+                this.socket.on('stop typing', function (data) {
+                    self.user_stop_typing(data);
+                });
+
+
+            },
+
+            user_joined: function (array_of_users_online) {  // _id index
+                this.users_online = array_of_users_online;
+                console.log("users online");
+                console.log(this.users_online);
+                var self = this;
+                _.each(this.users_online, function (user_id) {
+                    var friend = self.collection.findWhere({"_id" : user_id});
+                    if(friend){
+                        friend.set("online", true);
+                    }
+                });
+                self = null;
+            },
+
+            user_left: function (data) {
+                var user_id = data.user_id;
+                var self = this;
+                setTimeout(function(){
+                    var friend = self.collection.findWhere({"_id" : user_id});
+                    if(friend){
+                        friend.set("online", false);
+                    }
+                    self = null;
+                }, 1500);
+
+                var index = this.users_online.indexOf(user_id);
+                if (index > -1) {
+                    this.users_online.splice(index, 1);
+                }
+            },
+
+            user_typing: function (data) {
+                var user_id = data.user_id;
+                var friend = this.collection.findWhere({"_id" : user_id});
+                if(friend){
+                    friend.set("typing", true);
+                }
+            },
+
+            user_stop_typing: function (data) {
+                console.log("user stopped typing");
+                var user_id = data.user_id;
+                var friend = this.collection.findWhere({"_id" : user_id});
+                if(friend){
+                    friend.set("typing", false);
+                }
+            },
+
+            new_message: function (data) {
+               _.each(this.childViews, function(childView){
+                    var user_id = childView.model.get("_id");
+                    if(data.from == user_id){
+                        if(childView.add_message){
+                            childView.add_message(data.message);
+                        }
+                    }
+                });
             },
 
             onClose: function() {
+                this.socket.emit("user left");
+                //this.socket.disconnect();
+                console.log("closing chat view");
                 _.each(this.childViews, function(childView){
                       if (childView.close){
                         childView.close();

@@ -4,14 +4,16 @@ define([
         "marionette",
         "backbone",
         "jquery.cookie",
-        "idle"
+        "idle",
+        "io"
     ],
 
-    function(_, Marionette, Backbone, cookie, idle) {
+    function(_, Marionette, Backbone, cookie, idle, io) {
 
         var App;
 
         App = new Backbone.Marionette.Application();
+        App.io = io();
         App.Router = {};
         App.Header = {};
         App.Footer = {};
@@ -70,6 +72,11 @@ define([
         };
 
         App.Log_User_Out = function() {
+            App.logged_in = false;
+            App.Session.clear();
+            App.Router.navigate('', {
+                trigger: true
+            });
                $.ajax({
                 type: "GET",
                 url: "/logout",
@@ -79,11 +86,7 @@ define([
                 })
                 .fail(function( xhr ){
                     console.log("something went wrong in logout");
-                });
-            App.Session.clear();
-            App.Router.navigate('', {
-                trigger: true
-            });
+                });            
         };
 
         App.GET_comment_editing_no_comment_fecthing = function(){

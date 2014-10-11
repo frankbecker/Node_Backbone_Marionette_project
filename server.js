@@ -24,7 +24,7 @@ var sessionOpts = {
 app.set('root_directory', __dirname);
 // configuration ===============================================================
 
-require('./config/passport')(passport); // pass passport for configuration
+require('./config/passport')(passport, app); // pass passport for configuration
 
 app.configure(function() {
 
@@ -47,5 +47,68 @@ app.configure(function() {
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 // launch ======================================================================
-app.listen(port);
+
+var server = app.listen(port);
+var socket = require('socket.io');
+var io = socket.listen(server);
+
+//  Socket.IO Chat
+var users = [];
+io.sockets.on('connection', function (socket) {
+
+  socket.on('add user', function () {
+    socket._id = app.get("user_logged_in");
+    users.push(socket._id);
+    io.sockets.emit('user joined', users);
+  });
+
+  socket.on('new message', function (data) {
+    var to_id = data.to_id;
+    var message = data.message;
+
+    //if(socket._id !== from_id && socket._id !== to_id)return;
+
+  io.sockets.emit('new message', {
+      from: socket._id,
+      to: to_id,
+      message: message
+    });
+  });
+
+
+  socket.on('typing', function () {
+    io.sockets.emit('typing', {
+      user_id: socket._id
+    });
+  });
+
+  socket.on('stop typing', function () {
+    io.sockets.emit('stop typing', {
+      user_id: socket._id
+    });
+  });
+
+  socket.on('user left', function () {
+	console.log("user logged out:"+ socket._id);
+	var index = users.indexOf(socket._id);
+		if (index > -1) {
+		users.splice(index, 1);
+		}
+    io.sockets.emit('user left', {
+      user_id: socket._id
+    });
+  });
+
+  socket.on('disconnect', function () {
+	console.log("user logged out:"+ socket._id);
+    var index = users.indexOf(socket._id);
+		if (index > -1) {
+			users.splice(index, 1);
+		}
+    io.sockets.emit('user left', {
+      user_id: socket._id
+    });
+  });
+
+}); /// io
 console.log('The magic happens on port ' + port);

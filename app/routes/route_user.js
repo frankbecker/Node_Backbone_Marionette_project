@@ -4,9 +4,21 @@ var Sessions = require('../models/schema_session');
 var fs = require("fs");
 var _ = require('underscore');
 
-exports.logOut = function(req, res){        
-        req.logout();
+exports.logOut = function(req, res){
+    var user_id = req.app.get("user_logged_in");
+    console.log(user_id);
+    Sessions.findOne({ 'user' : user_id }, function(err, session) {
+        if (err) return res.send(404,"session not found");
+        try{
+            session.remove();
+        }catch(error){
+            console.log("session doesn't exist");
+        }
         req.session.destroy();
+        res.send(401,'Session Expired');
+    });
+    //req.logout();
+    //req.session.destroy();
 };
 
 exports.findById = function(req, res) {
@@ -28,7 +40,7 @@ exports.findAll = function(req, res) {
                 friend.local = "";
                 my_array.push(friend._id.toString());
             });
-            Sessions.find({ 'user' : {$in: my_array } }, function(err, sessions) {
+            /*Sessions.find({ 'user' : {$in: my_array } }, function(err, sessions) {
                 //console.log(sessions);
                 _.each(sessions,function(sess, index){
                     console.log(index);
@@ -40,7 +52,8 @@ exports.findAll = function(req, res) {
                     });
                 });
                 res.send(collection);
-            });
+            });*/
+            res.send(collection);
         });
         return;
     }
