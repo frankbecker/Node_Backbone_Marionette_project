@@ -227,9 +227,7 @@ define(['App',
             },
 
             logout: function(){
-                if(App.logged_in){
-                    App.Log_User_Out();
-                }
+                App.Log_User_Out();
             }
         });
 

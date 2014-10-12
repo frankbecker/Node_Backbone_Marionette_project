@@ -9,7 +9,7 @@ module.exports = function(app, passport) {
 	// =====================================
 	// LOGIN ===============================
 	// =====================================
-	app.post('/login', already_logged_in, function(req, res, next) {
+	app.post('/login', function(req, res, next) {
 		passport.authenticate('local-login', {session: true}, function(err, user, info) {
 			if (err)return next(err);
 			if (user === false) {
@@ -24,7 +24,7 @@ module.exports = function(app, passport) {
 		})(req, res, next);
 	});
 
-	app.post('/signup', already_logged_in, function(req, res, next) {
+	app.post('/signup', function(req, res, next) {
 		passport.authenticate('local-signup', function(err, user, info) {
 		if (err) return next(err);
 		if (user === false) {

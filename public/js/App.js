@@ -72,6 +72,7 @@ define([
         };
 
         App.Log_User_Out = function() {
+            console.log("logging out");
             App.logged_in = false;
             App.Session.clear();
             App.Router.navigate('', {
@@ -88,7 +89,7 @@ define([
                 .fail(function( xhr ){
                     console.log("something went wrong in logout");
                 });
-            },200);
+            },1000);
         };
 
         App.GET_comment_editing_no_comment_fecthing = function(){
