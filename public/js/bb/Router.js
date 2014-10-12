@@ -117,8 +117,8 @@ define(['App',
 
             album: function(user_id, album_id, img_id, commment_id){
                 var options = {
-                    album_id : album_id,
                     user_id : user_id,
+                    album_id : album_id,
                     img_id : img_id,
                     commment_id : commment_id
                 };
