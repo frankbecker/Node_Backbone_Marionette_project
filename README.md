@@ -22,3 +22,5 @@ I did this so that I could easily query for current sessions.
 "connect-mongo" is a great package but for some reason it would break when setting stringify to false as an option.
 So I hacked it, the session was being set as a string, but I need an object. 
 I <3 Objects
+
+Here is a link to the project <a href"http://sheltered-sierra-9661.herokuapp.com/">http://sheltered-sierra-9661.herokuapp.com/</a>
