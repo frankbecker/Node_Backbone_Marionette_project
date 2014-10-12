@@ -33,13 +33,26 @@ exports.findAll = function(req, res) {
         _.each(comments, function(comment){
             array_of_ids.push(comment._id);
         });
-       return Comment.find({ 'parent': { $in: array_of_ids }, 'created': { "$gte": last_checked }, 'user': { $ne: user_id } }).populate('user').exec();
+       return Comment.find({ 'parent': { $in: array_of_ids }, 'created': { "$gte": last_checked }, 'user': { $ne: user_id } }).exec();
        
     }).then(function (sub_collection) {
         _.each(sub_collection, function(sub){
             sub.user.local = "";
             temp_collection.push(sub);
-        });        
+        });
+        return Comment.find({ 'user': user_id, 'img_number': { $ne: null } }).exec();
+    }).then(function (img_comments) {
+        var array_of_img_ids = [];
+        _.each(img_comments, function(img){
+            array_of_img_ids.push(img.img_number);
+        });
+        return Comment.find({'img_number': { $in: array_of_img_ids }, 'created': { "$gte": last_checked }, 'user': { $ne: user_id } }).populate('user').populate("img_number").exec();
+    }).then(function (imgs) {
+        _.each(imgs, function(img){
+            img.user.local = "";
+            temp_collection.push(img);
+        });
+        temp_collection = _.uniq(temp_collection);  /// I put this in place just in case we have repetitive models
         res.send(temp_collection);
     });
 };

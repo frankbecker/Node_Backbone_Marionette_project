@@ -127,6 +127,7 @@ define(['App',
              },
 
             build_side_bar_and_main_view: function(MainView , options, flag){
+                App.logged_in = true;  /// we sill set this to true here in case there is a refresh, this conditional is just in case the user decides to go back to the login screen
                 if(typeof MainView === 'object'){
                     App.mainRegion.show(MainView);  /// view has already been initialized
                 }else if(options){

@@ -28,7 +28,8 @@ define([
             template: Handlebars.compile(Template),
 
             events: {
-                "click #notification" : "update_notification"
+                "click #notification" : "update_notification",
+                "click #logout"      : "logout"
             },
 
             initialize: function() {
@@ -146,6 +147,10 @@ define([
 
             is_user_idle: function () {
                 this.user_idle = App.user_idle;
+            },
+
+            logout: function(){
+                App.Log_User_Out();
             },
 
             onClose: function() {

@@ -21,10 +21,10 @@ module.exports = function(app, io) {
 
     socket.on('new message', function (data) {
       var to_id = data.to_id;
+      var from_id = data.from_id;
       var message = data.message;
-      if(to_id == socket._id)return;
       io.sockets.emit('new message', {
-          from: socket._id,
+          from: from_id,
           to: to_id,
           message: message
         });
