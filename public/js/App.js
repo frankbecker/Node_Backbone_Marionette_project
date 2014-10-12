@@ -8,7 +8,14 @@ define([
         "io"
     ],
 
-    function(_, Marionette, Backbone, cookie, idle, io) {
+    function(
+        _,
+        Marionette,
+        Backbone,
+        cookie,
+        idle,
+        io
+        ){
 
         var App;
 
