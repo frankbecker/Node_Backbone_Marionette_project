@@ -1,3 +1,6 @@
+/*
+Author: Francisco Becker
+ */
 // Set the require.js configuration
 require.config({
 
@@ -26,7 +29,8 @@ require.config({
         marionette: 'lib/backbone.marionette.min',
         'backbone.wreqr': 'lib/backbone.wreqr',
         'backbone.babysitter': 'lib/backbone.babysitter',
-        'idle'   :  'lib/jquery.idle.min'
+        'idle'   :  'lib/jquery.idle.min',
+        io  : 'lib/socket.io-1.1.0'
 
     },
 
@@ -76,13 +80,22 @@ require([
     "jquery",
     "backbone",
     "bb/Router",
-    "bb/Models/Session/Session"
-], function(App, $, Backbone, AppRouter, Session) {
+    "bb/Models/Session/Session",
+    'bb/Collections/Profiles/Profiles'
+], function(
+    App,
+    $,
+    Backbone,
+    AppRouter,
+    Session,
+    Profiles
+    ){
     /// This file and addInitializer function server as an abstraction layer,
     /// so that we don't create a circular dependecy,
-    /// meaning Session requires App, and if we require Session in App we will create a circular dependency
+    /// meaning Session requires App, and if we require Session in App we will create a circular dependency, and if that happens nothing works
     App.addInitializer(function() {
          App.Router = new AppRouter();
+         App.Friends = new Profiles();
           App.reload_session = function() {
             App.Session = new Session();
         }();

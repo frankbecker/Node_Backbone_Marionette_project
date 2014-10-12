@@ -7,7 +7,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 var User       		= require('../app/models/schema_user');
 
 // expose this function to our app using module.exports
-module.exports = function(passport) {
+module.exports = function(passport , app) {
 
 	// =========================================================================
     // passport session setup ==================================================
@@ -17,15 +17,19 @@ module.exports = function(passport) {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
-        console.log("serializeUser");
         done(null, user._id);
     });
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
-        console.log("deserializeUser");
+        console.log("deserializeUser: "+ id);
+        app.set('user_logged_in', id);
         User.findById(id, function(err, user) {
+<<<<<<< HEAD
             console.log(user);
+=======
+            //console.log(user);
+>>>>>>> issue/REAL-MASTER
             done(err, user);
         });
     });

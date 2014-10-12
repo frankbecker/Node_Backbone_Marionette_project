@@ -282,6 +282,11 @@ define([
             },
 
             remove_image_pop_up : function(){
+                var user_id = this.profile_in_view.get("_id");
+                var album_id = this.album_id;
+                App.Router.navigate("album/"+user_id+"/"+album_id, {
+                    trigger: false
+                });
                 this.image_pop_up_view.close();
             },
 

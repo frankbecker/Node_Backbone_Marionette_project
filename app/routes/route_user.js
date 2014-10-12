@@ -1,10 +1,24 @@
 var mongoose = require('mongoose');
 var User = require('../models/schema_user');
+var Sessions = require('../models/schema_session');
 var fs = require("fs");
+var _ = require('underscore');
 
 exports.logOut = function(req, res){
+    console.log("USER LOGOUT ----  user_logged_in");
+    var user_id = req.app.get("user_logged_in");
+    console.log(user_id);
+    Sessions.findOne({ 'user' : user_id }, function(err, session) {
+        if (err) return res.send(404,"err deleting session");
+        try{
+            req.logout();
+            session.remove();
+        }catch(error){
+            res.send(404,"session not found");
+        }
         req.session.destroy();
-        req.logout();
+        res.send(200,'Successfully delete session');
+    });
 };
 
 exports.findById = function(req, res) {
@@ -18,15 +32,37 @@ exports.findById = function(req, res) {
 
 exports.findAll = function(req, res) {
     var _id = req.query.user_id;
+    var my_array = [];
+
     if(_id){
-        //  Eventually will need to update this so that it only returns friends based on ID, but I have to implement all of this design and logic
         User.find({ '_id': { $ne: _id } } , function(err, collection) {
+            _.each(collection, function(friend) {
+                friend.local = "";
+                my_array.push(friend._id.toString());
+            });
             res.send(collection);
         });
         return;
     }
+
     User.find({}, function(err, collection) {
-            res.send(collection);
+            _.each(collection, function(friend) {
+                friend.local = "";
+                my_array.push(friend._id.toString());
+            });
+            Sessions.find({ 'user' : {$in: my_array } }, function(err, sessions) {
+                //console.log(sessions);
+                _.each(sessions,function(sess, index){
+                    console.log(index);
+                    console.log(sess.user);
+                    _.each( collection ,function (friend) {
+                        if(friend._id.toString() == sess.user){
+                            friend.online = true;
+                        }
+                    });
+                });
+                res.send(collection);
+            });
     });
 };
 
@@ -38,21 +74,6 @@ exports.addUser = function(req, res) {
       console.log("User was saved");
     });
 };
-
-/*exports.updateUser = function(req, res) {
-    var _id = req.params.id;
-    var user = req.body;
-    delete User._id;
-        User.update({'_id':_id}, user, {safe:true}, function(err, result) {
-            if (err) {
-                console.log('Error updating User: ' + err);
-                res.send({'error':'An error has occurred'});
-            } else {
-                console.log('' + result + ' document(s) updated');
-                res.send(user);
-            }
-        });
-};*/
 
 exports.updateUser = function(req, res) {
     var _id = req.params.id;

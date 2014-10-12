@@ -1,25 +1,38 @@
+/*
+Author: Francisco Becker
+ */
 define([
         // Libs
         "underscore",
         "marionette",
         "backbone",
         "jquery.cookie",
-        "idle"
+        "idle",
+        "io"
     ],
 
-    function(_, Marionette, Backbone, cookie, idle) {
+    function(
+        _,
+        Marionette,
+        Backbone,
+        cookie,
+        idle,
+        io
+        ){
 
         var App;
 
         App = new Backbone.Marionette.Application();
+        App.io = io();
         App.Router = {};
         App.Header = {};
         App.Footer = {};
         App.Dialog = {};
         App.Session = {};
+        App.Friends = {};
         App.Profile_in_View = null;
-        App.header_built = false;
         App.user_idle = false;
+        App.logged_in = false;
         App.comment_editing_no_comment_fecthing = false;
 
         App.addRegions({
@@ -27,6 +40,7 @@ define([
             mainRegion: "#container_region",
             left_sidebar_region: "#left_sidebar_region",
             footerRegion: "#footer_region",
+            chatRegion: "#chat_region",
             dialogsRegion: "#dialogs"
         });
 
@@ -53,6 +67,7 @@ define([
                     trigger: true
                  });
             };
+            App.logged_in = true;
             App.Session.save_session(response, callback); /// I need this call back because the setcookies function takes way too long to return
         };
 
@@ -62,24 +77,29 @@ define([
                     trigger: true
                  });
             };
+            App.logged_in = true;
             App.Session.save_session(response, callback); /// I need this call back because the setcookies function takes way too long to return
         };
 
         App.Log_User_Out = function() {
-               $.ajax({
-                type: "GET",
-                url: "/logout",
-                })
-                .done(function( response ) {
-                    console.log("user has been logout");
-                })
-                .fail(function( xhr ){
-                    console.log("something went wrong in logout");
-                });
+            if(!App.logged_in)return;
+            App.logged_in = false;
             App.Session.clear();
             App.Router.navigate('', {
                 trigger: true
             });
+            setTimeout(function(){
+               $.ajax({
+                type: "POST",
+                url: "/loggin_out"
+                })
+                .done(function( response ) {
+                    //console.log("user has been logout");
+                })
+                .fail(function( xhr ){
+                    console.log("something went wrong in logout");
+                });
+            },1000);
         };
 
         App.GET_comment_editing_no_comment_fecthing = function(){
@@ -108,7 +128,7 @@ define([
                 App.user_idle = false;
                 App.trigger("user_idle");
               },
-              idle: 10000
+              idle: 5 * 60 * 1000   //// five minutes
             });
         };
 
@@ -120,7 +140,10 @@ define([
                 App.Router.navigate('', {
                     trigger: true
                 });
+            }else if(status_code == 499){
+                message = resp.responseText;
             }
+            if(!message)return;
             $("#app_modal .modal-body b").html(message);
             $("#app_modal").modal('show');
         };

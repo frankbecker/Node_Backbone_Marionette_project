@@ -28,7 +28,8 @@ define([
             template: Handlebars.compile(Template),
 
             events: {
-                "click #notification" : "update_notification"
+                "click #notification" : "update_notification",
+                "click #logout"      : "logout"
             },
 
             initialize: function() {
@@ -55,6 +56,7 @@ define([
             },
 
             update_notification : function(e){
+                $("#notification .badge", this.el).addClass("no_opacity");
                 if($(".navbar-right").hasClass("open"))return;
                 this.model.set("update_notif" , true);
                 this.model.save(null, {
@@ -73,7 +75,7 @@ define([
                     user_id : this.model.get("_id"),
                     notif_time: this.model.get("notif_last_checked")
                 };
-                if(!this.user_idle){
+                if(!this.user_idle && this.view_is_alive){
                     this.collection.fetch({
 
                        data: decodeURIComponent($.param(param)),
@@ -85,10 +87,10 @@ define([
                        success:function(collection, response, options){
                         $(".badge", self.el).html(self.collection.length);
                         if(self.collection.length === 0){
-                           $(".badge", self.el).addClass("no_opacity");
+                           $("#notification .badge", self.el).addClass("no_opacity");
                            self.add_no_notification_warning();
                         }else{
-                           $(".badge", self.el).removeClass("no_opacity");
+                           $("#notification .badge", self.el).removeClass("no_opacity");
                            self.remove_no_notification_warning();
                         }
                         self.after_fetch();
@@ -145,6 +147,10 @@ define([
 
             is_user_idle: function () {
                 this.user_idle = App.user_idle;
+            },
+
+            logout: function(){
+                App.Log_User_Out();
             },
 
             onClose: function() {

@@ -12,7 +12,7 @@ exports.findById = function(req, res) {
 };
 
 exports.findComments = function(req, res) {
-    console.log(req.user);
+    //console.log(req.user);
     var user_id = req.query.user_id;  /// find by user
     var img_id = req.query.img_id;     ///  find by image number
     var comment_id = req.query.comment_id;  /// find by comment _id
@@ -23,6 +23,7 @@ exports.findComments = function(req, res) {
             if (err) return console.error(err);
             //!ATTENTION I am using this function in order to remove both username and password from our User object
             // I am trying to set up a getter in order to fix this issue, but I'll need to look deeper into this problem
+            // Because when we log in we need these values when retrieveing the user object from the Database
             _.each(collection , function(model){
                 model.user.local = "";
                 Comment.find({ parent: model._id },function(err, sub_collection) {
@@ -76,6 +77,7 @@ exports.updateComment = function(req, res) {
     comment.user = comment.user._id;   /// we need to get rid of the User object and just update the user with _id field, I am trying to find a better way of doing this, cleaner way
     console.log("updateComment");
     delete comment._id;
+    delete comment.created; /// we need to remove the date because we convert when retrieving from the database, and we don't need to update this value
         Comment.update({'_id':_id}, comment, {safe:true}, function(err, result) {
             if (err) {
                 console.log('Error updating Comment: ' + err);

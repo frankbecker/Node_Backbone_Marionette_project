@@ -4,25 +4,12 @@ var Comments_route = require('./routes/route_comments');
 var Albums_route = require('./routes/route_albums');
 var Image_route = require('./routes/route_image');
 var Notif_route = require('./routes/route_notifications');
-module.exports = function(app, passport) {
+module.exports = function(app, passport) {	
 
 	// =====================================
 	// LOGIN ===============================
 	// =====================================
-	// show the login form
-	/*app.get('/login', function(req, res) {
-		console.log(req.cookies);
-		// render the page and pass in any flash data if it exists
-		//res.render('login.ejs', { message: req.flash('loginMessage') });
-	});*/
-
-	/*app.post('/login', passport.authenticate('local-login', {
-		successRedirect : '/profile', // redirect to the secure profile section
-		failureRedirect : '/login', // redirect back to the signup page if there is an error
-		failureFlash : true // allow flash messages
-	}));*/
-	// process the login form
-	app.post('/login', function(req, res, next) {
+	app.post('/login', already_logged_in, function(req, res, next) {
 		passport.authenticate('local-login', {session: true}, function(err, user, info) {
 			if (err)return next(err);
 			if (user === false) {
@@ -30,14 +17,14 @@ module.exports = function(app, passport) {
 				} else {
 				req.logIn(user, function(err) {
 					if (err) { return res.send({'status':'err','message':err.message}); }
-					req.app.set('user_legged_in', user._id);
+					req.app.set('user_logged_in', user._id);
 					return res.send(200, user);	
 				});
 			}
 		})(req, res, next);
 	});
 
-	app.post('/signup', function(req, res, next) {
+	app.post('/signup', already_logged_in, function(req, res, next) {
 		passport.authenticate('local-signup', function(err, user, info) {
 		if (err) return next(err);
 		if (user === false) {
@@ -94,18 +81,24 @@ module.exports = function(app, passport) {
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================	
-	app.get('/logout', User_route.logOut);
+	app.post('/loggin_out', isLoggedIn, User_route.logOut);
 	//app.all('*', isLoggedIn);
+	
+	// route middleware to make sure
+	function isLoggedIn(req, res, next) {
+		console.log("isLoggedIn");
+		// if user is authenticated in the session, carry on
+		if (req.isAuthenticated())
+			return next();
+
+		// if they aren't redirect them to the home page
+		req.logout();
+		res.send(401,'Session Expired');
+	}
+
+	function already_logged_in (req, res, next) {
+		if (!req.isAuthenticated()) return next();
+
+		res.send(499,'You are already logged in with this Browser, please use a different one. Thanks!');
+	}
 };
-
-// route middleware to make sure
-function isLoggedIn(req, res, next) {
-	console.log("isLoggedIn");
-	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated())
-		return next();
-
-	// if they aren't redirect them to the home page
-	req.logout();
-	res.send(401,'Session Expired');
-}

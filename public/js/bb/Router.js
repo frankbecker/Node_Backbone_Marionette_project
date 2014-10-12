@@ -13,7 +13,8 @@ define(['App',
         'bb/Views/Pictures/Pictures',
         'bb/Views/Pictures/Create_Album',
         'bb/Views/Pictures/Album',
-        'bb/Views/Friends/Friends'
+        'bb/Views/Friends/Friends',
+        'bb/Views/Chat/Chat'
     ],
     function(
         App,
@@ -31,7 +32,8 @@ define(['App',
         Pictures,
         Create_Album,
         Album,
-        Friends
+        Friends,
+        Chat
     ) {
 
 
@@ -45,9 +47,10 @@ define(['App',
                 });
                 this.routesHit = 0;
                 this.history_fragment_array = [];
+                this.chat_built = false;
+                this.header_built = false;
                 //keep count of number of routes handled by your application
                 Backbone.history.on('route', this.keep_track_history, this);
-                this.sidebar = null;
             },
 
             routes: {
@@ -68,20 +71,24 @@ define(['App',
             },
 
             registration: function() {
+                // Temporarily commenting this out
                 //App.mainRegion.show(new Register());
                 //this.close_side_bar_view();
                 App.mainRegion.show(new Login());
                 this.close_unecessary_views();
+                this.logout();
             },
 
             login: function(){
                 App.mainRegion.show(new Login());
                 this.close_unecessary_views();
+                this.logout();
             },
 
             signup: function(){
                 App.mainRegion.show(new Signup());
                 this.close_unecessary_views();
+                this.logout();
             },
 
             profile: function(_id, commment_id, sub_comment_id){
@@ -110,8 +117,8 @@ define(['App',
 
             album: function(user_id, album_id, img_id, commment_id){
                 var options = {
-                    album_id : album_id,
                     user_id : user_id,
+                    album_id : album_id,
                     img_id : img_id,
                     commment_id : commment_id
                 };
@@ -120,15 +127,21 @@ define(['App',
              },
 
             build_side_bar_and_main_view: function(MainView , options, flag){
+                App.logged_in = true;  /// we sill set this to true here in case there is a refresh, this conditional is just in case the user decides to go back to the login screen
                 if(typeof MainView === 'object'){
                     App.mainRegion.show(MainView);  /// view has already been initialized
                 }else if(options){
                     App.mainRegion.show(new MainView(options));
                 }else{
                     App.mainRegion.show(new MainView());
-                }            
-                if(!App.header_built){
+                }
+                if(!this.header_built){
                     App.headerRegion.show(new Header());
+                    this.header_built = true;
+                }
+                if(!this.chat_built){
+                    App.chatRegion.show(new Chat());
+                    this.chat_built = true;
                 }
                 if(flag) return;
                  App.left_sidebar_region.show(new Sidebar());
@@ -147,6 +160,7 @@ define(['App',
                 App.Profile_in_View.fetch({
                     success: function() {
                         self.build_side_bar_and_main_view(View, options, Flag);
+                        self.fetch_session_friends();
                         self = null;
                     },
                     error: function (err, resp, options) {
@@ -163,10 +177,35 @@ define(['App',
                 }
                 try{
                     App.headerRegion.close();
-                    App.header_built = false;
+                    this.header_built = false;
                 }catch(err){
 
                 }
+                try{
+                    App.chatRegion.close();
+                    this.chat_built = false;
+                }catch(err){
+
+                }
+            },
+
+            fetch_session_friends: function () {
+                var self = this;
+                var session_id = App.Session.get("_id");
+                App.Friends.fetch({
+
+                    data: $.param({ user_id: session_id}),
+
+                    silent: true,
+
+                    success:function(collection, response, options){
+                        App.Friends.trigger("fetched");
+                    },
+                   
+                    error: function (err, resp, options) {
+                        App.handle_bad_response(resp);
+                    }
+               });
             },
 
             keep_track_history: function(e) {

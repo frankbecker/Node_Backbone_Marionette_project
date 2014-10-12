@@ -6,8 +6,8 @@ define([
         'backbone',
         'handlebars',
         'text!bb/Templates/Friends/Friends.html',
-        'bb/Collections/Profiles/Profiles',
-        'bb/Views/Friends/Friend'
+        'bb/Views/Friends/Friend',
+        'bb/Collections/Profiles/Profiles'
     ],
     function(
         App,
@@ -17,8 +17,8 @@ define([
         Backbone,
         Handlebars,
         Template,
-        Profiles,
-        Friend
+        Friend,
+        Profiles
     ) {
 
         var Friends = Marionette.View.extend({
@@ -33,10 +33,11 @@ define([
             },
 
             initialize: function() {
+                this.childViews = [];      //GARBAGE COLLECTION
                 this.collection = new Profiles();
                 this.profile_in_view = App.Profile_in_View;
-                this.childViews = [];      //GARBAGE COLLECTION
-                this.fetch_collection();
+                this.listenTo(this.collection, "reset", this.display_list_of_friends);
+                this.fetch_profile_friends();
             },
 
             render: function() {
@@ -44,19 +45,15 @@ define([
                 return this;
             },
 
-            fetch_collection: function(){
-                var self = this;
-                var profile_in_view_id = this.profile_in_view.get("_id");
+            fetch_profile_friends: function  (argument) {
+                var profile_id = this.profile_in_view.get("_id");
                 this.collection.fetch({
 
-                   data: $.param({ user_id: profile_in_view_id}),
+                    data: $.param({ user_id: profile_id}),
 
-                   silent: true,
-
-                   success:function(collection, response, options){
-                    self.display_list_of_friends();
-                    self = null;
-                   },
+                    success:function(collection, response, options){
+                        collection.trigger("reset");
+                    },
                    
                     error: function (err, resp, options) {
                         App.handle_bad_response(resp);

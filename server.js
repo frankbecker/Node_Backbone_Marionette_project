@@ -1,3 +1,6 @@
+/*
+Author: Francisco Becker
+ */
 // server.js
 
 // set up ======================================================================
@@ -15,7 +18,7 @@ mongoose.connect(configDB.url); // connect to our database
 var sessionOpts = {
 	key: "token",
 	secret: 'ilovescotchscotchyscotchscotch',
-	cookie: { maxAge: 30 * 60 * 1000 },  /// Half Hour Session
+	cookie: { maxAge: 30 * 60 * 1000 },  /// 30 minute Session
 	store: new MongoStore({
       db : mongoose.connection.db
     })
@@ -24,7 +27,7 @@ var sessionOpts = {
 app.set('root_directory', __dirname);
 // configuration ===============================================================
 
-require('./config/passport')(passport); // pass passport for configuration
+require('./config/passport')(passport, app); // pass passport for configuration
 
 app.configure(function() {
 
@@ -47,5 +50,9 @@ app.configure(function() {
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 // launch ======================================================================
-app.listen(port);
+
+var server = app.listen(port);
+var socket = require('socket.io');
+var io = socket.listen(server);
+require('./app/routes/socket_chat')(app, io); //  Socket.IO Chat
 console.log('The magic happens on port ' + port);

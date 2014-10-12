@@ -32,8 +32,8 @@ define([
 
             initialize: function() {
                 this.listenTo(this.model, "change", this.update_only_comment);
-                this.listenTo(this.model, "remove", this.close);
-                this.listenTo(this.model, "destroy", this.close);
+                this.listenTo(this.model, "remove", this._close);
+                this.listenTo(this.model, "destroy", this._close);
                 this.render();
             },
 
@@ -91,11 +91,18 @@ define([
 
             destroy_model: function(){
                 this.model.destroy();
-                this.close();
             },
 
             onClose: function() {
 
+            },
+
+            _close: function(){
+                var self = this;
+                $(this.el).fadeOut( 700,function() {
+                    self.close();
+                    self = null;
+                });
             }
         });
         // export stuff:
