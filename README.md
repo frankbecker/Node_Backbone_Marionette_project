@@ -4,7 +4,7 @@ I pigged back off of https://github.com/scotch-io/easy-node-authentication
 
 This repo uses passport for user authentication.
 
-I've built a commenting wall, and I am still adding more features to this project.
+I've built a social network all in Javascript.
 
 If you wish to view it, pull the repo down, make sure you have MongoDB installed and running.
 Run node server.js at the project root and the magic should happen at port 8080.

@@ -1,6 +1,7 @@
 /*
 Author: Francisco Becker
  */
+
 define([
         // Libs
         "underscore",
