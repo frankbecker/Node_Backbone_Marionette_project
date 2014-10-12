@@ -71,6 +71,7 @@ define(['App',
             },
 
             registration: function() {
+                // Temporarily commenting this out
                 //App.mainRegion.show(new Register());
                 //this.close_side_bar_view();
                 App.mainRegion.show(new Login());

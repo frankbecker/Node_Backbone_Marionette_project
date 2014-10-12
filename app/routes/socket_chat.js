@@ -6,7 +6,7 @@ module.exports = function(app, io) {
    var users = [];
     socket.on('add user', function (user) {
       socket._id = app.get('user_logged_in');
-      if(!socket._id){
+      if(!socket._id){  /// this is just a fallback
         socket._id = user._id;
       }
           var promise = Sessions.find({}).exec();
@@ -57,26 +57,18 @@ module.exports = function(app, io) {
     socket.on('disconnect', function (user) {
       if(!socket._id){
         socket._id = app.get('user_logged_in');
-      }else{
-        socket._id = user._id;
       }
+      if(!socket._id){ /// this is just a fall back
+          socket._id = user._id;
+      }
+      
       var index = users.indexOf(socket._id);
           if (index > -1) {
               users.splice(index, 1);
           }
-        Sessions.findOne({ 'user' : socket._id }, function(err, session) {
-        if (err) return res.send(404,"err deleting session");
-        try{
-            //req.logout();
-            session.remove();
-            console.log("removing record from sossion collection");
-        }catch(error){
-            //res.send(404,"session not found");
-        }
-        });
-      io.sockets.emit('user left', {
-        user_id: socket._id
-      });
+            io.sockets.emit('user left', {
+              user_id: socket._id
+            });
     });
 
   }); /// io

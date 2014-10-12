@@ -64,10 +64,17 @@ define([
                 this.fetch_comments();
                 $(this.el).html(this.template(this.model.toJSON()));
                 setTimeout(function(){
+                      self.scroll_top();
+                },200);
+                setTimeout(function(){
                       self.scroll_to_comment();
                       self= null;
                 },400);
                 return this;
+            },
+
+            scroll_top: function(){
+                $("#comments", this.el).animate({ scrollTop: 0 }, 0);  /// scroll to bottom with every new message  
             },
 
             scroll_to_comment: function() {
@@ -278,6 +285,10 @@ define([
                 });
 
                 target.value = "";
+                setTimeout(function (argument) {
+                    var container_height = $("#comments", self.el).prop('scrollHeight');
+                    $("#comments", self.el).animate({ scrollTop: container_height }, 0);  /// scroll to bottom with every new message  
+                },200);            
             },
 
             append_new_Comment: function(new_comment){
@@ -290,10 +301,10 @@ define([
                 }
                 var comment = new SubComment({ model : new_comment });
                 this.childViews.push(comment);
-                $("#comments", this.el).append(comment.el);
+                $("#comments", this.el).append(comment.el);                
             },
 
-            onClose: function() {
+            onClose: function() {            
                 _.each(this.childViews, function(childView){
                       if (childView.close){
                         childView.close();

@@ -1,3 +1,6 @@
+/*
+Author: Francisco Becker
+ */
 // Set the require.js configuration
 require.config({
 
@@ -89,7 +92,7 @@ require([
     ){
     /// This file and addInitializer function server as an abstraction layer,
     /// so that we don't create a circular dependecy,
-    /// meaning Session requires App, and if we require Session in App we will create a circular dependency
+    /// meaning Session requires App, and if we require Session in App we will create a circular dependency, and if that happens nothing works
     App.addInitializer(function() {
          App.Router = new AppRouter();
          App.Friends = new Profiles();

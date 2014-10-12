@@ -1,3 +1,6 @@
+/*
+Author: Francisco Becker
+ */
 // server.js
 
 // set up ======================================================================
@@ -15,7 +18,7 @@ mongoose.connect(configDB.url); // connect to our database
 var sessionOpts = {
 	key: "token",
 	secret: 'ilovescotchscotchyscotchscotch',
-	cookie: { maxAge: 30 * 60 * 1000 },  /// Half Hour Session
+	cookie: { maxAge: 30 * 60 * 1000 },  /// 30 minute Session
 	store: new MongoStore({
       db : mongoose.connection.db
     })

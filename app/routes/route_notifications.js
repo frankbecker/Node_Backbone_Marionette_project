@@ -7,6 +7,8 @@ exports.findAll = function(req, res) {
     var last_checked = req.query.notif_time;
     last_checked = new Date(last_checked);
     ///  I probably need a better implementation for this but it works for now
+    ///  I think that I could implement this differently, maybe by having a Notification collection which gets updated with every entry.
+    ///  I definitely need a better implementation for this.
     var temp_collection = [];
     var promise = Comment.find({ user_wall: user_id ,'created': { "$gte": last_checked }, 'user': { $ne: user_id } }).populate('user').populate("img_number").exec();
     

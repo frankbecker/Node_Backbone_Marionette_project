@@ -1,3 +1,6 @@
+/*
+Author: Francisco Becker
+ */
 define([
         // Libs
         "underscore",
@@ -80,6 +83,7 @@ define([
 
         App.Log_User_Out = function() {
             console.log("logging out");
+            if(!App.logged_in)return;
             App.logged_in = false;
             App.Session.clear();
             App.Router.navigate('', {
@@ -125,7 +129,7 @@ define([
                 App.user_idle = false;
                 App.trigger("user_idle");
               },
-              idle: 10000
+              idle: 5 * 60 * 1000   //// five minutes
             });
         };
 
@@ -140,6 +144,7 @@ define([
             }else if(status_code == 499){
                 message = resp.responseText;
             }
+            if(!message)return;
             $("#app_modal .modal-body b").html(message);
             $("#app_modal").modal('show');
         };
