@@ -25,11 +25,8 @@ module.exports = function(passport , app) {
         console.log("deserializeUser: "+ id);
         app.set('user_logged_in', id);
         User.findById(id, function(err, user) {
-<<<<<<< HEAD
-            console.log(user);
-=======
             //console.log(user);
->>>>>>> issue/REAL-MASTER
+
             done(err, user);
         });
     });
