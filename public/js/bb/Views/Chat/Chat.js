@@ -112,8 +112,6 @@ define([
 
             user_joined: function (array_of_users_online) {  // _id index
                 this.users_online = array_of_users_online;
-                console.log("users online");
-                console.log(this.users_online);
                 var self = this;
                 _.each(this.users_online, function (user_id) {
                     var friend = self.collection.findWhere({"_id" : user_id});
@@ -192,8 +190,7 @@ define([
                 this.socket.emit("user left", {
                   _id: user_id
                 });
-                //this.socket.disconnect();
-                console.log("closing chat view");
+                //this.socket.disconnect(); /// this happens when user closes the tab or browser
                 _.each(this.childViews, function(childView){
                       if (childView.close){
                         childView.close();

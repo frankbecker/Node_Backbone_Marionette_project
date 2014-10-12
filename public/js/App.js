@@ -82,7 +82,6 @@ define([
         };
 
         App.Log_User_Out = function() {
-            console.log("logging out");
             if(!App.logged_in)return;
             App.logged_in = false;
             App.Session.clear();
@@ -95,7 +94,7 @@ define([
                 url: "/loggin_out"
                 })
                 .done(function( response ) {
-                    console.log("user has been logout");
+                    //console.log("user has been logout");
                 })
                 .fail(function( xhr ){
                     console.log("something went wrong in logout");
