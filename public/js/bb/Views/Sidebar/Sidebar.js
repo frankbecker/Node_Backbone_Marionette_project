@@ -32,6 +32,7 @@ define([
                 if(!this.model){
                   this.model =  App.Session;
                 }
+                this.listenTo(App, 'update_side_bar', this.render);
                 this.listenTo(this.model, 'change', this.render);
             },
 
@@ -41,7 +42,7 @@ define([
                 setTimeout(function(){
                     self.highlight_proper_nav();
                     self = null;
-                },0)
+                },0);
                 return this;
             },
 

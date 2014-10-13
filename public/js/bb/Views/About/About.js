@@ -94,7 +94,7 @@ define([
                     App.Session.set("profile_pic", model.get("profile_pic"));
                     App.Session.save_session(model.toJSON(), null);  /// this is a little hack, I should have a better design for this
                     App.Session.trigger("change"); /// I need to come back to this, I have this here because of the Side bar, so that we can updata the image in case a new one is uploaded
-                    App.Profile_in_View.trigger("change");
+                    App.trigger("update_side_bar");
                     self.render();
                     self.showAlert('Success!', 'Info saved successfully', 'alert-success');
                 },
