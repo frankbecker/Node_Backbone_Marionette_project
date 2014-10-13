@@ -89,18 +89,17 @@ define([
             App.Router.navigate('', {
                 trigger: true
             });
-            setTimeout(function(){
-               $.ajax({
-                type: "POST",
-                url: "/loggin_out"
-                })
-                .done(function( response ) {
-                    //console.log("user has been logout");
-                })
-                .fail(function( xhr ){
-                    console.log("something went wrong in logout");
-                });
-            },1000);
+           $.ajax({
+            type: "POST",
+            url: "/loggin_out"
+            })
+            .done(function( response ) {
+                //console.log("user has been logout");
+            })
+            .fail(function( xhr ){
+                console.log("something went wrong in logout");
+            });
+
         };
 
         App.GET_comment_editing_no_comment_fecthing = function(){
