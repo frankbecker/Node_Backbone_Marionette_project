@@ -58,7 +58,8 @@ define([
                 this.profile_in_view = App.Profile_in_View;
                 this.session = App.Session;
                 this.album_id = options.album_id;
-                this.match = ((options.user_id == this.session.get("_id")) ? true : false);
+                this.user_id = options.user_id;
+                this.match = (( this.user_id == this.session.get("_id")) ? true : false);
                 this.model = new Album_model({ _id : options.album_id });
                 this.fetch_this_model();
                 this.collection = new Images();
@@ -282,12 +283,12 @@ define([
             },
 
             remove_image_pop_up : function(){
-                var user_id = this.profile_in_view.get("_id");
+                var user_id = this.user_id;
                 var album_id = this.album_id;
+                this.image_pop_up_view.close();
                 App.Router.navigate("album/"+user_id+"/"+album_id, {
                     trigger: false
                 });
-                this.image_pop_up_view.close();
             },
 
             ///  +++++++++++++++++++++++++++++++++++++++++++++++++
