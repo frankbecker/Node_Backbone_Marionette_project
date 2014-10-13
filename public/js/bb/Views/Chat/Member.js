@@ -72,6 +72,7 @@ define([
             },
 
             open_chat_box: function (e) {
+                if( this.chat_box_opened )return;
                 this.chat_box = new ChatBox({ model: this.model , socket: this.socket});
                 this.listenTo(this.chat_box, "hide", this.set_chat_box_opened_false);
                 $("#chat_boxes").prepend(this.chat_box.el);
