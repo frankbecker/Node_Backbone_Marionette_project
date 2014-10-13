@@ -201,7 +201,9 @@ define([
                 $("h4", this.el).removeClass("hide");
                 $(".panel", this.el).addClass("hide");
                 var new_name = $("#name", this.el).html();
+                new_name = _.escape(new_name);
                 var description = $("#description", this.el).html();
+                description = _.escape(description);
                 var user = this.model.get("user");
                 this.model.set({
                     "name" : new_name,
@@ -266,7 +268,7 @@ define([
                 var img_id = this.model.get("_id");
                 var user_id = this.session.get("_id");
                 var profile_in_view = this.profile_in_view.get("_id");
-                var comment = target.value;
+                var comment = _.escape(target.value);
                 this.comments.create({
                   body: comment,
                   user: user_id,

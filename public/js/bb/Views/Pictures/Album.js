@@ -188,7 +188,9 @@ define([
                 $("#edit", this.el).removeClass("hide");
                 $(".edit_content", this.el).removeClass("editable").attr("contenteditable", false);
                 var name = $("#name", this.el).html();
+                name = _.escape(name);
                 var description = $("#description", this.el).html();
+                description = _.escape(description);
                 this.model.set("name", name);
                 this.model.set("description", description);
                 var img_cover = this.model.get("img_cover");
@@ -327,7 +329,9 @@ define([
               var self = this;
               var session_id = this.session.get("_id");
               var name = $("#Add_Image #name", this.el).val();
+              name = _.escape(name);
               var description = $("#Add_Image #description", this.el).val();
+              description = _.escape(description);
               var image_name = this.image_name;
               var album_id = this.album_id;
               this.collection.create({

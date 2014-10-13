@@ -61,7 +61,7 @@ define([
                 // Apply the change to the model
                 var target = event.target;
                 var change = {};
-                change[target.id] = target.value;
+                change[target.id] = _.escape(target.value);
                 this.model.set(change);
 
                 // Run validation rule (if any) on changed item

@@ -58,7 +58,9 @@ define([
                 e.preventDefault();
                 if(!this.validate())return;
                 var input_email = $("#email", this.el).val();
+                input_email = _.escape(input_email); 
                 var input_password = $("#password", this.el).val();
+                input_password = _.escape(input_password);
                 var $alert = $(".alert", this.el);
                 $.ajax({
                 type: "POST",

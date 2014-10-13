@@ -103,7 +103,7 @@ define([
                 
               var self = this;
               this.new_comment = this.collection.create({
-                  body: target.value,
+                  body: _.escape(target.value),
                   user: this.user_logged_in.get("_id"),
                   user_wall: this.model.get("_id")
                 },
