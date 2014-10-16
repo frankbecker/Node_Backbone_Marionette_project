@@ -55,10 +55,11 @@ exports.addAlbum = function(req, res) {
 exports.updateAlbum = function(req, res) {
     var _id = req.params.id;
     var album = req.body;
+    delete album._id;
         Album.update({'_id':_id}, album, {safe:true}, function(err, result) {
             if (err) {
                 console.log('Error updating User: ' + err);
-                res.send(500,{'error':'An error has occurred'});
+                res.send(500,{'error':'An error has occurred updating album'});
             } else {
                 console.log('' + result + ' document(s) updated');
                 res.send(album);
