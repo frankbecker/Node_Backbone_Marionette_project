@@ -55,7 +55,7 @@ exports.addAlbum = function(req, res) {
 exports.updateAlbum = function(req, res) {
     var _id = req.params.id;
     var album = req.body;
-    delete album._id;
+    delete album._id;  /// for some reason, I need to remove this, I'll look deeper into this issue
         Album.update({'_id':_id}, album, {safe:true}, function(err, result) {
             if (err) {
                 console.log('Error updating User: ' + err);

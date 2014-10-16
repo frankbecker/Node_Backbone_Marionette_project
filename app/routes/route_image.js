@@ -30,6 +30,7 @@ exports.addImage = function(req, res) {
 exports.updateImage = function(req, res) {
     var _id = req.params.id;
     var image = req.body;
+    delete image._id;  /// I need to remove this here, I need to figure out why this is happening, must be a MongoDB configuration
     var temp_user = image.user;
     image.user = image.user._id;
         Image.findOneAndUpdate({'_id':_id}, image, {safe:true}, function(err, result) {
