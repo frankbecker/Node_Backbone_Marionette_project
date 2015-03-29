@@ -7,8 +7,11 @@ Author: Francisco Becker
 // get all the tools we need
 var express  = require('express');
 // making this a global /// because I also need to access this in my schema so that I can delete some files
-var MongoStore = require('connect-mongo')(express);
 app      = express();
+
+// MongoStore is used for storing the session and cleaning up expired sessions.
+// Very useful library, I did not include this in the package.json because I manually modified a few files within the library
+var MongoStore = require('connect-mongo')(express);
 var port     = process.env.PORT || 8080;
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -36,7 +39,6 @@ app.configure(function() {
 	app.use(express.cookieParser()); // read cookies (needed for auth)
 	app.use(express.bodyParser()); // get information from html forms
 	app.use(express.static(__dirname + '/public'));
-	app.set('view engine', 'ejs'); // set up ejs for templating
 
 	// required for passport
 	app.use(express.session(sessionOpts)); // session secret
