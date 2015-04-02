@@ -1,5 +1,6 @@
 // app/routes.js
 var Projects_route = require('./routes/route_projects');
+var Tables_route = require('./routes/route_tables');
 module.exports = function(app, passport) {
 
 	// =====================================
@@ -62,8 +63,18 @@ repo comments list
 project repos list
 project comments lis*/
 
+	// =====================================
+	// PROJECTS SECTION =========================
+	// =====================================	
+
 	app.get('/projects' , Projects_route.find_all);
 
+	// =====================================
+	// PROJECTS SECTION =========================
+	// =====================================	
+
+	app.get('/tables' , Tables_route.find_all);
+	app.get('/tables/:id' , Tables_route.find_table);
 
 	//app.all('*', isLoggedIn);
 	

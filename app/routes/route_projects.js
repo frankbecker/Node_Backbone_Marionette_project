@@ -3,14 +3,7 @@ var async = require('async');
 var fs = require("fs");
 var _ = require('underscore');
 var logger = require('tracer').colorConsole();
-//var credentials = fs.readFileSync('db.connection.mysql.json', 'utf8');
-var credentials = 
-{
-  host            : '127.0.0.1',
-  user            : 'root',
-  password        : 'password',
-  database        : 'MIMIC_MANAGER'
-};
+var credentials = JSON.parse(fs.readFileSync('db.connection.mysql.json', 'utf8'));
 
 exports.find_all = function(req, res) {
     var connection = mysql.createConnection(credentials);
